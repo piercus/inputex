@@ -19,14 +19,15 @@ inputEx.DatePickerField = function(options) {
 lang.extend(inputEx.DatePickerField, inputEx.DateField, {
    /**
     * Set the default date picker CSS classes
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.DatePickerField.superclass.setOptions.call(this, options);
       
-      // Overwrite options
+      // Overwrite default options
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-DateField inputEx-PickerField inputEx-DatePickerField';
-      this.options.readonly = true;
+
+      this.options.readonly = YAHOO.lang.isUndefined(options.readonly) ? true : options.readonly;
       
       // Added options
       this.options.calendar = options.calendar || inputEx.messages.defautCalendarOpts;
@@ -54,16 +55,18 @@ lang.extend(inputEx.DatePickerField, inputEx.DateField, {
       // HACK: Set position absolute to the overlay
       Dom.setStyle(this.oOverlay.body.parentNode, "position", "absolute");
       
-      
-      Event.addListener(this.el,'click',function(){
-         // calendar may not have been rendered yet
-         this.renderCalendar();
+      // Subscribe the click handler on the field only if readonly
+		if(this.options.readonly) {
+	      Event.addListener(this.el,'click',function(){
+	         // calendar may not have been rendered yet
+	         this.renderCalendar();
          
-         if (!this.oOverlay.justHidden) {
-            this.button._showMenu();
-         }
-      },this,true);
-      
+	         if (!this.oOverlay.justHidden) {
+	            this.button._showMenu();
+	         }
+	      },this,true);
+      }
+
       this.oOverlay.hideEvent.subscribe(function() {
          this.oOverlay.justHidden = true;
          YAHOO.lang.later(250,this,function(){this.oOverlay.justHidden=false;});
@@ -166,21 +169,42 @@ lang.extend(inputEx.DatePickerField, inputEx.DateField, {
       this.calendarRendered = true;
    },
    
-   // Select the right date and display the right page on calendar, when the field has a value
-   beforeShowOverlay: function() {
+   /**
+  	 * Select the right date and display the right page on calendar, when the field has a value
+ 	 */
+   beforeShowOverlay: function(e) {
+	
       var date = this.getValue(true);
-      if (!!date && !!this.calendar) {
+      if (!!this.calendar) {
          
-         // HACK: don't fire Field updatedEvt when selecting date
-         this.ignoreBeforeShowOverlayCall = true;
-         // select the previous date in calendar
-         this.calendar.select(date);
-			this.ignoreBeforeShowOverlayCall = false;
-         
-         this.calendar.cfg.setProperty("pagedate",(date.getMonth()+1)+"/"+date.getFullYear());
+			if(!!date) {
+         	// HACK: don't fire Field updatedEvt when selecting date
+         	this.ignoreBeforeShowOverlayCall = true;
+         	// select the previous date in calendar
+        		this.calendar.select(date);
+				this.ignoreBeforeShowOverlayCall = false;
+         	this.calendar.cfg.setProperty("pagedate",(date.getMonth()+1)+"/"+date.getFullYear());
+			}
+
          this.calendar.render(); // refresh calendar
       }
-   }
+   },
+
+	/**
+	 * Disable the field
+	 */
+	disable: function() {
+		inputEx.DatePickerField.superclass.disable.call(this);
+		this.button.set('disabled', true);
+	},
+	
+	/**
+	 * Enable the field
+	 */
+	enable: function() {
+		inputEx.DatePickerField.superclass.enable.call(this);
+		this.button.set('disabled', false);
+	}
    
 });
 

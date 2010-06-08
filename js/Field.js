@@ -55,7 +55,7 @@ inputEx.Field.prototype = {
   
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
 	setOptions: function(options) {
 
@@ -306,13 +306,14 @@ inputEx.Field.prototype = {
       // Unsubscribe all listeners on the updatedEvt
       this.updatedEvt.unsubscribeAll();
       
+      // Purge element (remove listeners on el and childNodes recursively)
+      util.Event.purgeElement(el, true);
+      
       // Remove from DOM
       if(Dom.inDocument(el)) {
          el.parentNode.removeChild(el);
       }
       
-      // recursively purge element
-      util.Event.purgeElement(el, true);
    },
    
    /**
@@ -358,16 +359,33 @@ inputEx.Field.prototype = {
     */
    isEmpty: function() {
       return this.getValue() === '';
-   }
+   },
+
+	/**
+	 * Set the parentField.
+	 * Generally use by composable fields (ie. Group,Form,ListField,CombineField,...}
+	 * @param {inputEx.Group|inputEx.Form|inputEx.ListField|inputEx.CombineField} parentField The parent field instance
+	 */
+	setParentField: function(parentField) {
+		this.parentField = parentField;
+	},
+	
+	/**
+	 * Return the parent field instance
+	 * @return {inputEx.Group|inputEx.Form|inputEx.ListField|inputEx.CombineField}
+	 */
+	getParentField: function() {
+		return this.parentField;
+	}
    
 };
 
 inputEx.Field.groupOptions = [
-   { type: "string", inputParams:{label: "Label", name: "label", value: ''} },
-   { type: "string", inputParams:{label: "Name", name: "name", value: ''} },
-   { type: "string", inputParams: {label: "Description",name: "description", value: ''} },
-   { type: "boolean", inputParams: {label: "Required?",name: "required", value: false} },
-   { type: "boolean", inputParams: {label: "Show messages",name: "showMsg", value: false} }
+   { type: "string", label: "Label", name: "label", value: '' },
+   { type: "string", label: "Name", name: "name", value: '' },
+   { type: "string", label: "Description",name: "description", value: '' },
+   { type: "boolean", label: "Required?",name: "required", value: false },
+   { type: "boolean", label: "Show messages",name: "showMsg", value: false }
 ];
 
 })();

@@ -32,7 +32,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	   
 	/**
 	 * Set the ListField classname
-	 * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+	 * @param {Object} options Options object as passed to the constructor
 	 */
 	setOptions: function(options) {
 	   inputEx.ListField.superclass.setOptions.call(this, options);
@@ -223,10 +223,17 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	      
 	   // Instantiate the new subField
 	   var opts = lang.merge({}, this.options.elementType);
-	   if(!opts.inputParams) opts.inputParams = {};
-	   if(!lang.isUndefined(value)) opts.inputParams.value = value;
 	   
-	   var el = inputEx.buildField(opts);
+	   // Retro-compatibility with deprecated inputParams Object : TODO -> remove
+      if(lang.isObject(opts.inputParams) && !lang.isUndefined(value)) {
+         opts.inputParams.value = value;
+         
+      // New prefered way to set options of a field
+      } else if (!lang.isUndefined(value)) {
+         opts.value = value;
+      }
+	   
+	   var el = inputEx(opts,this);
 	   
 	   var subFieldEl = el.getEl();
 	   Dom.setStyle(subFieldEl, 'margin-left', '4px');
@@ -402,8 +409,8 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	
 // Register this class as "list" type
 inputEx.registerType("list", inputEx.ListField, [
-   { type: 'string', inputParams: {label: 'List label', name: 'listLabel', value: ''}},
-   { type: 'type', inputParams: {label: 'List element type', required: true, name: 'elementType'} }
+   { type: 'string', label: 'List label', name: 'listLabel', value: ''},
+   { type: 'type', label: 'List element type', required: true, name: 'elementType' }
 ]);
 
 

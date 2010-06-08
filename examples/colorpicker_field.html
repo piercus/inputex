@@ -20,19 +20,19 @@
 
  <body class="yui-skin-sam">
 
-<p class='demoTitle'>inputEx - ColorPickerField Usage</p>
+<h1>inputEx - ColorPickerField Usage</h1>
 
 <p style="margin-left: 20px;">This field is a wrapper around the <a href="http://developer.yahoo.com/yui/colorpicker/">YUI ColorPicker widget</a>.</p>
 
 
 <!-- Example 1 -->
 <div class='exampleDiv'>
-	<p class="title">Basic ColorPickerField creation</p>
+	<h2>Basic ColorPickerField creation</h2>
 	<p>Use the following code to create a basic inputEx ColorPickerField.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			new inputEx.ColorPickerField({parentEl: 'container1', label: 'Choose a color', description: 'Click to view the available colors'});
+			new inputEx.ColorPickerField({parentEl: 'container1', label: 'Choose a color', description: 'Click to view the available colors' });
 		</textarea>
 	</div>
 </div>
@@ -41,12 +41,12 @@
 
 <!-- Example 2 -->
 <div class='exampleDiv'>
-	<p class="title">Smaller ColorPickerField</p>
+	<h2>Smaller ColorPickerField</h2>
 	<p>Use the following code to create a ColorPickerField without controls</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			var field = new inputEx.ColorPickerField({parentEl: 'container2', label: 'Choose a color', showcontrols: false, value:'#2626AF'});
+			var field = new inputEx.ColorPickerField({parentEl: 'container2', label: 'Choose a color', value:'#2626AF', colorPickerOptions:{showcontrols:false} });
 			
 			// Register the 'updatedEvt' and log the value to the page
 			var logDiv = inputEx.cn('div', null, null, "Log :");

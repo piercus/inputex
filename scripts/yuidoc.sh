@@ -24,7 +24,7 @@ generator_out="$INPUTEXPATH/api"
 template="$yuidoc_home/template"
 
 # The version of your project to display within the documentation.
-version=0.4.0rc1
+version=0.5.1
 
 # The version of YUI the project is using.  This effects the output for
 # YUI configuration attributes.  This should start with '2' or '3'.
@@ -32,7 +32,7 @@ yuiversion=2.8.0r4
 
 projectName="inputEx-library"
 
-projectUrl="http://javascript.neyric.com/inputex"
+projectUrl="http://neyric.github.com/inputex"
 
 ##############################################################################
 # add -s to the end of the line to show items marked private

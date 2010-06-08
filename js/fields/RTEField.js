@@ -10,7 +10,7 @@
  * @param {Object} options Added options:
  * <ul>
  *   <li>opts: the options to be added when calling the RTE constructor (see YUI RTE)</li>
- *   <li>type: if == 'simple', the field will use the SimpleEditor. Any other value will use the Editor class.</li>
+ *   <li>editorType: if == 'simple', the field will use the SimpleEditor. Any other value will use the Editor class.</li>
  * </ul>
  */
 inputEx.RTEField = function(options) {
@@ -19,13 +19,13 @@ inputEx.RTEField = function(options) {
 lang.extend(inputEx.RTEField, inputEx.Field, {   
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
   	setOptions: function(options) {
   	   inputEx.RTEField.superclass.setOptions.call(this, options);
   	   
   	   this.options.opts = options.opts || {};
-  	   this.options.type = options.type;
+  	   this.options.editorType = options.editorType;
    },
    
 	/**
@@ -36,7 +36,7 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 	   
 	   var id = "inputEx-RTEField-"+inputEx.RTEfieldsNumber;
 	   var attributes = {id:id};
-      if(this.options.name) attributes.name = this.options.name;
+      if(this.options.name) { attributes.name = this.options.name; }
       
 	   this.el = inputEx.cn('textarea', attributes);
 	   
@@ -47,7 +47,8 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 	   var _def = {
 	       height: '300px',
 	       width: '580px',
-	       dompath: true
+	       dompath: true,
+	       filterWord:true // get rid of the MS word junk
 	   };
 	   //The options object
 	   var o = this.options.opts;
@@ -57,8 +58,8 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 	            _def[i] = o[i];
 	        }
 	   }
-	   //Check if options.type is present and set to simple, if it is use SimpleEditor instead of Editor
-	   var editorType = ((this.options.type && (this.options.type == 'simple')) ? YAHOO.widget.SimpleEditor : YAHOO.widget.Editor);
+	   //Check if options.editorType is present and set to simple, if it is use SimpleEditor instead of Editor
+	   var editorType = ((this.options.editorType && (this.options.editorType == 'simple')) ? YAHOO.widget.SimpleEditor : YAHOO.widget.Editor);
 	
 	   //If this fails then the code is not loaded on the page
 	   if (editorType) {
@@ -67,6 +68,32 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 	   } else {
 	    alert('Editor is not on the page');
 	   }
+	   
+	   
+	   /**
+   	 * Filters out msword html comments, classes, and other junk
+   	 * (complementary with YAHOO.widget.SimpleEditor.prototype.filter_msword, when filterWord option is true)
+   	 * @param {String} value The html string
+   	 * @return {String} The html string
+   	 */
+   	this.editor.filter_msword = function(html) {
+   	   
+   	   html = editorType.prototype.filter_msword.call(this,html);
+   	   
+   	   // if we don't filter ms word junk
+   	   if (!this.get('filterWord')) {
+   	      return html;
+   	   }
+
+   	   html = html.replace( /<!--[^>][\s\S]*-->/gi, ''); // strip (meta-)comments
+         html = html.replace( /<\/?meta[^>]*>/gi, ''); // strip meta tags
+         html = html.replace( /<\/?link[^>]*>/gi, ''); // strip link tags
+         html = html.replace( / class=('|")?MsoNormal('|")?/gi, ''); // strip MS office class
+         html = YAHOO.lang.trim(html); // trim spaces
+         
+         return html;
+   	};
+   	
 	},
 	
 	/**
@@ -99,12 +126,18 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 	 * @return {String} the html string
 	 */
 	getValue: function() {
+	   
+	   var html;
+	   
 	   try {
-	      this.editor.saveHTML();
-         return this.el.value;
+	      // trigger HTML cleaning (strip MS word or internal junk)
+	      // + save to hidden textarea (required for classic HTML 'submit')
+	      html = this.editor.saveHTML();
+	      return html;
 	   }
 	   catch(ex) { return null; }
 	}
+	
 	
 });
 	

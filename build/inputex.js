@@ -1,8 +1,8 @@
 /* 
 Distributed under the MIT License :
-Visit http://javascript.neyric.com/inputex for more informations
+Visit http://neyric.github.com/inputex for more informations
 
-Copyright (c) 2007-2009, Eric Abouaf <eric.abouaf at gmail.com>
+Copyright (c) 2007-2010, Eric Abouaf <eric.abouaf at gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,16 +32,23 @@ THE SOFTWARE.
  var lang = YAHOO.lang;
  
 /**
- * Build a field from an object like: { type: 'color' or fieldClass: inputEx.ColorField, inputParams: {} }<br />
- * The inputParams property is the object that will be passed as the <code>options</code> parameter to the field class constructor.<br />
+ * The inputEx method lets you create a field from the JSON definition:
+ * <pre>
+ *    inputEx({type: 'string', name: 'company', label: 'Your company' })
+ * </pre>
+ * Build a field from an object like: { type: 'color' or fieldClass: inputEx.ColorField, ... }<br />
  * If the neither type or fieldClass are found, it uses inputEx.StringField
+ *
  * @class inputEx
  * @static
  * @param {Object} fieldOptions
+ * @param {inputEx.Group|inputEx.Form|inputEx.ListField|inputEx.CombineField} (optional) parentField The parent field instance
  * @return {inputEx.Field} Created field instance
  */
-inputEx = function(fieldOptions) {
-   var fieldClass = null;
+inputEx = function(fieldOptions, parentField) {
+   var fieldClass = null,
+       inputInstance;
+   
 	if(fieldOptions.type) {
 	   fieldClass = inputEx.getFieldClass(fieldOptions.type);
 	   if(fieldClass === null) fieldClass = inputEx.StringField;
@@ -51,7 +58,20 @@ inputEx = function(fieldOptions) {
 	}
 
    // Instanciate the field
-   var inputInstance = new fieldClass(fieldOptions.inputParams);
+   
+   // Retro-compatibility with deprecated inputParams Object
+   if (lang.isObject(fieldOptions.inputParams)) {
+      inputInstance = new fieldClass(fieldOptions.inputParams);
+      
+   // New prefered way to instanciate a field
+   } else {
+      inputInstance = new fieldClass(fieldOptions);
+   }
+
+	// If the parentField argument is provided
+	if(parentField) {
+		inputInstance.setParentField(parentField);
+	}
 
    // Add the flatten attribute if present in the params
    /*if(fieldOptions.flatten) {
@@ -63,7 +83,7 @@ inputEx = function(fieldOptions) {
 
 lang.augmentObject(inputEx, {
    
-   VERSION: "0.4.0rc1",
+   VERSION: "0.5.0",
    
    /**
     * Url to the spacer image. This url schould be changed according to your project directories
@@ -182,8 +202,7 @@ lang.augmentObject(inputEx, {
    },
    
    /**
-    * Kept for backward compatibility
-    * @alias inputEx
+    * @deprecated Kept for backward compatibility (alias for inputEx() )
     * @param {Object} fieldOptions
     * @return {inputEx.Field} Created field instance
     */
@@ -456,7 +475,9 @@ inputEx.JsonSchema = {
    inputExToSchema: function(inputExJson) {
       
       var t = inputExJson.type || "string",
-          ip = inputExJson.inputParams || {};
+          // inputParams is here for retro-compatibility : TODO -> remove
+          // -> ip = inputExJson || {};
+          ip = (lang.isObject(inputExJson.inputParams) ? inputExJson.inputParams : inputExJson) || {};
       
       if(t == "group") {
          var ret = {
@@ -468,7 +489,9 @@ inputEx.JsonSchema = {
          
          for(var i = 0 ; i < ip.fields.length ; i++) {
             var field = ip.fields[i];
-            var fieldName = field.inputParams.name;
+            // inputParams is here for retro-compatibility : TODO -> remove
+            // -> var fieldName = field.name;
+            var fieldName = lang.isObject(field.inputParams) ? field.inputParams.name : field.name;
             ret.properties[fieldName] = inputEx.JsonSchema.inputExToSchema(field);
          }
          
@@ -596,7 +619,7 @@ inputEx.JsonSchema.Builder = function(opts) {
 	this.schemaToParamMap = options.schemaToParamMap || {
 		'title':'label',
 		'description':'description',
-		'_inputex':null	// null value means copy child key/value pairs into inputParams directly
+		'_inputex':null	// null value means copy child key/value pairs into field options directly
 	};
 	
 	/**
@@ -605,7 +628,7 @@ inputEx.JsonSchema.Builder = function(opts) {
 	this.referenceResolver = options.referenceResolver || null;
 	
 	/**
-	 * options to be applied to inputParams unless already specified
+	 * options to be applied unless already specified
 	 * @property defaultOptions
 	 */
 	this.defaultOptions = options.defaultOptions || {};	
@@ -632,9 +655,9 @@ inputEx.JsonSchema.Builder.prototype = {
 	 */
 	schemaToInputEx:function(p, propertyName) {
 	
-	   var fieldDef = {inputParams: { label: propertyName, name: propertyName} };
+	   var fieldDef = { label: propertyName, name: propertyName };
 	   var schemaMap = this.schemaToParamMap;
-    	var referencedSchema = p["$ref"]; 
+    	var referencedSchema = p["$ref"];
 		var key;
 	    
 	   if(referencedSchema){
@@ -661,7 +684,7 @@ inputEx.JsonSchema.Builder.prototype = {
 	   }
 
 	   if(!p.optional) {
-	      fieldDef.inputParams.required = true;
+	      fieldDef.required = true;
 	   }
 
 	    for(key in schemaMap) {
@@ -670,17 +693,17 @@ inputEx.JsonSchema.Builder.prototype = {
 	      	  var v = p[key];
 	      	  if(!lang.isUndefined(v)) {
 	      		  if(paramName === null) {
-	      			  // copy / merge values from v directly into inputParams
+	      			  // copy / merge values from v directly into options
 	      			  if(lang.isObject(v)) {
-	      				  // v must be an object, copy key/value pairs into inputParams
+	      				  // v must be an object, copy key/value pairs into options
 	      				  for(var vkey in v) {
 	      					  if(v.hasOwnProperty(vkey)) {
-	      						  fieldDef.inputParams[vkey] = v[vkey];
+	      						  fieldDef[vkey] = v[vkey];
 	      					  }
 	      				  }
 	      			  }
 	      		  } else {
-	      			  fieldDef.inputParams[paramName] = v;
+	      			  fieldDef[paramName] = v;
 	      		  }
 	      	  }
 	        }
@@ -707,30 +730,30 @@ inputEx.JsonSchema.Builder.prototype = {
 	       
 	       // default value
 	       if( !lang.isUndefined(p["default"]) ) {
-	          fieldDef.inputParams.value = p["default"];
+	          fieldDef.value = p["default"];
 	       }
 	    
 	       if(type == "array" ) {
 	          fieldDef.type = "list";
 	          if(lang.isObject(p.items) && !lang.isArray(p.items)) {
 	        	  // when items is an object, it's a schema that describes each item in the list
-	        	  fieldDef.inputParams.elementType = this.schemaToInputEx(p.items, propertyName);
+	        	  fieldDef.elementType = this.schemaToInputEx(p.items, propertyName);
 	          }
 	
-		       if(p.minItems) { fieldDef.inputParams.minItems = p.minItems; }
-				 if(p.maxItems) { fieldDef.inputParams.maxItems = p.maxItems; }
+		       if(p.minItems) { fieldDef.minItems = p.minItems; }
+				 if(p.maxItems) { fieldDef.maxItems = p.maxItems; }
 	
 	       }
 	       else if(type == "object" ) {
 	          fieldDef.type = "group";
-	          if(p.title && lang.isUndefined(fieldDef.inputParams.legend)) {
-	        	  fieldDef.inputParams.legend = p.title; 
+	          if(p.title && lang.isUndefined(fieldDef.legend)) {
+	        	  fieldDef.legend = p.title; 
 	          }
-	          //fieldDef.inputParams = this.schemaToInputEx(p, propertyName);
-	          //fieldDef.inputParams = this._parseSchemaProperty(p, propertyName);
+	          //fieldDef = this.schemaToInputEx(p, propertyName);
+	          //fieldDef = this._parseSchemaProperty(p, propertyName);
 	          var fields = [];
 	          if(propertyName) {
-	        	  fieldDef.inputParams.name = propertyName;
+	        	  fieldDef.name = propertyName;
 	          }
 	
 	          for(key in p.properties) {
@@ -739,43 +762,43 @@ inputEx.JsonSchema.Builder.prototype = {
 	             }
 	          }
 	
-	          fieldDef.inputParams.fields = fields;
+	          fieldDef.fields = fields;
 	          
 	       }
 	       else if(type == "string" && (p["enum"] || p["options"]) ) {
 	          fieldDef.type = "select";
 	          
 	          if(p.options) {
-  	             fieldDef.inputParams.selectOptions = [];
-     	          fieldDef.inputParams.selectValues = [];
+  	             fieldDef.selectOptions = [];
+     	          fieldDef.selectValues = [];
 	             for(var i = 0 ; i < p.options.length ; i++) {
 	                var o = p.options[i];
-	                fieldDef.inputParams.selectOptions[i] = o.label;
-	                fieldDef.inputParams.selectValues[i] = o.value;
+	                fieldDef.selectOptions[i] = o.label;
+	                fieldDef.selectValues[i] = o.value;
 	             }
              }
              else {
-    	          fieldDef.inputParams.selectValues = p["enum"];
+    	          fieldDef.selectValues = p["enum"];
              }
 	       }
 	       else if(type == "string") {
-	    	  if(!lang.isUndefined(p.pattern) && lang.isUndefined(fieldDef.inputParams.regexp)) {
+	    	  if(!lang.isUndefined(p.pattern) && lang.isUndefined(fieldDef.regexp)) {
 	    		  if(lang.isString(p.pattern)) {
-	    			  fieldDef.inputParams.regexp = new RegExp(p.pattern);
+	    			  fieldDef.regexp = new RegExp(p.pattern);
 	    		  } else {
-	    			  fieldDef.inputParams.regexp = p.pattern;
+	    			  fieldDef.regexp = p.pattern;
 	    		  }
 	    	  }
-	    	  if(!lang.isUndefined(p.maxLength) && lang.isUndefined(fieldDef.inputParams.maxLength)) {
-	    		  fieldDef.inputParams.maxLength = p.maxLength; 
+	    	  if(!lang.isUndefined(p.maxLength) && lang.isUndefined(fieldDef.maxLength)) {
+	    		  fieldDef.maxLength = p.maxLength; 
 	    	  }
 
-	    	  if(!lang.isUndefined(p.minLength) && lang.isUndefined(fieldDef.inputParams.minLength)) {
-	    		  fieldDef.inputParams.minLength = p.minLength; 
+	    	  if(!lang.isUndefined(p.minLength) && lang.isUndefined(fieldDef.minLength)) {
+	    		  fieldDef.minLength = p.minLength; 
 	    	  }
 
-	    	  if(!lang.isUndefined(p.readonly) && lang.isUndefined(fieldDef.inputParams.readonly)) {
-	    		  fieldDef.inputParams.readonly = p.readonly; 
+	    	  if(!lang.isUndefined(p.readonly) && lang.isUndefined(fieldDef.readonly)) {
+	    		  fieldDef.readonly = p.readonly; 
 	    	  }
 
            // According to http://groups.google.com/group/json-schema/web/json-schema-possible-formats
@@ -784,7 +807,7 @@ inputEx.JsonSchema.Builder.prototype = {
 	                fieldDef.type = "html";
 	             } else if(p.format == "date") {
 	                fieldDef.type = "date";
-	                fieldDef.inputParams.tooltipIcon = true;
+	                fieldDef.tooltipIcon = true;
 	             } else if(p.format == 'url') {
 	            	 fieldDef.type = 'url';
 	             } else if(p.format == 'email') {
@@ -808,8 +831,8 @@ inputEx.JsonSchema.Builder.prototype = {
 	
 	    // Add the defaultOptions
 	    for(var kk in this.defaultOptions) {
-	        if(this.defaultOptions.hasOwnProperty(kk) && lang.isUndefined(fieldDef.inputParams[kk])) {
-	        	fieldDef.inputParams[kk] = this.defaultOptions[kk]; 
+	        if(this.defaultOptions.hasOwnProperty(kk) && lang.isUndefined(fieldDef[kk])) {
+	        	fieldDef[kk] = this.defaultOptions[kk]; 
 	        }	    	
 	    }
 	    return fieldDef;
@@ -828,8 +851,8 @@ inputEx.JsonSchema.Builder.prototype = {
       
       // Set the default value of each property to the instance value
       for(var i = 0 ; i < formDef.fields.length ; i++) {
-         var fieldName = formDef.fields[i].inputParams.name;
-         formDef.fields[i].inputParams.value = instanceObject[fieldName];
+         var fieldName = formDef.fields[i].name;
+         formDef.fields[i].value = instanceObject[fieldName];
       }
       
       return formDef;
@@ -897,7 +920,7 @@ inputEx.Field.prototype = {
   
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
 	setOptions: function(options) {
 
@@ -1148,13 +1171,14 @@ inputEx.Field.prototype = {
       // Unsubscribe all listeners on the updatedEvt
       this.updatedEvt.unsubscribeAll();
       
+      // Purge element (remove listeners on el and childNodes recursively)
+      util.Event.purgeElement(el, true);
+      
       // Remove from DOM
       if(Dom.inDocument(el)) {
          el.parentNode.removeChild(el);
       }
       
-      // recursively purge element
-      util.Event.purgeElement(el, true);
    },
    
    /**
@@ -1200,16 +1224,33 @@ inputEx.Field.prototype = {
     */
    isEmpty: function() {
       return this.getValue() === '';
-   }
+   },
+
+	/**
+	 * Set the parentField.
+	 * Generally use by composable fields (ie. Group,Form,ListField,CombineField,...}
+	 * @param {inputEx.Group|inputEx.Form|inputEx.ListField|inputEx.CombineField} parentField The parent field instance
+	 */
+	setParentField: function(parentField) {
+		this.parentField = parentField;
+	},
+	
+	/**
+	 * Return the parent field instance
+	 * @return {inputEx.Group|inputEx.Form|inputEx.ListField|inputEx.CombineField}
+	 */
+	getParentField: function() {
+		return this.parentField;
+	}
    
 };
 
 inputEx.Field.groupOptions = [
-   { type: "string", inputParams:{label: "Label", name: "label", value: ''} },
-   { type: "string", inputParams:{label: "Name", name: "name", value: ''} },
-   { type: "string", inputParams: {label: "Description",name: "description", value: ''} },
-   { type: "boolean", inputParams: {label: "Required?",name: "required", value: false} },
-   { type: "boolean", inputParams: {label: "Show messages",name: "showMsg", value: false} }
+   { type: "string", label: "Label", name: "label", value: '' },
+   { type: "string", label: "Name", name: "name", value: '' },
+   { type: "string", label: "Description",name: "description", value: '' },
+   { type: "boolean", label: "Required?",name: "required", value: false },
+   { type: "boolean", label: "Show messages",name: "showMsg", value: false }
 ];
 
 })();(function() {
@@ -1223,7 +1264,7 @@ inputEx.Field.groupOptions = [
  * @constructor
  * @param {Object} options The following options are added for Groups and subclasses:
  * <ul>
- *   <li>fields: Array of input fields declared like { label: 'Enter the value:' , type: 'text' or fieldClass: inputEx.Field, optional: true/false, inputParams: {inputparams object} }</li>
+ *   <li>fields: Array of input fields declared like { label: 'Enter the value:' , type: 'text' or fieldClass: inputEx.Field, optional: true/false, ... }</li>
  *   <li>legend: The legend for the fieldset (default is an empty string)</li>
  *   <li>collapsible: Boolean to make the group collapsible (default is false)</li>
  *   <li>collapsed: If collapsible only, will be collapsed at creation (default is false)</li>
@@ -1242,28 +1283,19 @@ lang.extend(inputEx.Group, inputEx.Field, {
    
    /**
     * Adds some options: legend, collapsible, fields...
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
-   
-   	this.options = {};
-   	
+      
+      inputEx.Group.superclass.setOptions.call(this, options);
+         	
    	this.options.className = options.className || 'inputEx-Group';
    	
    	this.options.fields = options.fields;
    	
-   	this.options.id = options.id;
-   	
-   	this.options.name = options.name;
-   	
-   	this.options.value = options.value;
-   	
    	this.options.flatten = options.flatten;
    
       this.options.legend = options.legend || '';
-   
-      // leave this for compatibility reasons
-      this.inputConfigs = options.fields;
    
       this.options.collapsible = lang.isUndefined(options.collapsible) ? false : options.collapsible;
       this.options.collapsed = lang.isUndefined(options.collapsed) ? false : options.collapsed;
@@ -1288,7 +1320,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
    	   this.divEl.id = this.options.id;
    	}
   	   
-  	   this.renderFields(this.divEl);  	  
+  	   this.renderFields(this.divEl);
   	   
   	   if(this.options.disabled) {
   	      this.disable();
@@ -1312,7 +1344,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
       }
    
       if(!lang.isUndefined(this.options.legend) && this.options.legend !== ''){
-         this.legend.appendChild( document.createTextNode(" "+this.options.legend) );
+         this.legend.appendChild( inputEx.cn("span", null, null, " "+this.options.legend) );
       }
    
       if( this.options.collapsible || (!lang.isUndefined(this.options.legend) && this.options.legend !== '') ) {
@@ -1344,12 +1376,12 @@ lang.extend(inputEx.Group, inputEx.Field, {
   
    /**
     * Instanciate one field given its parameters, type or fieldClass
-    * @param {Object} fieldOptions The field properties as required bu inputEx.buildField
+    * @param {Object} fieldOptions The field properties as required by the inputEx() method
     */
    renderField: function(fieldOptions) {
 
       // Instanciate the field
-      var fieldInstance = inputEx.buildField(fieldOptions);      
+      var fieldInstance = inputEx(fieldOptions,this);
       
 	   this.inputs.push(fieldInstance);
       
@@ -1408,6 +1440,38 @@ lang.extend(inputEx.Group, inputEx.Field, {
       }
       return response;
    },
+	
+	/**
+	 * Alternative method to validate for advanced error handling
+	 * @returns {Object} with all Forms's fields state, error message
+	 * and validate containing a boolean for the global Form validation
+	 */
+	getFieldsStates: function() {
+		var input, inputName, state, message,
+		returnedObj = { fields:{}, validate:true };
+      
+      // Loop on all the sub fields
+      for (var i = 0 ; i < this.inputs.length ; i++) {
+	
+   	   input = this.inputs[i];
+			inputName = input.options.name;
+   	   state = input.getState();
+			message = input.getStateString(state);
+						
+			returnedObj.fields[inputName] = {};
+			returnedObj.fields[inputName].valid = true;
+			returnedObj.fields[inputName].message = message;
+			
+			// check if subfield validates
+   	   if( state == inputEx.stateRequired || state == inputEx.stateInvalid ) {
+				returnedObj.fields[inputName].valid = false;
+				returnedObj.validate = false;
+   	   }
+
+      }
+
+      return returnedObj;
+	},
    
    /**
     * Enable all fields in the group
@@ -1619,7 +1683,26 @@ lang.extend(inputEx.Group, inputEx.Field, {
 				}
 			}
 		}
-	}
+	},
+
+   
+   /**
+    * Purge all event listeners and remove the component from the dom
+    */
+   destroy: function() {
+      
+      var i, length, field;
+      
+      // Recursively destroy inputs
+      for (i = 0, length = this.inputs.length ; i < length ; i++) {
+         field = this.inputs[i];
+         field.destroy();
+      }
+      
+      // Destroy group itself
+      inputEx.Group.superclass.destroy.call(this);
+      
+   }
    
    
 });
@@ -1627,16 +1710,217 @@ lang.extend(inputEx.Group, inputEx.Field, {
    
 // Register this class as "group" type
 inputEx.registerType("group", inputEx.Group, [
-   { type: "string", inputParams:{label: "Name", name: "name", value: ''} },
-   { type: 'string', inputParams: { label: 'Legend', name:'legend'}},
-   { type: 'boolean', inputParams: {label: 'Collapsible', name:'collapsible', value: false}},
-   { type: 'boolean', inputParams: {label: 'Collapsed', name:'collapsed', value: false}},
-   { type: 'list', inputParams:{ label: 'Fields', name: 'fields', elementType: {type: 'type' } } }
+   { type: "string", label: "Name", name: "name", value: '' },
+   { type: 'string', label: 'Legend', name:'legend'},
+   { type: 'boolean', label: 'Collapsible', name:'collapsible', value: false},
+   { type: 'boolean', label: 'Collapsed', name:'collapsed', value: false},
+   { type: 'list', label: 'Fields', name: 'fields', elementType: {type: 'type' } }
 ], true);
 
 
 })();(function () {
-   var util = YAHOO.util, lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = util.Dom;
+   var util = YAHOO.util, lang = YAHOO.lang, Event = util.Event, Dom = util.Dom;
+
+/**
+ * Create a button
+ * @class inputEx.widget.Button
+ * @constructor
+ * @param {Object} options The following options are available for Button :
+ * <ul>
+ * 	<li><b>id</b>: id of the created A element (default is auto-generated)</li>
+ * 	<li><b>className</b>: CSS class added to the button (default is either "inputEx-Button-Link" or "inputEx-Button-Submit-Link", depending on "type")</li>
+ * 	<li><b>parentEl</b>: The DOM element where we should append the button</li>
+ * 	<li><b>type</b>: "link", "submit-link" or "submit"</li>
+ * 	<li><b>value</b>: text displayed inside the button</li>
+ * 	<li><b>disabled</b>: Disable the button after creation</li>
+ * 	<li><b>onClick</b>: Custom click event handler</li>
+ * </ul>
+ */
+inputEx.widget.Button = function(options) {
+   
+   this.setOptions(options || {});
+      
+   if (!!this.options.parentEl) {
+      this.render(this.options.parentEl);
+   }
+   
+};
+
+
+lang.augmentObject(inputEx.widget.Button.prototype,{
+   
+   /**
+ 	 * set the default options
+ 	 */
+   setOptions: function(options) {
+      
+      this.options = {};
+      this.options.id = lang.isString(options.id) ? options.id  : Dom.generateId();
+      this.options.className = options.className || "inputEx-Button";
+      this.options.parentEl = lang.isString(options.parentEl) ? Dom.get(options.parentEl) : options.parentEl;
+      
+      // default type === "submit"
+      this.options.type = (options.type === "link" || options.type === "submit-link") ? options.type : "submit";
+      
+      // value is the text displayed inside the button (<input type="submit" value="Submit" /> convention...)
+      this.options.value = options.value;
+      
+      this.options.disabled = !!options.disabled;
+      
+      if (lang.isFunction(options.onClick)) {
+         this.options.onClick = {fn: options.onClick, scope:this};
+         
+      } else if (lang.isObject(options.onClick)) {
+         this.options.onClick = {fn: options.onClick.fn, scope: options.onClick.scope || this};
+      }
+      
+   },
+   
+   /**
+ 	 * render the button into the parent Element
+    * @param {DOMElement} parentEl The DOM element where the button should be rendered
+	 * @return {DOMElement} The created button
+	 */
+   render: function(parentEl) {
+      
+      var innerSpan;
+      
+      if (this.options.type === "link" || this.options.type === "submit-link") {
+         
+         this.el = inputEx.cn('a', {className: this.options.className, id:this.options.id, href:"#"});
+         Dom.addClass(this.el,this.options.type === "link" ? "inputEx-Button-Link" : "inputEx-Button-Submit-Link");
+         
+         innerSpan = inputEx.cn('span', null, null, this.options.value);
+         
+         this.el.appendChild(innerSpan);
+         
+      // default type is "submit" input
+      } else {
+         
+         this.el = inputEx.cn('input', {type: "submit", value: this.options.value, className: this.options.className, id:this.options.id});
+         Dom.addClass(this.el,"inputEx-Button-Submit");
+      }
+      
+      parentEl.appendChild(this.el);
+      
+      if (this.options.disabled) {
+         this.disable();
+      }
+      
+      this.initEvents();
+      
+      return this.el;
+   },
+   
+   /**
+ 	 * attach the listeners on "click" event and create the custom events
+	 */
+   initEvents: function() {
+
+      /**
+		 * Click Event facade (YUI custom event)
+ 		 * @event clickEvent
+		 */ 
+      this.clickEvent = new util.CustomEvent("click");
+
+      /**
+		 * Submit Event facade (YUI custom event)
+ 		 * @event submitEvent
+		 */
+      this.submitEvent = new util.CustomEvent("submit");
+      
+      
+      Event.addListener(this.el,"click",function(e) {
+         
+         var fireSubmitEvent;
+         
+         // stop click event, so :
+         //
+         //  1. buttons of 'link' or 'submit-link' type don't link to any url
+         //  2. buttons of 'submit' type (<input type="submit" />) don't fire a 'submit' event
+         Event.stopEvent(e);
+         
+         // button disabled : don't fire clickEvent, and stop here
+         if (this.disabled) {
+            fireSubmitEvent = false;
+            
+         // button enabled : fire clickEvent
+         } else {
+            // submit event will be fired if not prevented by clickEvent
+            fireSubmitEvent = this.clickEvent.fire();
+         }
+         
+         // link buttons should NOT fire a submit event
+         if (this.options.type === "link") {
+            fireSubmitEvent = false;
+         }
+         
+         if (fireSubmitEvent) {
+            this.submitEvent.fire();
+         }
+         
+      },this,true);
+      
+      // Subscribe onClick handler
+      if (this.options.onClick) {
+         this.clickEvent.subscribe(this.options.onClick.fn,this.options.onClick.scope,true);
+      }
+      
+   },
+   
+   /**
+ 	 * Disable the button
+	 */
+   disable: function() {
+      
+      this.disabled = true;
+      
+      Dom.addClass(this.el,"inputEx-Button-disabled");
+      
+      if (this.options.type === "submit") {
+         this.el.disabled = true;
+      }
+   },
+   
+   /**
+ 	 * Enable the button
+	 */
+   enable: function() {
+      
+      this.disabled = false;
+      
+      Dom.removeClass(this.el,"inputEx-Button-disabled");
+      
+      if (this.options.type === "submit") {
+         this.el.disabled = false;
+      }
+   },
+   
+   
+   /**
+    * Purge all event listeners and remove the component from the dom
+    */
+   destroy: function() {
+      
+      // Unsubscribe all listeners to click and submit events
+      this.clickEvent.unsubscribeAll();
+      this.submitEvent.unsubscribeAll();
+      
+      // Purge element (remove listeners on el and childNodes recursively)
+      util.Event.purgeElement(this.el, true);
+      
+      // Remove from DOM
+      if(Dom.inDocument(this.el)) {
+         this.el.parentNode.removeChild(this.el);
+      }
+      
+   }
+   
+   
+});
+
+})();(function () {
+   var util = YAHOO.util, lang = YAHOO.lang, Event = util.Event, Dom = util.Dom;
 
 /**
  * Create a group of fields within a FORM tag and adds buttons
@@ -1658,7 +1942,7 @@ lang.extend(inputEx.Form, inputEx.Group, {
 
    /**
     * Adds buttons and set ajax default parameters
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.Form.superclass.setOptions.call(this, options);
@@ -1671,7 +1955,7 @@ lang.extend(inputEx.Form, inputEx.Group, {
    	this.options.method = options.method;
 
 		this.options.className =  options.className || 'inputEx-Group';
-		this.options.autocomplete = lang.isUndefined(options.autocomplete) ? true : options.autocomplete;
+		this.options.autocomplete = (options.autocomplete === false || options.autocomplete === "off") ? false : true;
 		
 		this.options.enctype = options.enctype;
 
@@ -1734,25 +2018,30 @@ lang.extend(inputEx.Form, inputEx.Group, {
     * Render the buttons
     */
    renderButtons: function() {
-
+       
+      var buttonConf, button, i, buttonsNb = this.options.buttons.length;
+      
       this.buttonDiv = inputEx.cn('div', {className: 'inputEx-Form-buttonBar'});
 
-	   var button, buttonEl;
-	   for(var i = 0 ; i < this.options.buttons.length ; i++ ) {
-	      button = this.options.buttons[i];
-	
-			// Throw Error if button is undefined
-			if(!button) {
-				throw new Error("inputEx.Form: One of the provided button is undefined ! (check trailing comma)");
-			}
-			
-	      buttonEl = inputEx.cn('input', {type: button.type, value: button.value});
-	      if( button.onClick ) { buttonEl.onclick = button.onClick; }
-	      this.buttons.push(buttonEl);
-	      this.buttonDiv.appendChild(buttonEl);
-	   }
-
-	   this.form.appendChild(this.buttonDiv);
+      for(i = 0 ; i < buttonsNb ; i++ ) {
+         buttonConf = this.options.buttons[i];
+   
+         // Throw Error if button is undefined
+         if(!buttonConf) {
+            throw new Error("inputEx.Form: One of the provided button is undefined ! (check trailing comma)");
+         }
+         
+         button = new inputEx.widget.Button(buttonConf);
+         button.render(this.buttonDiv);
+         
+         this.buttons.push(button);
+         
+      }
+      
+      // useful for link buttons re-styling (float required on <a>'s ... )
+      this.buttonDiv.appendChild(inputEx.cn('div',null,{clear:'both'}));
+      
+      this.form.appendChild(this.buttonDiv);
    },
 
 
@@ -1760,10 +2049,44 @@ lang.extend(inputEx.Form, inputEx.Group, {
     * Init the events
     */
    initEvents: function() {
+      
+      var i, length;
+      
       inputEx.Form.superclass.initEvents.call(this);
-
-      // Handle the submit event
-      Event.addListener(this.form, 'submit', this.options.onSubmit || this.onSubmit,this,true);
+      
+      
+      // Custom event to normalize form submits
+      this.submitEvent = new util.CustomEvent("submit");
+      
+      
+      // Two ways to trigger the form submitEvent firing
+      //
+      //
+      // 1. catch a 'submit' event on form (say a user pressed <Enter> in a field)
+      //
+         Event.addListener(this.form, 'submit', function(e) {
+         
+            // always stop event
+            Event.stopEvent(e);
+         
+            // replace with custom event
+            this.submitEvent.fire();
+         
+         },this,true);
+      
+      
+      //
+      // 2. click on a 'submit' or 'submit-link' button
+      //
+         for(i=0, length=this.buttons.length; i<length; i++) {
+         
+            this.buttons[i].submitEvent.subscribe(function() { this.submitEvent.fire(); }, this, true);
+         
+         }
+      
+      
+      // When form submitEvent is fired, call onSubmit
+      this.submitEvent.subscribe(this.options.onSubmit || this.onSubmit, this, true);
    },
 
    /**
@@ -1772,17 +2095,20 @@ lang.extend(inputEx.Form, inputEx.Group, {
     * @param {Event} e The original onSubmit event
     */
    onSubmit: function(e) {
-      
+	   
       // do nothing if does not validate
 	   if ( !this.validate() ) {
-		   Event.stopEvent(e); // no submit
-		   return; // no ajax submit
+		   return; // no submit
 	   }
 	   
 	   if(this.options.ajax) {
-		   Event.stopEvent(e);
-	      this.asyncRequest();
+	      this.asyncRequest(); // send ajax request
+	      return;
 	   }
+	   
+	   // normal submit finally
+	   // (won't fire a dom "submit" event, so no risk to loop)
+	   this.form.submit();
    },
 
    /**
@@ -1926,8 +2252,9 @@ lang.extend(inputEx.Form, inputEx.Group, {
     */
    enable: function() {
       inputEx.Form.superclass.enable.call(this);
+      
       for (var i = 0 ; i < this.buttons.length ; i++) {
- 	      this.buttons[i].disabled = false;
+ 	      this.buttons[i].enable();
       }
    },
 
@@ -1936,9 +2263,32 @@ lang.extend(inputEx.Form, inputEx.Group, {
     */
    disable: function() {
       inputEx.Form.superclass.disable.call(this);
+      
       for (var i = 0 ; i < this.buttons.length ; i++) {
- 	      this.buttons[i].disabled = true;
+         this.buttons[i].disable();
       }
+   },
+   
+   
+   /**
+    * Purge all event listeners and remove the component from the dom
+    */
+   destroy: function() {
+      
+      var i, length, button;
+      
+      // Unsubscribe all listeners to submit event
+      this.submitEvent.unsubscribeAll();
+      
+      // Recursively destroy buttons
+      for (i = 0, length = this.buttons.length ; i < length ; i++) {
+         button = this.buttons[i];
+         button.destroy();
+      }
+      
+      // destroy Form itself (+ inputs)
+      inputEx.Form.superclass.destroy.call(this);
+      
    }
 
 });
@@ -1949,19 +2299,17 @@ inputEx.messages.ajaxWait = "Please wait...";
 
 // Register this class as "form" type
 inputEx.registerType("form", inputEx.Form, [
-   {type: 'list', inputParams:{ 
+   {  
+      type: 'list', 
       label: 'Buttons', 
       name: 'buttons', 
-         elementType: {
-            type: 'group', 
-            inputParams: { 
-               fields: [
-                  { inputParams: {label: 'Label', name: 'value'}},
-                  { type: 'select', inputParams: {label: 'Type', name: 'type', selectValues:["button", "submit"]} }
-               ] 
-            } 
-         } 
-      } 
+      elementType: {
+         type: 'group', 
+         fields: [
+            { label: 'Label', name: 'value'},
+            { type: 'select', label: 'Type', name: 'type', selectValues:["button", "submit"] }
+         ]
+      }
    }
 ]);
 
@@ -1988,12 +2336,10 @@ inputEx.CombineField = function(options) {
 lang.extend( inputEx.CombineField, inputEx.Group, {
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.CombineField.superclass.setOptions.call(this, options);
-
-      this.options.label = options.label;
 
       // Overwrite options
       this.options.className = options.className ? options.className : 'inputEx-CombineField';
@@ -2069,8 +2415,7 @@ lang.extend( inputEx.CombineField, inputEx.Group, {
       
       // Subfields should inherit required property
       if (this.options.required) {
-         if (!fieldOptions.inputParams) {fieldOptions.inputParams = {};}
-         fieldOptions.inputParams.required = true;
+         fieldOptions.required = true;
       }
       
       return inputEx.CombineField.superclass.renderField.call(this, fieldOptions);
@@ -2123,8 +2468,8 @@ lang.extend( inputEx.CombineField, inputEx.Group, {
 	
 // Register this class as "combine" type
 inputEx.registerType("combine", inputEx.CombineField, [
-   { type: 'list', inputParams: {name: 'fields', label: 'Elements', required: true, elementType: {type: 'type'} } },
-   { type: 'list', inputParams: {name: 'separators', label: 'Separators', required: true } }
+   { type: 'list', name: 'fields', label: 'Elements', required: true, elementType: {type: 'type'} },
+   { type: 'list', name: 'separators', label: 'Separators', required: true }
 ]);
 	
 })();(function() {
@@ -2157,7 +2502,7 @@ inputEx.StringField = function(options) {
 lang.extend(inputEx.StringField, inputEx.Field, {
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
 	setOptions: function(options) {
 	   inputEx.StringField.superclass.setOptions.call(this, options);
@@ -2168,6 +2513,8 @@ lang.extend(inputEx.StringField, inputEx.Field, {
 	   this.options.minLength = options.minLength;
 	   this.options.typeInvite = options.typeInvite;
 	   this.options.readonly = options.readonly;
+	   this.options.autocomplete = (options.autocomplete === false || options.autocomplete === "off") ? false : true;
+	   this.options.trim = (options.trim === true) ? true : false;
    },
 
 
@@ -2183,11 +2530,12 @@ lang.extend(inputEx.StringField, inputEx.Field, {
       var attributes = {};
       attributes.type = 'text';
       attributes.id = this.divEl.id?this.divEl.id+'-field':YAHOO.util.Dom.generateId();
-      if(this.options.size) attributes.size = this.options.size;
-      if(this.options.name) attributes.name = this.options.name;
-      if(this.options.readonly) attributes.readonly = 'readonly';
+      if(this.options.size) { attributes.size = this.options.size; }
+      if(this.options.name) { attributes.name = this.options.name; }
+      if(this.options.readonly) { attributes.readonly = 'readonly'; }
 
-      if(this.options.maxLength) attributes.maxLength = this.options.maxLength;
+      if(this.options.maxLength) { attributes.maxLength = this.options.maxLength; }
+      if(!this.options.autocomplete) { attributes.autocomplete = 'off'; }
 
       // Create the node
       this.el = inputEx.cn('input', attributes);
@@ -2222,7 +2570,16 @@ lang.extend(inputEx.StringField, inputEx.Field, {
     * @param {String} The string value
     */
    getValue: function() {
-	   return (this.options.typeInvite && this.el.value == this.options.typeInvite) ? '' : this.el.value;
+      
+      var value;
+      
+      value = (this.options.typeInvite && this.el.value == this.options.typeInvite) ? '' : this.el.value;
+      
+      if (this.options.trim) {
+         value = YAHOO.lang.trim(value);
+      }
+      
+	   return value;
    },
 
    /**
@@ -2370,9 +2727,9 @@ inputEx.messages.stringTooShort = ["This field should contain at least "," numbe
 
 // Register this class as "string" type
 inputEx.registerType("string", inputEx.StringField, [
-    { type: 'string',  inputParams: { label: 'Type invite', name: 'typeInvite', value: ''}},
-    { type: 'integer', inputParams: { label: 'Size', name: 'size', value: 20}},
-    { type: 'integer', inputParams: { label: 'Min. length', name: 'minLength', value: 0}}
+    { type: 'string', label: 'Type invite', name: 'typeInvite', value: ''},
+    { type: 'integer', label: 'Size', name: 'size', value: 20},
+    { type: 'integer', label: 'Min. length', name: 'minLength', value: 0}
 ]);
 
 })();
@@ -2387,24 +2744,25 @@ inputEx.registerType("string", inputEx.StringField, [
  * @extends inputEx.StringField
  * @param {Object} options Added options for Autocompleter
  * <ul>
- *	  <li>datasource: the datasource</li>
- *	  <li>autoComp: autocompleter options</li>
+ *  <li>datasource: the datasource</li>
+ *  <li>autoComp: autocompleter options</li>
  *   <li>returnValue: function to format the returned value (optional)</li>
  * </ul>
  */
 inputEx.AutoComplete = function(options) {
    inputEx.AutoComplete.superclass.constructor.call(this, options);
+
 };
 
 lang.extend(inputEx.AutoComplete, inputEx.StringField, {
 
    /**
     * Adds autocomplete options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.AutoComplete.superclass.setOptions.call(this, options);
-      
+  
       // Overwrite options
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-AutoComplete';
       
@@ -2412,6 +2770,8 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       this.options.datasource = options.datasource;
       this.options.autoComp = options.autoComp;
       this.options.returnValue = options.returnValue;
+      this.options.generateRequest = options.generateRequest;
+      this.options.datasourceParameters = options.datasourceParameters;
    },
    
    /**
@@ -2421,11 +2781,10 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
     *   <li>listener to autocompleter textboxBlurEvent added in buildAutocomplete method</li>
     * </ul>
     */
-   initEvents: function() {	
-	   inputEx.AutoComplete.superclass.initEvents.call(this);
-	   
-	   // remove standard blur listener
-	   Event.removeBlurListener(this.el, this.onBlur);
+   initEvents: function() {
+      inputEx.AutoComplete.superclass.initEvents.call(this);
+
+      // remove standard blur listener
    },
 
    /**
@@ -2444,7 +2803,7 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       if(this.options.size) attributes.size = this.options.size;
       if(this.options.readonly) attributes.readonly = 'readonly';
       if(this.options.maxLength) attributes.maxLength = this.options.maxLength;
-   
+
       // Create the node
       this.el = inputEx.cn('input', attributes);
       
@@ -2476,10 +2835,22 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       if(!this._nElementsReady) { this._nElementsReady = 0; }
       this._nElementsReady++;
       if(this._nElementsReady != 2) return;
+
+      if(!lang.isUndefined(this.options.datasourceParameters))
+      {
+         for (param in this.options.datasourceParameters)
+         {
+            this.options.datasource[param] = this.options.datasourceParameters[param];
+         }
+      }
+
       
       // Instantiate AutoComplete
       this.oAutoComp = new YAHOO.widget.AutoComplete(this.el.id, this.listEl.id, this.options.datasource, this.options.autoComp);
-
+      if(!lang.isUndefined(this.options.generateRequest))
+      {
+          this.oAutoComp.generateRequest = this.options.generateRequest;
+      }
       // subscribe to the itemSelect event
       this.oAutoComp.itemSelectEvent.subscribe(this.itemSelectHandler, this, true);
       
@@ -2496,24 +2867,31 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
     * @param {} aArgs
     */
    itemSelectHandler: function(sType, aArgs) {
-   	var aData = aArgs[2];
-   	this.setValue( this.options.returnValue ? this.options.returnValue(aData) : aData[0] );
+      var aData = aArgs[2];
+      this.setValue( this.options.returnValue ? this.options.returnValue(aData) : aData[0] );
    },
-   
+
+   onBlur: function(e){
+	 if (this.hiddenEl.value != this.el.value && this.el.value != this.options.typeInvite) this.el.value = this.hiddenEl.value;
+	   if(this.el.value == '' && this.options.typeInvite) {
+	         Dom.addClass(this.divEl, "inputEx-typeInvite");
+			 if (this.el.value == '') this.el.value = this.options.typeInvite;
+     }
+},
    /**
     * onChange event handler
     * @param {Event} e The original 'change' event
     */
-	onChange: function(e) {
-	   this.setClassFromState();
-	   
-	   // Clear the field when no value 
+   onChange: function(e) {
+      this.setClassFromState();
+      // Clear the field when no value 
+	 if (this.hiddenEl.value != this.el.value) this.hiddenEl.value = this.el.value;
       lang.later(50, this, function() {
          if(this.el.value == "") {
             this.setValue("");
          }
       });
-	},
+   },
    
    /**
     * Set the value
@@ -2521,17 +2899,16 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
     * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
     */
    setValue: function(value, sendUpdatedEvt) {
-	
       this.hiddenEl.value = value || "";
-      
+      this.el.value  =  value || "";
       // "inherited" from inputex.Field :
       //    (can't inherit of inputex.StringField because would set this.el.value...)
       //
-	   // set corresponding style
-   	this.setClassFromState();
-	   
-	   if(sendUpdatedEvt !== false) {
-	      // fire update event
+   // set corresponding style
+   this.setClassFromState();
+
+   if(sendUpdatedEvt !== false) {
+      // fire update event
          this.fireUpdatedEvt();
       }
    },
@@ -2572,7 +2949,7 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
 	   
 	/**
 	 * Adds the CheckBox specific options
-	 * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+	 * @param {Object} options Options object as passed to the constructor
 	 */
 	setOptions: function(options) {
 	   inputEx.CheckBox.superclass.setOptions.call(this, options);
@@ -2595,15 +2972,16 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
 	renderComponent: function() {
 	
    	var checkBoxId = this.divEl.id?this.divEl.id+'-field':YAHOO.util.Dom.generateId();
-   	
-	   this.el = inputEx.cn('input', { id: checkBoxId, type: 'checkbox', checked:(this.options.checked === false) ? false : true });
+	   this.el = inputEx.cn('input', { id: checkBoxId, type: 'checkbox' });
+
 	   this.fieldContainer.appendChild(this.el);
 	
 	   this.rightLabelEl = inputEx.cn('label', {"for": checkBoxId, className: 'inputEx-CheckBox-rightLabel'}, null, this.options.rightLabel);
 	   this.fieldContainer.appendChild(this.rightLabelEl);
 	
 	   // Keep state of checkbox in a hidden field (format : this.checkedValue or this.uncheckedValue)
-	   this.hiddenEl = inputEx.cn('input', {type: 'hidden', name: this.options.name || '', value: this.el.checked ? this.checkedValue : this.uncheckedValue});
+	   // This is useful for non-javascript form submit (it allows custom checked/unchecked values to be submitted)
+	   this.hiddenEl = inputEx.cn('input', {type: 'hidden', name: this.options.name || '', value: this.uncheckedValue});
 	   this.fieldContainer.appendChild(this.hiddenEl);
 	},
 	   
@@ -2611,7 +2989,6 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
 	 * Clear the previous events and listen for the "change" event
 	 */
 	initEvents: function() {
-	   Event.addListener(this.el, "change", this.onChange, this, true);	
 	   
 	   // Awful Hack to work in IE6 and below (the checkbox doesn't fire the change event)
 	   // It seems IE 8 removed this behavior from IE7 so it only works with IE 7 ??
@@ -2619,7 +2996,9 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
 	      Event.addListener(this.el, "click", function() { this.fireUpdatedEvt(); }, this, true);	
 	   }*/
 	   if( YAHOO.env.ua.ie ) {
-	      Event.addListener(this.el, "click", function() { YAHOO.lang.later(10,this,this.fireUpdatedEvt); }, this, true);	
+	      Event.addListener(this.el, "click", function(e) { YAHOO.lang.later(10,this,function(){this.onChange(e);}); }, this, true);	
+	   } else {
+	      Event.addListener(this.el, "change", this.onChange, this, true);
 	   }
 	   
 	   Event.addFocusListener(this.el, this.onFocus, this, true);
@@ -2633,10 +3012,7 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
 	onChange: function(e) {
 	   this.hiddenEl.value = this.el.checked ? this.checkedValue : this.uncheckedValue;
 	
-      // In IE the fireUpdatedEvent is sent by the click ! We need to send it only once ! 
-      if( !YAHOO.env.ua.ie ) {
-	      inputEx.CheckBox.superclass.onChange.call(this,e);
-      }
+	   inputEx.CheckBox.superclass.onChange.call(this,e);
 	},
 	
 	/**
@@ -2653,17 +3029,36 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
     * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
 	 */
 	setValue: function(value, sendUpdatedEvt) {
-	   if (value===this.checkedValue) {
-			this.hiddenEl.value = value;
+	   if (value===this.checkedValue || (typeof(value) == 'string' && typeof(this.checkedValue) == 'boolean' &&
+		value === String(this.checkedValue))) {
+			this.hiddenEl.value = this.checkedValue;
+			
+			// check checkbox (all browsers)
 			this.el.checked = true;
+			
+			// hacks for IE6, because input is not operational at init, 
+			// so "this.el.checked = true" would work for default values !
+			// (but still work for later setValue calls)
+			if (YAHOO.env.ua.ie === 6) {
+			   this.el.setAttribute("defaultChecked","checked"); // for IE6
+		   }
 		}
 	   else {
 	      // DEBUG :
 	      /*if (value!==this.uncheckedValue && lang.isObject(console) && lang.isFunction(console.log) ) {
 	         console.log("inputEx.CheckBox: value is *"+value+"*, schould be in ["+this.checkedValue+","+this.uncheckedValue+"]");
          }*/
-			this.hiddenEl.value = value;
-			this.el.checked = false;
+			this.hiddenEl.value = this.uncheckedValue;
+			
+			// uncheck checkbox (all browsers)
+		   this.el.checked = false;
+		   
+			// hacks for IE6, because input is not operational at init, 
+			// so "this.el.checked = false" would work for default values !
+			// (but still work for later setValue calls)
+			if (YAHOO.env.ua.ie === 6) {
+			   this.el.removeAttribute("defaultChecked"); // for IE6
+		   }
 		}
 		
 		// Call Field.setValue to set class and fire updated event
@@ -2688,7 +3083,7 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
 	
 // Register this class as "boolean" type
 inputEx.registerType("boolean", inputEx.CheckBox, [ 
-   {type: 'string', inputParams: {label: 'Right Label', name: 'rightLabel'} } 
+   {type: 'string', label: 'Right Label', name: 'rightLabel'}
 ]);
 	
 })();(function() {
@@ -2706,10 +3101,6 @@ inputEx.registerType("boolean", inputEx.CheckBox, [
  *   <li>palette: default palette to be used (if colors option not provided)</li>
  *   <li>cellPerLine: how many colored cells in a row on the palette</li>
  *   <li>ratio: screen-like ratio to display the palette, syntax: [with,height], default: [16,9] (if cellPerLine not provided)</li>
- *   <li>overlayPadding: padding inside the popup palette</li>
- *   <li>cellWidth: width of a colored cell</li>
- *   <li>cellHeight: height of a colored cell</li>
- *   <li>cellMargin: margin of a colored cell (cell spacing = 2*cellMarging)</li>
  * </ul>
  */
 inputEx.ColorField = function(options) {
@@ -2719,7 +3110,7 @@ lang.extend(inputEx.ColorField, inputEx.Field, {
    
 	/**
 	 * Adds the 'inputEx-ColorField' default className
-	 * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+	 * @param {Object} options Options object as passed to the constructor
 	 */
    setOptions: function(options) {
    	inputEx.ColorField.superclass.setOptions.call(this, options);
@@ -2733,10 +3124,6 @@ lang.extend(inputEx.ColorField, inputEx.Field, {
    	
    	if (options.ratio) { this.options.ratio = options.ratio;}
    	if (options.cellPerLine) { this.options.cellPerLine = options.cellPerLine;}
-   	if (options.overlayPadding) { this.options.overlayPadding = options.overlayPadding;}
-   	if (options.cellHeight) { this.options.cellHeight = options.cellHeight;}
-   	if (options.cellWidth) { this.options.cellWidth = options.cellWidth;}
-   	if (options.cellMargin) { this.options.cellMargin = options.cellMargin;}
    },
    
 	/**
@@ -2748,7 +3135,7 @@ lang.extend(inputEx.ColorField, inputEx.Field, {
 	   this.el = inputEx.cn('input', {
 	      type: 'hidden', 
 	      name: this.options.name || '', 
-	      value: this.options.value || '#DD7870' });
+	      value: this.options.value || '#FFFFFF' });
 	   	   
 	   // Create a colored area
 	   this.colorEl = inputEx.cn('div', {className: 'inputEx-ColorField-button'}, {backgroundColor: this.el.value});
@@ -2800,11 +3187,13 @@ lang.extend(inputEx.ColorField, inputEx.Field, {
 	
 	renderPalette: function() {
       
+      var defaultPalette, overlayBody;
+      
       // render once !
       if (this.paletteRendered) return;
 
       // set default palette to be used
-      var defaultPalette = this.options.palette || 1;
+      defaultPalette = this.options.palette || 1;
 
       // set colors available
       this.colors = this.options.colors || this.setDefaultColors(defaultPalette);
@@ -2816,30 +3205,20 @@ lang.extend(inputEx.ColorField, inputEx.Field, {
       // set color grid dimensions
       this.cellPerLine = this.options.cellPerLine || Math.ceil(Math.sqrt(this.length*this.ratio[0]/this.ratio[1]));
       this.cellPerColumn = Math.ceil(this.length/this.cellPerLine);
-      this.overlayPadding = this.options.overlayPadding || 7;
-
-      // set cell dimensions
-      this.cellWidth = this.options.cellWidth || 17;
-      this.cellHeight = this.options.cellHeight || 17;
-      this.cellMargin = this.options.cellMargin || 4;
 
       // Render the color grid
-      var overlayBody = document.getElementById(this.oOverlay.body.id);
-      var colorGrid = this.renderColorGrid();
-      overlayBody.appendChild(colorGrid);
-
-      // Set overlay dimensions
-      var width = (this.cellWidth + 2*this.cellMargin) * this.cellPerLine + (YAHOO.env.ua.ie == 6 ? 3*this.overlayPadding : 0);
-      var height = (this.cellHeight + 2*this.cellMargin) * this.cellPerColumn + (YAHOO.env.ua.ie == 6 ? 3*this.overlayPadding : 0);
-
-      Dom.setStyle(overlayBody, "width", width+"px");
-      Dom.setStyle(overlayBody, "height", height+"px");
-      Dom.setStyle(overlayBody, "padding", this.overlayPadding+"px");
+      overlayBody = document.getElementById(this.oOverlay.body.id);
+      this.colorGrid = this.renderColorGrid();
+      overlayBody.appendChild(this.colorGrid);
 
       // Unsubscribe the event so this function is called only once
       this.button.unsubscribe("mousedown", this.renderPalette); 
 
       this.paletteRendered = true;
+      
+      // Select the square in the created palette from the value
+      // This must be done after "this.paletteRendered = true".
+      this.markSelectedColor();
 	},
 	
 	/**
@@ -2855,12 +3234,60 @@ lang.extend(inputEx.ColorField, inputEx.Field, {
 	 * This creates a color grid
 	 */
 	renderColorGrid: function() {
-	   var grid = inputEx.cn('div');
-	   for(var i = 0 ; i < this.length ; i++) {
-	      var square = inputEx.cn('div', {className: 'inputEx-ColorField-square'},{backgroundColor: this.colors[i], width:this.cellWidth+"px", height:this.cellHeight+"px", margin:this.cellMargin+"px" });
-	   	Event.addListener(square, "mousedown", this.onColorClick, this, true );
+	   
+	   var grid, eventDelegation, square, i;
+	   
+	   // remember squares
+	   this.squares = [];
+	
+	   // container
+	   grid = inputEx.cn('div', {className: 'inputEx-ColorField-Grid'});
+	   
+	   // Is event delegation available ?
+	   // (YAHOO.util.Event.delegate method is in "event-delegate" YUI-module)
+	   eventDelegation = !lang.isUndefined(Event.delegate);
+	   
+	   for(i = 0 ; i < this.length ; i++) {
+	      
+	      //var square = inputEx.cn('div', {className: 'inputEx-ColorField-square'},{backgroundColor: this.colors[i], width:this.cellWidth+"px", height:this.cellHeight+"px", margin:this.cellMargin+"px" });
+	      square = inputEx.cn('div', {className: 'inputEx-ColorField-square'},{backgroundColor: this.colors[i] });
 	   	grid.appendChild(square);
+			
+	   	this.squares.push(square);
+	   	
+	   	// No event delegation available : add a listener on each square
+	   	if (!eventDelegation) {
+	   	  Event.addListener(square, "mousedown", function(e) {
+	   	     var el = Event.getTarget(e);
+	   	     this.onColorClick(e,el,grid);
+	   	  }, this, true );
+   	   }
+	   	
+	   	// <br clear='both'/> insertion to end a line
+	   	// ( + always after the last colored square)
+	   	if (i%this.cellPerLine === this.cellPerLine-1 || i === this.length-1) {
+            grid.appendChild(inputEx.cn('br',{clear:'both'}));
+         }
       }
+      
+      // Mousedown event delegation
+      if (eventDelegation) {
+         
+         if (!lang.isUndefined(YAHOO.util.Selector)) {
+            
+            Event.delegate(grid,"mousedown",this.onColorClick,"div.inputEx-ColorField-square",this,true);
+            
+         } else {
+            
+            Event.delegate(grid,"mousedown",this.onColorClick,function(el) {
+               if (el.nodeName === "DIV" && YAHOO.util.Dom.hasClass(el,'inputEx-ColorField-square')) {
+                  return el;
+               }
+            },this,true);
+            
+         }
+      }
+      
 	   return grid;
 	},
 	   
@@ -2868,19 +3295,18 @@ lang.extend(inputEx.ColorField, inputEx.Field, {
 	 * Handle a color selection
 	 * @param {Event} e The original click event
 	 */
-	onColorClick: function(e) {
-	   
-		var square = Event.getTarget(e);
+	onColorClick: function(e,square,container) {
 		
 		// Stop the event to prevent a selection
 		Event.stopEvent(e);
-	   		   	
+	   
 	   // Overlay closure
       this.oOverlay.hide();
        
 	   // SetValue
 		var color = Dom.getStyle(square,'background-color');
 		var hexaColor = inputEx.ColorField.ensureHexa(color);
+		
 	   this.setValue(hexaColor);
 	},
 	
@@ -2890,8 +3316,10 @@ lang.extend(inputEx.ColorField, inputEx.Field, {
 	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
 	 */
 	setValue: function(value, sendUpdatedEvt) {
+		
 	   this.el.value = value;
-	   Dom.setStyle(this.colorEl, 'background-color', this.el.value);
+	
+		this.markSelectedColor(value);
 
 		// Call Field.setValue to set class and fire updated event
 		inputEx.ColorField.superclass.setValue.call(this,value, sendUpdatedEvt);
@@ -2910,6 +3338,56 @@ lang.extend(inputEx.ColorField, inputEx.Field, {
 	 */
 	close: function() {
 	  this.oOverlay.hide();
+	},
+	
+	/**
+    * Purge all event listeners and remove the component from the dom
+    */
+   destroy: function() {
+      
+      // colorEl listener
+      Event.purgeElement(this.colorEl);
+      
+      // remove squares' mousedown listener(s)
+      if (this.colorGrid) {
+         Event.purgeElement(this.colorGrid,true);
+      }
+      
+      inputEx.ColorField.superclass.destroy.call(this);
+      
+   },
+
+	markSelectedColor: function(value) {
+		
+		var i;
+		
+		value = value || this.getValue();
+		
+		// mark the colored square in the palette as 'selected'
+		if (!!value && this.paletteRendered) {
+			
+			value = value.toLowerCase(); // normalize case for following test
+			
+			for (i=0; i<this.length; i++) {
+				
+				// test color in lower case
+				if (this.colors[i].toLowerCase() === value) {
+					
+					YAHOO.util.Dom.addClass(this.squares[i],'selected');
+					
+				} else {
+					
+					YAHOO.util.Dom.removeClass(this.squares[i],'selected');
+					
+				}
+				
+			}
+			
+		}
+		
+		// set background color on colorEl
+		Dom.setStyle(this.colorEl, 'background-color', this.el.value);
+		
 	}
 	  
 }); 
@@ -2968,10 +3446,8 @@ inputEx.ColorField.ensureHexa = function (color) {
 // Register this class as "color" type
 inputEx.registerType("color", inputEx.ColorField, []);
 	
-})();(function() {
-	
+})();(function() {	
    var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
-	
 /**
  * A Date Field. 
  * @class inputEx.DateField
@@ -2990,14 +3466,14 @@ inputEx.DateField = function(options) {
 lang.extend(inputEx.DateField, inputEx.StringField, {
 	/**
 	 * Adds the 'inputEx-DateField' default className
-	 * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+	 * @param {Object} options Options object as passed to the constructor
 	 */
    setOptions: function(options) {
    	inputEx.DateField.superclass.setOptions.call(this, options);
    	
    	// Overwrite options
    	this.options.className = options.className ? options.className : 'inputEx-Field inputEx-DateField';
-   	this.options.messages.invalid = inputEx.messages.invalidDate;
+   	this.options.messages.invalid = inputEx.messages.invalidDate ? inputEx.messages.invalidDate : "Invalid date, ex: 03/27/2008";
    	
    	// Added options
    	this.options.dateFormat = options.dateFormat || inputEx.messages.defaultDateFormat;
@@ -3078,7 +3554,9 @@ lang.extend(inputEx.DateField, inputEx.StringField, {
 
 });
 
-// Those methods are limited but largely enough for our usage
+/**
+ * Those methods are limited but largely enough for our usage
+ */
 inputEx.DateField.parseWithFormat = function(sDate,format) {
 	var separator = format.match(/[^Ymd ]/g)[0];
 	var ladate = sDate.split(separator);
@@ -3089,6 +3567,9 @@ inputEx.DateField.parseWithFormat = function(sDate,format) {
    return (new Date(Y,m,d));
 };
 
+/**
+ * Those methods are limited but largely enough for our usage
+ */
 inputEx.DateField.formatDate = function(d,format) {
 	var str = format.replace('Y',d.getFullYear());
    var m = d.getMonth()+1;
@@ -3099,11 +3580,11 @@ inputEx.DateField.formatDate = function(d,format) {
 };
 	
 // Specific message for the container
-inputEx.messages.invalidDate = "Invalid date, ex: 03/27/2008";
+// inputEx.messages.invalidDate = "Invalid date, ex: 03/27/2008";
 	
 // Register this class as "date" type
 inputEx.registerType("date", inputEx.DateField, [
-   {type: 'select', inputParams: {label: 'Date format', name: 'dateFormat', selectOptions: ["m/d/Y", "d/m/Y"], selectValues: ["m/d/Y", "d/m/Y"] } }
+   {type: 'select', label: 'Date format', name: 'dateFormat', selectOptions: ["m/d/Y", "d/m/Y"], selectValues: ["m/d/Y", "d/m/Y"] }
 ]);
 	
 })();(function() {
@@ -3127,13 +3608,13 @@ inputEx.DateSplitField = function(options) {
    options.fields = [];
    for(var i = 0 ; i < 3 ; i++) {
       if(i == this.dayIndex) {
-         options.fields.push({type: 'integer', inputParams: { typeInvite: inputEx.messages.dayTypeInvite, size: 2} });
+         options.fields.push({type: 'integer', typeInvite: inputEx.messages.dayTypeInvite, size: 2 });
       }
       else if(i == this.yearIndex) {
-         options.fields.push({type: 'integer', inputParams: { typeInvite: inputEx.messages.yearTypeInvite, size: 4} });
+         options.fields.push({type: 'integer', typeInvite: inputEx.messages.yearTypeInvite, size: 4 });
       }
       else {
-         options.fields.push({type: 'integer', inputParams: {typeInvite: inputEx.messages.monthTypeInvite, size: 2} });
+         options.fields.push({type: 'integer', typeInvite: inputEx.messages.monthTypeInvite, size: 2 });
       }
    }
 
@@ -3277,14 +3758,15 @@ inputEx.DatePickerField = function(options) {
 lang.extend(inputEx.DatePickerField, inputEx.DateField, {
    /**
     * Set the default date picker CSS classes
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.DatePickerField.superclass.setOptions.call(this, options);
       
-      // Overwrite options
+      // Overwrite default options
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-DateField inputEx-PickerField inputEx-DatePickerField';
-      this.options.readonly = true;
+
+      this.options.readonly = YAHOO.lang.isUndefined(options.readonly) ? true : options.readonly;
       
       // Added options
       this.options.calendar = options.calendar || inputEx.messages.defautCalendarOpts;
@@ -3312,16 +3794,18 @@ lang.extend(inputEx.DatePickerField, inputEx.DateField, {
       // HACK: Set position absolute to the overlay
       Dom.setStyle(this.oOverlay.body.parentNode, "position", "absolute");
       
-      
-      Event.addListener(this.el,'click',function(){
-         // calendar may not have been rendered yet
-         this.renderCalendar();
+      // Subscribe the click handler on the field only if readonly
+		if(this.options.readonly) {
+	      Event.addListener(this.el,'click',function(){
+	         // calendar may not have been rendered yet
+	         this.renderCalendar();
          
-         if (!this.oOverlay.justHidden) {
-            this.button._showMenu();
-         }
-      },this,true);
-      
+	         if (!this.oOverlay.justHidden) {
+	            this.button._showMenu();
+	         }
+	      },this,true);
+      }
+
       this.oOverlay.hideEvent.subscribe(function() {
          this.oOverlay.justHidden = true;
          YAHOO.lang.later(250,this,function(){this.oOverlay.justHidden=false;});
@@ -3424,21 +3908,42 @@ lang.extend(inputEx.DatePickerField, inputEx.DateField, {
       this.calendarRendered = true;
    },
    
-   // Select the right date and display the right page on calendar, when the field has a value
-   beforeShowOverlay: function() {
+   /**
+  	 * Select the right date and display the right page on calendar, when the field has a value
+ 	 */
+   beforeShowOverlay: function(e) {
+	
       var date = this.getValue(true);
-      if (!!date && !!this.calendar) {
+      if (!!this.calendar) {
          
-         // HACK: don't fire Field updatedEvt when selecting date
-         this.ignoreBeforeShowOverlayCall = true;
-         // select the previous date in calendar
-         this.calendar.select(date);
-			this.ignoreBeforeShowOverlayCall = false;
-         
-         this.calendar.cfg.setProperty("pagedate",(date.getMonth()+1)+"/"+date.getFullYear());
+			if(!!date) {
+         	// HACK: don't fire Field updatedEvt when selecting date
+         	this.ignoreBeforeShowOverlayCall = true;
+         	// select the previous date in calendar
+        		this.calendar.select(date);
+				this.ignoreBeforeShowOverlayCall = false;
+         	this.calendar.cfg.setProperty("pagedate",(date.getMonth()+1)+"/"+date.getFullYear());
+			}
+
          this.calendar.render(); // refresh calendar
       }
-   }
+   },
+
+	/**
+	 * Disable the field
+	 */
+	disable: function() {
+		inputEx.DatePickerField.superclass.disable.call(this);
+		this.button.set('disabled', true);
+	},
+	
+	/**
+	 * Enable the field
+	 */
+	enable: function() {
+		inputEx.DatePickerField.superclass.enable.call(this);
+		this.button.set('disabled', false);
+	}
    
 });
 
@@ -3463,7 +3968,7 @@ YAHOO.lang.extend(inputEx.EmailField, inputEx.StringField, {
    
    /**
     * Set the email regexp and invalid message
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.EmailField.superclass.setOptions.call(this, options);
@@ -3477,7 +3982,12 @@ YAHOO.lang.extend(inputEx.EmailField, inputEx.StringField, {
     * @return {String} The email string
     */
    getValue: function() {
-      return inputEx.removeAccents(this.el.value.toLowerCase());
+      
+      var value;
+      
+      value = inputEx.EmailField.superclass.getValue.call(this);
+      
+      return inputEx.removeAccents(value.toLowerCase());
    }
 
 });
@@ -3511,28 +4021,35 @@ YAHOO.lang.extend(inputEx.HiddenField, inputEx.Field, {
 	   this.divEl = inputEx.cn('div', null, {display: 'none'});
 	   
 	   this.el = inputEx.cn('input', {type: 'hidden'});
+	   this.rawValue = ''; // initialize the rawValue with '' (default value of a hidden field)
+	
 	   if(this.options.name) this.el.name = this.options.name;
 	   this.divEl.appendChild(this.el);
    },
 
    /**
-    * Stores the value in a local variable
+    * Stores the typed value in a local variable, and store the value in the hidden input (cast as string by the input)
     * @param {Any} val The value to set
     * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
     */
    setValue: function(val, sendUpdatedEvt) {
+	
+	   // store in the hidden input (so the value is sent as "string" if HTML form submit)
       this.el.value = val;
+
+      // store the value in a variable, so getValue can return it without type casting
+      this.rawValue = val;
 
       // Call Field.setValue to set class and fire updated event
 		inputEx.HiddenField.superclass.setValue.call(this,val, sendUpdatedEvt);
    },
 
    /**
-    * Get the previously stored value
+    * Get the previously stored value (respect the datatype of the value)
     * @return {Any} the previously stored value
     */
    getValue: function() {
-      return this.el.value;
+      return this.rawValue;
    }
 
 });
@@ -3563,14 +4080,18 @@ inputEx.InPlaceEdit = function(options) {
 lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.InPlaceEdit.superclass.setOptions.call(this, options);
       
-      this.options.animColors = options.animColors || {from: '#ffff99' , to: '#ffffff'};
       this.options.visu = options.visu;
+      
       this.options.editorField = options.editorField;
+      
+      this.options.buttonTypes = options.buttonTypes || {ok:"submit",cancel:"link"};
+      
+      this.options.animColors = options.animColors || null;
    },
 
    /**
@@ -3589,24 +4110,31 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       this.editorContainer = inputEx.cn('div', {className: CSS_PREFIX+'editor'}, {display: 'none'});
       
       // Render the editor field
-      this.editorField = inputEx.buildField(this.options.editorField);
+      this.editorField = inputEx(this.options.editorField,this);
       var editorFieldEl = this.editorField.getEl();
       
       this.editorContainer.appendChild( editorFieldEl );
       Dom.addClass( editorFieldEl , CSS_PREFIX+'editorDiv');
       
-      this.okButton = inputEx.cn('a', {className: CSS_PREFIX+'OkButton'}, null, inputEx.messages.okEditor);
-      this.okButton.href = ""; // IE required (here, not in the cn fct)
-      this.editorContainer.appendChild(this.okButton);
-      
-      this.cancelLink = inputEx.cn('a', {className: CSS_PREFIX+'CancelLink'}, null, inputEx.messages.cancelEditor);
-      this.cancelLink.href = ""; // IE required (here, not in the cn fct)
-      this.editorContainer.appendChild(this.cancelLink);
+      this.okButton = new inputEx.widget.Button({
+         type: this.options.buttonTypes.ok,
+         parentEl: this.editorContainer,
+         value: inputEx.messages.okEditor,
+         className: "inputEx-Button "+CSS_PREFIX+'OkButton',
+         onClick: {fn: this.onOkEditor, scope:this}
+      });
+
+      this.cancelLink = new inputEx.widget.Button({
+         type: this.options.buttonTypes.cancel,
+         parentEl: this.editorContainer,
+         value: inputEx.messages.cancelEditor,
+         className: "inputEx-Button "+CSS_PREFIX+'CancelLink',
+         onClick: {fn: this.onCancelEditor, scope:this}
+      });
       
       // Line breaker ()
       this.editorContainer.appendChild( inputEx.cn('div',null, {clear: 'both'}) );
       
-      //this.divEl.appendChild(this.editorContainer);
       this.fieldContainer.appendChild(this.editorContainer);
       
    },
@@ -3633,7 +4161,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       }
       this.colorAnim = new YAHOO.util.ColorAnim(this.formattedContainer, {backgroundColor: this.options.animColors}, 1);
       this.colorAnim.onComplete.subscribe(function() { Dom.setStyle(this.formattedContainer, 'background-color', ''); }, this, true);
-      this.colorAnim.animate();   
+      this.colorAnim.animate();
    },
    
    /**
@@ -3662,14 +4190,12 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
    initEvents: function() {  
       Event.addListener(this.formattedContainer, "click", this.openEditor, this, true);
             
-      // For color animation
-      Event.addListener(this.formattedContainer, 'mouseover', this.onVisuMouseOver, this, true);
-      Event.addListener(this.formattedContainer, 'mouseout', this.onVisuMouseOut, this, true);
-         
-      // Editor: 
-      Event.addListener(this.okButton, 'click', this.onOkEditor, this, true);
-      Event.addListener(this.cancelLink, 'click', this.onCancelEditor, this, true);
-         
+      // For color animation (if specified)
+      if (this.options.animColors) {
+         Event.addListener(this.formattedContainer, 'mouseover', this.onVisuMouseOver, this, true);
+         Event.addListener(this.formattedContainer, 'mouseout', this.onVisuMouseOut, this, true);
+      }
+      
       if(this.editorField.el) {
          // Register some listeners
          Event.addListener(this.editorField.el, "keyup", this.onKeyUp, this, true);
@@ -3801,7 +4327,7 @@ inputEx.messages.okEditor = "Ok";
 
 // Register this class as "inplaceedit" type
 inputEx.registerType("inplaceedit", inputEx.InPlaceEdit, [
-   { type:'type', inputParams: {label: 'Editor', name: 'editorField'} }
+   { type:'type', label: 'Editor', name: 'editorField'}
 ]);
 
 })();(function() {
@@ -3867,8 +4393,8 @@ YAHOO.lang.extend(inputEx.IntegerField, inputEx.StringField, {
 
 // Register this class as "integer" type
 inputEx.registerType("integer", inputEx.IntegerField, [
-   //{ type: 'integer', inputParams: {label: 'Radix', name: 'radix', value: 10}},
-   {type: 'boolean', inputParams: {label: 'Accept negative', name: 'negative', value: false} }
+   //{ type: 'integer', label: 'Radix', name: 'radix', value: 10},
+   {type: 'boolean', label: 'Accept negative', name: 'negative', value: false }
 ]);
 
 })();(function() {
@@ -3905,7 +4431,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	   
 	/**
 	 * Set the ListField classname
-	 * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+	 * @param {Object} options Options object as passed to the constructor
 	 */
 	setOptions: function(options) {
 	   inputEx.ListField.superclass.setOptions.call(this, options);
@@ -4096,10 +4622,17 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	      
 	   // Instantiate the new subField
 	   var opts = lang.merge({}, this.options.elementType);
-	   if(!opts.inputParams) opts.inputParams = {};
-	   if(!lang.isUndefined(value)) opts.inputParams.value = value;
 	   
-	   var el = inputEx.buildField(opts);
+	   // Retro-compatibility with deprecated inputParams Object : TODO -> remove
+      if(lang.isObject(opts.inputParams) && !lang.isUndefined(value)) {
+         opts.inputParams.value = value;
+         
+      // New prefered way to set options of a field
+      } else if (!lang.isUndefined(value)) {
+         opts.value = value;
+      }
+	   
+	   var el = inputEx(opts,this);
 	   
 	   var subFieldEl = el.getEl();
 	   Dom.setStyle(subFieldEl, 'margin-left', '4px');
@@ -4275,8 +4808,8 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	
 // Register this class as "list" type
 inputEx.registerType("list", inputEx.ListField, [
-   { type: 'string', inputParams: {label: 'List label', name: 'listLabel', value: ''}},
-   { type: 'type', inputParams: {label: 'List element type', required: true, name: 'elementType'} }
+   { type: 'string', label: 'List label', name: 'listLabel', value: ''},
+   { type: 'type', label: 'List element type', required: true, name: 'elementType' }
 ]);
 
 
@@ -4374,7 +4907,7 @@ lang.extend(inputEx.PasswordField, inputEx.StringField, {
    
 	/**
 	 * Add the password regexp, strengthIndicator, capsLockWarning
-	 * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+	 * @param {Object} options Options object as passed to the constructor
 	 */
 	setOptions: function(options) {
 	   inputEx.PasswordField.superclass.setOptions.call(this, options);
@@ -4604,8 +5137,8 @@ inputEx.messages.passwordStrength = "Password Strength";
 
 // Register this class as "password" type
 inputEx.registerType("password", inputEx.PasswordField, [
-   {type: 'boolean', inputParams: {label: 'Strength indicator', name: 'strengthIndicator', value: false} },
-   {type: 'boolean', inputParams: {label: 'CapsLock warning', name: 'capsLockWarning', value: false} }
+   {type: 'boolean', label: 'Strength indicator', name: 'strengthIndicator', value: false },
+   {type: 'boolean', label: 'CapsLock warning', name: 'capsLockWarning', value: false }
 ]);
 	
 })();(function() {	
@@ -4641,12 +5174,11 @@ lang.extend(inputEx.RadioField, inputEx.Field, {
 	   
 	/**
 	 * Adds the Radio button specific options
-	 * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+	 * @param {Object} options Options object as passed to the constructor
 	 */
 	setOptions: function(options) {
 	   inputEx.RadioField.superclass.setOptions.call(this, options);
-
-      this.options.className = options.className ? options.className : 'inputEx-Field inputEx-RadioField';
+      
 	   if (lang.isUndefined(options.allowAny) || options.allowAny === false ) {
         this.options.allowAny = false;
       } else {
@@ -4659,6 +5191,14 @@ lang.extend(inputEx.RadioField, inputEx.Field, {
       this.options.choices = options.choices;
       // values == choices if not provided
 	   this.options.values = lang.isArray(options.values) ? options.values : options.choices;
+	   
+	   this.options.display = options.display === "vertically" ? "vertically" : "inline"; // default "inline"
+	   
+	   this.options.className = options.className ? options.className : 'inputEx-Field inputEx-RadioField';
+	   if (this.options.display === "vertically") {
+         this.options.className +=  ' inputEx-RadioField-Vertically';
+      }
+      
 	},
 	   
 	/**
@@ -4700,11 +5240,14 @@ lang.extend(inputEx.RadioField, inputEx.Field, {
            this.radioAny = inputEx.cn('input', { type: 'radio', name: this.options.name });
         }
 	     div.appendChild(this.radioAny);
-	     
+        
         this.anyField = new inputEx.StringField({value:this.options.allowAny.value});
+        this.anyField.disable();
+        
         Dom.setStyle(this.radioAny, "float","left");
         Dom.setStyle(this.anyField.getEl(), "float","left");
-        this.anyField.disable();
+        /* Hack for firefox 3.5+ */ 
+        if (YAHOO.env.ua.gecko >= 1.91) { Dom.setStyle(this.radioAny, "marginTop","0.2em"); }
         
         if (this.options.allowAny.separators) {
      	     sep = inputEx.cn("div",null,{margin:"3px"},this.options.allowAny.separators[0] || '');
@@ -4870,14 +5413,32 @@ lang.extend(inputEx.RadioField, inputEx.Field, {
 	   }
 	   
 	   return true;
+	},
+	
+	/**
+    * Disable the field
+    */
+	disable: function() {
+		for(var i = 0 ; i < this.optionEls.length; i++) {
+			this.optionEls[i].disabled = true;
+		}
+	},
+	
+	/**
+    * Enable the field
+    */
+	enable: function() {
+		for(var i = 0 ; i < this.optionEls.length; i++) {
+			this.optionEls[i].disabled = false;
+		}
 	}
 	
 });   
 	
 // Register this class as "radio" type
 inputEx.registerType("radio", inputEx.RadioField, [
-   {type: 'list', inputParams: {label: 'Options', name: 'choices', elementType: {type: 'string'} } },
-   {type: 'boolean', inputParams: {label: 'Allow custom value', name: 'allowAny'}, value: false  }
+   {type: 'list', label: 'Options', name: 'choices', elementType: {type: 'string'} },
+   {type: 'boolean', label: 'Allow custom value', name: 'allowAny', value: false  }
 ]);
 	
 })();(function() {
@@ -4892,7 +5453,7 @@ inputEx.registerType("radio", inputEx.RadioField, [
  * @param {Object} options Added options:
  * <ul>
  *   <li>opts: the options to be added when calling the RTE constructor (see YUI RTE)</li>
- *   <li>type: if == 'simple', the field will use the SimpleEditor. Any other value will use the Editor class.</li>
+ *   <li>editorType: if == 'simple', the field will use the SimpleEditor. Any other value will use the Editor class.</li>
  * </ul>
  */
 inputEx.RTEField = function(options) {
@@ -4901,13 +5462,13 @@ inputEx.RTEField = function(options) {
 lang.extend(inputEx.RTEField, inputEx.Field, {   
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
   	setOptions: function(options) {
   	   inputEx.RTEField.superclass.setOptions.call(this, options);
   	   
   	   this.options.opts = options.opts || {};
-  	   this.options.type = options.type;
+  	   this.options.editorType = options.editorType;
    },
    
 	/**
@@ -4918,7 +5479,7 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 	   
 	   var id = "inputEx-RTEField-"+inputEx.RTEfieldsNumber;
 	   var attributes = {id:id};
-      if(this.options.name) attributes.name = this.options.name;
+      if(this.options.name) { attributes.name = this.options.name; }
       
 	   this.el = inputEx.cn('textarea', attributes);
 	   
@@ -4929,7 +5490,8 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 	   var _def = {
 	       height: '300px',
 	       width: '580px',
-	       dompath: true
+	       dompath: true,
+	       filterWord:true // get rid of the MS word junk
 	   };
 	   //The options object
 	   var o = this.options.opts;
@@ -4939,8 +5501,8 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 	            _def[i] = o[i];
 	        }
 	   }
-	   //Check if options.type is present and set to simple, if it is use SimpleEditor instead of Editor
-	   var editorType = ((this.options.type && (this.options.type == 'simple')) ? YAHOO.widget.SimpleEditor : YAHOO.widget.Editor);
+	   //Check if options.editorType is present and set to simple, if it is use SimpleEditor instead of Editor
+	   var editorType = ((this.options.editorType && (this.options.editorType == 'simple')) ? YAHOO.widget.SimpleEditor : YAHOO.widget.Editor);
 	
 	   //If this fails then the code is not loaded on the page
 	   if (editorType) {
@@ -4949,6 +5511,32 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 	   } else {
 	    alert('Editor is not on the page');
 	   }
+	   
+	   
+	   /**
+   	 * Filters out msword html comments, classes, and other junk
+   	 * (complementary with YAHOO.widget.SimpleEditor.prototype.filter_msword, when filterWord option is true)
+   	 * @param {String} value The html string
+   	 * @return {String} The html string
+   	 */
+   	this.editor.filter_msword = function(html) {
+   	   
+   	   html = editorType.prototype.filter_msword.call(this,html);
+   	   
+   	   // if we don't filter ms word junk
+   	   if (!this.get('filterWord')) {
+   	      return html;
+   	   }
+
+   	   html = html.replace( /<!--[^>][\s\S]*-->/gi, ''); // strip (meta-)comments
+         html = html.replace( /<\/?meta[^>]*>/gi, ''); // strip meta tags
+         html = html.replace( /<\/?link[^>]*>/gi, ''); // strip link tags
+         html = html.replace( / class=('|")?MsoNormal('|")?/gi, ''); // strip MS office class
+         html = YAHOO.lang.trim(html); // trim spaces
+         
+         return html;
+   	};
+   	
 	},
 	
 	/**
@@ -4981,12 +5569,18 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 	 * @return {String} the html string
 	 */
 	getValue: function() {
+	   
+	   var html;
+	   
 	   try {
-	      this.editor.saveHTML();
-         return this.el.value;
+	      // trigger HTML cleaning (strip MS word or internal junk)
+	      // + save to hidden textarea (required for classic HTML 'submit')
+	      html = this.editor.saveHTML();
+	      return html;
 	   }
 	   catch(ex) { return null; }
 	}
+	
 	
 });
 	
@@ -5015,7 +5609,7 @@ inputEx.SelectField = function(options) {
 lang.extend(inputEx.SelectField, inputEx.Field, {
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
 	setOptions: function(options) {
 	   inputEx.SelectField.superclass.setOptions.call(this,options);
@@ -5038,23 +5632,26 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
     * Build a select tag with options
     */
    renderComponent: function() {
+      
+      var optionEl, i, length;
 
       this.el = inputEx.cn('select', {id: this.divEl.id?this.divEl.id+'-field':YAHOO.util.Dom.generateId(), name: this.options.name || ''});
       
       if (this.options.multiple) {this.el.multiple = true; this.el.size = this.options.selectValues.length;}
       
-      this.optionEls = {};
+      this.optionEls = [];
       
-      var optionEl;
-      for( var i = 0 ; i < this.options.selectValues.length ; i++) {
+      for(i = 0, length = this.options.selectValues.length; i < length ; i++) {
          
          optionEl = inputEx.cn('option', {value: this.options.selectValues[i]}, null, this.options.selectOptions[i]);
          
-         this.optionEls[this.options.selectOptions[i]] = optionEl;
+         this.optionEls.push(optionEl);
          this.el.appendChild(optionEl);
+
       }
+
       this.fieldContainer.appendChild(this.el);
-   },  
+   },
    
    /**
     * Register the "change" event
@@ -5071,13 +5668,19 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
     * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
     */
    setValue: function(value, sendUpdatedEvt) {
-      var index = 0;
-      var option;
-      for(var i = 0 ; i < this.options.selectValues.length ; i++) {
+	
+      var i, length, option;
+
+      for(i = 0, length = this.options.selectValues.length; i < length ; i++) {
+	
          if(value === this.options.selectValues[i]) {
+	
             option = this.el.childNodes[i];
 		      option.selected = "selected";
+		      break; // option node already found
+		
          }
+
       }
       
 		// Call Field.setValue to set class and fire updated event
@@ -5115,7 +5718,7 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
       var value = config.value,
 			 option = ""+(!lang.isUndefined(config.option) ? config.option : config.value),
 			 nbOptions = this.options.selectOptions.length,
-      	 position = nbOptions, // position of new option (default last)
+			 position = nbOptions, // position of new option (default last)
 			 i;
       
       if (lang.isNumber(config.position) && config.position >= 0 && config.position <= position) {
@@ -5141,12 +5744,12 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
       }
       
       // update values and options lists
-      this.options.selectValues = this.options.selectValues.slice(0,position).concat([value]).concat(this.options.selectValues.slice(position,nbOptions));
-      this.options.selectOptions = this.options.selectOptions.slice(0,position).concat([option]).concat(this.options.selectOptions.slice(position,nbOptions));
+      this.options.selectValues.splice(position,0,value); // insert value at position
+      this.options.selectOptions.splice(position,0,option);
 
       // new option in select
       var newOption = inputEx.cn('option', {value: value}, null, option);
-      this.optionEls[option] = newOption;
+      this.optionEls.splice(position,0,newOption);
       
       if (position<nbOptions) {
          YAHOO.util.Dom.insertBefore(newOption,this.el.childNodes[position]);
@@ -5197,12 +5800,12 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
       }
 
       // remove from selectValues / selectOptions array
-      this.options.selectValues.splice(position,1);
-      var removedOption = this.options.selectOptions.splice(position,1);
+      this.options.selectValues.splice(position,1); // remove 1 element at position
+      this.options.selectOptions.splice(position,1); // remove 1 element at position
 
       // remove from selector
-      this.el.removeChild(this.optionEls[removedOption]);
-      delete this.optionEls[removedOption];
+      this.el.removeChild(this.optionEls[position]);
+      this.optionEls.splice(position,1); // remove 1 element at position
       
       // clear if previous selected value doesn't exist anymore
       if (selectedIndex == position) {
@@ -5214,8 +5817,8 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
 
 // Register this class as "select" type
 inputEx.registerType("select", inputEx.SelectField, [
-   {  type: 'list', inputParams: {name: 'selectValues', label: 'Values', elementType: {type: 'string'}, required: true } },
-   {  type: 'list', inputParams: {name: 'selectOptions', label: 'Options', elementType: {type: 'string'} } }
+   {  type: 'list', name: 'selectValues', label: 'Values', elementType: {type: 'string'}, required: true },
+   {  type: 'list', name: 'selectOptions', label: 'Options', elementType: {type: 'string'} }
 ]);
 
 })();(function() {
@@ -5240,7 +5843,7 @@ YAHOO.lang.extend(inputEx.Textarea, inputEx.StringField, {
 
    /**
     * Set the specific options (rows and cols)
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.Textarea.superclass.setOptions.call(this, options);
@@ -5334,8 +5937,8 @@ inputEx.messages.stringTooLong = ["This field should contain at most "," numbers
 
 // Register this class as "text" type
 inputEx.registerType("text", inputEx.Textarea, [
-   { type: 'integer', inputParams: {label: 'Rows',  name: 'rows', value: 6} },
-   { type: 'integer', inputParams: {label: 'Cols', name: 'cols', value: 23} }
+   { type: 'integer', label: 'Rows',  name: 'rows', value: 6 },
+   { type: 'integer', label: 'Cols', name: 'cols', value: 23 }
 ]);
 
 })();(function() {
@@ -5356,9 +5959,9 @@ inputEx.TimeField = function(options) {
    for(i = 0 ; i < 24 ; i++) { s="";if(i<10){s="0";} s+= i;h.push(s);}
    for(i = 0 ; i < 60 ; i++) { s="";if(i<10){s="0";} s+= i;m.push(s);secs.push(s);}
    options.fields = [
-      {type: 'select', inputParams: {selectOptions: h, selectValues: h} },
-      {type: 'select', inputParams: {selectOptions: m, selectValues: m} },
-      {type: 'select', inputParams: {selectOptions: secs, selectValues: secs} }
+      {type: 'select', selectOptions: h, selectValues: h },
+      {type: 'select', selectOptions: m, selectValues: m },
+      {type: 'select', selectOptions: secs, selectValues: secs }
    ];
    options.separators = options.separators || [false,":",":",false];
    inputEx.TimeField.superclass.constructor.call(this,options);
@@ -5403,11 +6006,11 @@ inputEx.registerType("time", inputEx.TimeField);
  */
 inputEx.DateTimeField = function(options) {
    options.fields = [
-      {type: 'datepicker', inputParams: {}},
-      {type: 'time', inputParams: {}}
+      {type: 'datepicker'},
+      {type: 'time'}
    ];
    if(options.dateFormat) {
-      options.fields[0].inputParams.dateFormat = options.dateFormat;
+      options.fields[0].dateFormat = options.dateFormat;
    }
    options.separators = options.separators || [false, "&nbsp;&nbsp;", false];
    inputEx.DateTimeField.superclass.constructor.call(this,options);
@@ -5470,7 +6073,7 @@ YAHOO.lang.extend(inputEx.UneditableField, inputEx.Field, {
    
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
 	setOptions: function(options) {
       inputEx.UneditableField.superclass.setOptions.call(this,options);
@@ -5525,7 +6128,7 @@ lang.extend(inputEx.UrlField, inputEx.StringField, {
 
    /**
     * Adds the invalid Url message
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.UrlField.superclass.setOptions.call(this, options);
@@ -5602,7 +6205,7 @@ inputEx.messages.invalidUrl = "Invalid URL, ex: http://www.test.com";
 
 // Register this class as "url" type
 inputEx.registerType("url", inputEx.UrlField, [
-   {  type: 'boolean', inputParams: {label: 'Display favicon', name:'favicon', value: true}}
+   { type: 'boolean', label: 'Display favicon', name:'favicon', value: true}
 ]);
 
 })();(function() {
@@ -5960,15 +6563,10 @@ YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
     * Add an item to the list when the select changed
     */
    onAddNewItem: function() {
-      if(this.el.selectedIndex != 0) {
+      if(this.el.selectedIndex !== 0) {
          
          // Add the value to the ddlist
-         if(this.options.selectOptions) {
-            this.ddlist.addItem({value: this.options.selectValues[this.el.selectedIndex], label: this.options.selectOptions[this.el.selectedIndex]});
-         }
-         else {
-            this.ddlist.addItem(this.options.selectValues[this.el.selectedIndex]);
-         }
+         this.ddlist.addItem({value: this.options.selectValues[this.el.selectedIndex], label: this.options.selectOptions[this.el.selectedIndex]});
          
          // mark option disabled
          this.el.childNodes[this.el.selectedIndex].disabled = true;
@@ -5987,17 +6585,28 @@ YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
     */
    setValue: function(value, sendUpdatedEvt) {
       
-      this.ddlist.setValue(value);
+      var i, length, index, label, ddlistValue = [];
+      
+      if (!YAHOO.lang.isArray(value)) { return; }
       
       // Re-enable all options
-      for(var i = 0 ; i < this.el.childNodes.length ; i++) {
+      for(i = 0, length=this.el.childNodes.length ; i < length ; i++) {
          this.el.childNodes[i].disabled = false;
       }
-      // disable selected options
-      for(i = 0 ; i < value.length ; i++) {
-         var index = inputEx.indexOf(value[i], this.options.selectValues);
+      
+      // disable selected options and fill ddlist value
+      for(i = 0, length=value.length ; i < length ; i++) {
+         
+         index = inputEx.indexOf(value[i], this.options.selectValues);
+         label = this.options.selectOptions[index];
+         ddlistValue.push({value: value[i], label: label});
+         
          this.el.childNodes[index].disabled = true;
       }
+      
+      // set ddlist value
+      this.ddlist.setValue(ddlistValue);
+      
 	   
 	   if(sendUpdatedEvt !== false) {
 	      // fire update event
@@ -6029,24 +6638,25 @@ inputEx.registerType("multiselect", inputEx.MultiSelectField);
  * @extends inputEx.StringField
  * @param {Object} options Added options for Autocompleter
  * <ul>
- *	  <li>datasource: the datasource</li>
- *	  <li>autoComp: autocompleter options</li>
+ *  <li>datasource: the datasource</li>
+ *  <li>autoComp: autocompleter options</li>
  *   <li>returnValue: function to format the returned value (optional)</li>
  * </ul>
  */
 inputEx.AutoComplete = function(options) {
    inputEx.AutoComplete.superclass.constructor.call(this, options);
+
 };
 
 lang.extend(inputEx.AutoComplete, inputEx.StringField, {
 
    /**
     * Adds autocomplete options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.AutoComplete.superclass.setOptions.call(this, options);
-      
+  
       // Overwrite options
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-AutoComplete';
       
@@ -6054,6 +6664,8 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       this.options.datasource = options.datasource;
       this.options.autoComp = options.autoComp;
       this.options.returnValue = options.returnValue;
+      this.options.generateRequest = options.generateRequest;
+      this.options.datasourceParameters = options.datasourceParameters;
    },
    
    /**
@@ -6063,11 +6675,10 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
     *   <li>listener to autocompleter textboxBlurEvent added in buildAutocomplete method</li>
     * </ul>
     */
-   initEvents: function() {	
-	   inputEx.AutoComplete.superclass.initEvents.call(this);
-	   
-	   // remove standard blur listener
-	   Event.removeBlurListener(this.el, this.onBlur);
+   initEvents: function() {
+      inputEx.AutoComplete.superclass.initEvents.call(this);
+
+      // remove standard blur listener
    },
 
    /**
@@ -6086,7 +6697,7 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       if(this.options.size) attributes.size = this.options.size;
       if(this.options.readonly) attributes.readonly = 'readonly';
       if(this.options.maxLength) attributes.maxLength = this.options.maxLength;
-   
+
       // Create the node
       this.el = inputEx.cn('input', attributes);
       
@@ -6118,10 +6729,22 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       if(!this._nElementsReady) { this._nElementsReady = 0; }
       this._nElementsReady++;
       if(this._nElementsReady != 2) return;
+
+      if(!lang.isUndefined(this.options.datasourceParameters))
+      {
+         for (param in this.options.datasourceParameters)
+         {
+            this.options.datasource[param] = this.options.datasourceParameters[param];
+         }
+      }
+
       
       // Instantiate AutoComplete
       this.oAutoComp = new YAHOO.widget.AutoComplete(this.el.id, this.listEl.id, this.options.datasource, this.options.autoComp);
-
+      if(!lang.isUndefined(this.options.generateRequest))
+      {
+          this.oAutoComp.generateRequest = this.options.generateRequest;
+      }
       // subscribe to the itemSelect event
       this.oAutoComp.itemSelectEvent.subscribe(this.itemSelectHandler, this, true);
       
@@ -6138,24 +6761,31 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
     * @param {} aArgs
     */
    itemSelectHandler: function(sType, aArgs) {
-   	var aData = aArgs[2];
-   	this.setValue( this.options.returnValue ? this.options.returnValue(aData) : aData[0] );
+      var aData = aArgs[2];
+      this.setValue( this.options.returnValue ? this.options.returnValue(aData) : aData[0] );
    },
-   
+
+   onBlur: function(e){
+	 if (this.hiddenEl.value != this.el.value && this.el.value != this.options.typeInvite) this.el.value = this.hiddenEl.value;
+	   if(this.el.value == '' && this.options.typeInvite) {
+	         Dom.addClass(this.divEl, "inputEx-typeInvite");
+			 if (this.el.value == '') this.el.value = this.options.typeInvite;
+     }
+},
    /**
     * onChange event handler
     * @param {Event} e The original 'change' event
     */
-	onChange: function(e) {
-	   this.setClassFromState();
-	   
-	   // Clear the field when no value 
+   onChange: function(e) {
+      this.setClassFromState();
+      // Clear the field when no value 
+	 if (this.hiddenEl.value != this.el.value) this.hiddenEl.value = this.el.value;
       lang.later(50, this, function() {
          if(this.el.value == "") {
             this.setValue("");
          }
       });
-	},
+   },
    
    /**
     * Set the value
@@ -6163,17 +6793,16 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
     * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
     */
    setValue: function(value, sendUpdatedEvt) {
-	
       this.hiddenEl.value = value || "";
-      
+      this.el.value  =  value || "";
       // "inherited" from inputex.Field :
       //    (can't inherit of inputex.StringField because would set this.el.value...)
       //
-	   // set corresponding style
-   	this.setClassFromState();
-	   
-	   if(sendUpdatedEvt !== false) {
-	      // fire update event
+   // set corresponding style
+   this.setClassFromState();
+
+   if(sendUpdatedEvt !== false) {
+      // fire update event
          this.fireUpdatedEvt();
       }
    },
@@ -6326,7 +6955,7 @@ YAHOO.lang.extend(inputEx.UneditableField, inputEx.Field, {
    
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
 	setOptions: function(options) {
       inputEx.UneditableField.superclass.setOptions.call(this,options);
@@ -6376,7 +7005,7 @@ inputEx.SliderField = function(options) {
 YAHOO.lang.extend(inputEx.SliderField, inputEx.Field, {
    /**
     * Set the classname to 'inputEx-SliderField'
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.SliderField.superclass.setOptions.call(this, options);
@@ -6459,8 +7088,8 @@ YAHOO.lang.extend(inputEx.SliderField, inputEx.Field, {
 
 // Register this class as "slider" type
 inputEx.registerType("slider", inputEx.SliderField, [
-   { type: 'integer', inputParams: {label: 'Min. value',  name: 'minValue', value: 0} },
-   { type: 'integer', inputParams: {label: 'Max. value', name: 'maxValue', value: 100} }
+   { type: 'integer', label: 'Min. value',  name: 'minValue', value: 0 },
+   { type: 'integer', label: 'Max. value', name: 'maxValue', value: 100 }
 ]);
 
 })();

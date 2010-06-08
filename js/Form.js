@@ -1,5 +1,5 @@
 (function () {
-   var util = YAHOO.util, lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = util.Dom;
+   var util = YAHOO.util, lang = YAHOO.lang, Event = util.Event, Dom = util.Dom;
 
 /**
  * Create a group of fields within a FORM tag and adds buttons
@@ -21,7 +21,7 @@ lang.extend(inputEx.Form, inputEx.Group, {
 
    /**
     * Adds buttons and set ajax default parameters
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.Form.superclass.setOptions.call(this, options);
@@ -34,7 +34,7 @@ lang.extend(inputEx.Form, inputEx.Group, {
    	this.options.method = options.method;
 
 		this.options.className =  options.className || 'inputEx-Group';
-		this.options.autocomplete = lang.isUndefined(options.autocomplete) ? true : options.autocomplete;
+		this.options.autocomplete = (options.autocomplete === false || options.autocomplete === "off") ? false : true;
 		
 		this.options.enctype = options.enctype;
 
@@ -97,25 +97,30 @@ lang.extend(inputEx.Form, inputEx.Group, {
     * Render the buttons
     */
    renderButtons: function() {
-
+       
+      var buttonConf, button, i, buttonsNb = this.options.buttons.length;
+      
       this.buttonDiv = inputEx.cn('div', {className: 'inputEx-Form-buttonBar'});
 
-	   var button, buttonEl;
-	   for(var i = 0 ; i < this.options.buttons.length ; i++ ) {
-	      button = this.options.buttons[i];
-	
-			// Throw Error if button is undefined
-			if(!button) {
-				throw new Error("inputEx.Form: One of the provided button is undefined ! (check trailing comma)");
-			}
-			
-	      buttonEl = inputEx.cn('input', {type: button.type, value: button.value, name: button.name});
-	      if( button.onClick ) { buttonEl.onclick = button.onClick; }
-	      this.buttons.push(buttonEl);
-	      this.buttonDiv.appendChild(buttonEl);
-	   }
-
-	   this.form.appendChild(this.buttonDiv);
+      for(i = 0 ; i < buttonsNb ; i++ ) {
+         buttonConf = this.options.buttons[i];
+   
+         // Throw Error if button is undefined
+         if(!buttonConf) {
+            throw new Error("inputEx.Form: One of the provided button is undefined ! (check trailing comma)");
+         }
+         
+         button = new inputEx.widget.Button(buttonConf);
+         button.render(this.buttonDiv);
+         
+         this.buttons.push(button);
+         
+      }
+      
+      // useful for link buttons re-styling (float required on <a>'s ... )
+      this.buttonDiv.appendChild(inputEx.cn('div',null,{clear:'both'}));
+      
+      this.form.appendChild(this.buttonDiv);
    },
 
 
@@ -123,10 +128,44 @@ lang.extend(inputEx.Form, inputEx.Group, {
     * Init the events
     */
    initEvents: function() {
+      
+      var i, length;
+      
       inputEx.Form.superclass.initEvents.call(this);
-
-      // Handle the submit event
-      Event.addListener(this.form, 'submit', this.options.onSubmit || this.onSubmit,this,true);
+      
+      
+      // Custom event to normalize form submits
+      this.submitEvent = new util.CustomEvent("submit");
+      
+      
+      // Two ways to trigger the form submitEvent firing
+      //
+      //
+      // 1. catch a 'submit' event on form (say a user pressed <Enter> in a field)
+      //
+         Event.addListener(this.form, 'submit', function(e) {
+         
+            // always stop event
+            Event.stopEvent(e);
+         
+            // replace with custom event
+            this.submitEvent.fire();
+         
+         },this,true);
+      
+      
+      //
+      // 2. click on a 'submit' or 'submit-link' button
+      //
+         for(i=0, length=this.buttons.length; i<length; i++) {
+         
+            this.buttons[i].submitEvent.subscribe(function() { this.submitEvent.fire(); }, this, true);
+         
+         }
+      
+      
+      // When form submitEvent is fired, call onSubmit
+      this.submitEvent.subscribe(this.options.onSubmit || this.onSubmit, this, true);
    },
 
    /**
@@ -135,17 +174,20 @@ lang.extend(inputEx.Form, inputEx.Group, {
     * @param {Event} e The original onSubmit event
     */
    onSubmit: function(e) {
-      
+	   
       // do nothing if does not validate
 	   if ( !this.validate() ) {
-		   Event.stopEvent(e); // no submit
-		   return; // no ajax submit
+		   return; // no submit
 	   }
 	   
 	   if(this.options.ajax) {
-		   Event.stopEvent(e);
-	      this.asyncRequest();
+	      this.asyncRequest(); // send ajax request
+	      return;
 	   }
+	   
+	   // normal submit finally
+	   // (won't fire a dom "submit" event, so no risk to loop)
+	   this.form.submit();
    },
 
    /**
@@ -289,8 +331,9 @@ lang.extend(inputEx.Form, inputEx.Group, {
     */
    enable: function() {
       inputEx.Form.superclass.enable.call(this);
+      
       for (var i = 0 ; i < this.buttons.length ; i++) {
- 	      this.buttons[i].disabled = false;
+ 	      this.buttons[i].enable();
       }
    },
 
@@ -299,9 +342,32 @@ lang.extend(inputEx.Form, inputEx.Group, {
     */
    disable: function() {
       inputEx.Form.superclass.disable.call(this);
+      
       for (var i = 0 ; i < this.buttons.length ; i++) {
- 	      this.buttons[i].disabled = true;
+         this.buttons[i].disable();
       }
+   },
+   
+   
+   /**
+    * Purge all event listeners and remove the component from the dom
+    */
+   destroy: function() {
+      
+      var i, length, button;
+      
+      // Unsubscribe all listeners to submit event
+      this.submitEvent.unsubscribeAll();
+      
+      // Recursively destroy buttons
+      for (i = 0, length = this.buttons.length ; i < length ; i++) {
+         button = this.buttons[i];
+         button.destroy();
+      }
+      
+      // destroy Form itself (+ inputs)
+      inputEx.Form.superclass.destroy.call(this);
+      
    }
 
 });
@@ -312,19 +378,17 @@ inputEx.messages.ajaxWait = "Please wait...";
 
 // Register this class as "form" type
 inputEx.registerType("form", inputEx.Form, [
-   {type: 'list', inputParams:{ 
+   {  
+      type: 'list', 
       label: 'Buttons', 
       name: 'buttons', 
-         elementType: {
-            type: 'group', 
-            inputParams: { 
-               fields: [
-                  { inputParams: {label: 'Label', name: 'value'}},
-                  { type: 'select', inputParams: {label: 'Type', name: 'type', selectValues:["button", "submit"]} }
-               ] 
-            } 
-         } 
-      } 
+      elementType: {
+         type: 'group', 
+         fields: [
+            { label: 'Label', name: 'value'},
+            { type: 'select', label: 'Type', name: 'type', selectValues:["button", "submit"] }
+         ]
+      }
    }
 ]);
 

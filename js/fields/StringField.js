@@ -28,7 +28,7 @@ inputEx.StringField = function(options) {
 lang.extend(inputEx.StringField, inputEx.Field, {
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
 	setOptions: function(options) {
 	   inputEx.StringField.superclass.setOptions.call(this, options);
@@ -39,6 +39,8 @@ lang.extend(inputEx.StringField, inputEx.Field, {
 	   this.options.minLength = options.minLength;
 	   this.options.typeInvite = options.typeInvite;
 	   this.options.readonly = options.readonly;
+	   this.options.autocomplete = (options.autocomplete === false || options.autocomplete === "off") ? false : true;
+	   this.options.trim = (options.trim === true) ? true : false;
    },
 
 
@@ -54,11 +56,12 @@ lang.extend(inputEx.StringField, inputEx.Field, {
       var attributes = {};
       attributes.type = 'text';
       attributes.id = this.divEl.id?this.divEl.id+'-field':YAHOO.util.Dom.generateId();
-      if(this.options.size) attributes.size = this.options.size;
-      if(this.options.name) attributes.name = this.options.name;
-      if(this.options.readonly) attributes.readonly = 'readonly';
+      if(this.options.size) { attributes.size = this.options.size; }
+      if(this.options.name) { attributes.name = this.options.name; }
+      if(this.options.readonly) { attributes.readonly = 'readonly'; }
 
-      if(this.options.maxLength) attributes.maxLength = this.options.maxLength;
+      if(this.options.maxLength) { attributes.maxLength = this.options.maxLength; }
+      if(!this.options.autocomplete) { attributes.autocomplete = 'off'; }
 
       // Create the node
       this.el = inputEx.cn('input', attributes);
@@ -93,7 +96,16 @@ lang.extend(inputEx.StringField, inputEx.Field, {
     * @param {String} The string value
     */
    getValue: function() {
-	   return (this.options.typeInvite && this.el.value == this.options.typeInvite) ? '' : this.el.value;
+      
+      var value;
+      
+      value = (this.options.typeInvite && this.el.value == this.options.typeInvite) ? '' : this.el.value;
+      
+      if (this.options.trim) {
+         value = YAHOO.lang.trim(value);
+      }
+      
+	   return value;
    },
 
    /**
@@ -241,9 +253,9 @@ inputEx.messages.stringTooShort = ["This field should contain at least "," numbe
 
 // Register this class as "string" type
 inputEx.registerType("string", inputEx.StringField, [
-    { type: 'string',  inputParams: { label: 'Type invite', name: 'typeInvite', value: ''}},
-    { type: 'integer', inputParams: { label: 'Size', name: 'size', value: 20}},
-    { type: 'integer', inputParams: { label: 'Min. length', name: 'minLength', value: 0}}
+    { type: 'string', label: 'Type invite', name: 'typeInvite', value: ''},
+    { type: 'integer', label: 'Size', name: 'size', value: 20},
+    { type: 'integer', label: 'Min. length', name: 'minLength', value: 0}
 ]);
 
 })();

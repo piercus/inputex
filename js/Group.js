@@ -9,7 +9,7 @@
  * @constructor
  * @param {Object} options The following options are added for Groups and subclasses:
  * <ul>
- *   <li>fields: Array of input fields declared like { label: 'Enter the value:' , type: 'text' or fieldClass: inputEx.Field, optional: true/false, inputParams: {inputparams object} }</li>
+ *   <li>fields: Array of input fields declared like { label: 'Enter the value:' , type: 'text' or fieldClass: inputEx.Field, optional: true/false, ... }</li>
  *   <li>legend: The legend for the fieldset (default is an empty string)</li>
  *   <li>collapsible: Boolean to make the group collapsible (default is false)</li>
  *   <li>collapsed: If collapsible only, will be collapsed at creation (default is false)</li>
@@ -28,28 +28,19 @@ lang.extend(inputEx.Group, inputEx.Field, {
    
    /**
     * Adds some options: legend, collapsible, fields...
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
-   
-   	this.options = {};
-   	
+      
+      inputEx.Group.superclass.setOptions.call(this, options);
+         	
    	this.options.className = options.className || 'inputEx-Group';
    	
    	this.options.fields = options.fields;
    	
-   	this.options.id = options.id;
-   	
-   	this.options.name = options.name;
-   	
-   	this.options.value = options.value;
-   	
    	this.options.flatten = options.flatten;
    
       this.options.legend = options.legend || '';
-   
-      // leave this for compatibility reasons
-      this.inputConfigs = options.fields;
    
       this.options.collapsible = lang.isUndefined(options.collapsible) ? false : options.collapsible;
       this.options.collapsed = lang.isUndefined(options.collapsed) ? false : options.collapsed;
@@ -74,7 +65,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
    	   this.divEl.id = this.options.id;
    	}
   	   
-  	   this.renderFields(this.divEl);  	  
+  	   this.renderFields(this.divEl);
   	   
   	   if(this.options.disabled) {
   	      this.disable();
@@ -98,7 +89,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
       }
    
       if(!lang.isUndefined(this.options.legend) && this.options.legend !== ''){
-         this.legend.appendChild( document.createTextNode(" "+this.options.legend) );
+         this.legend.appendChild( inputEx.cn("span", null, null, " "+this.options.legend) );
       }
    
       if( this.options.collapsible || (!lang.isUndefined(this.options.legend) && this.options.legend !== '') ) {
@@ -130,12 +121,12 @@ lang.extend(inputEx.Group, inputEx.Field, {
   
    /**
     * Instanciate one field given its parameters, type or fieldClass
-    * @param {Object} fieldOptions The field properties as required bu inputEx.buildField
+    * @param {Object} fieldOptions The field properties as required by the inputEx() method
     */
    renderField: function(fieldOptions) {
 
       // Instanciate the field
-      var fieldInstance = inputEx.buildField(fieldOptions);      
+      var fieldInstance = inputEx(fieldOptions,this);
       
 	   this.inputs.push(fieldInstance);
       
@@ -194,6 +185,38 @@ lang.extend(inputEx.Group, inputEx.Field, {
       }
       return response;
    },
+	
+	/**
+	 * Alternative method to validate for advanced error handling
+	 * @returns {Object} with all Forms's fields state, error message
+	 * and validate containing a boolean for the global Form validation
+	 */
+	getFieldsStates: function() {
+		var input, inputName, state, message,
+		returnedObj = { fields:{}, validate:true };
+      
+      // Loop on all the sub fields
+      for (var i = 0 ; i < this.inputs.length ; i++) {
+	
+   	   input = this.inputs[i];
+			inputName = input.options.name;
+   	   state = input.getState();
+			message = input.getStateString(state);
+						
+			returnedObj.fields[inputName] = {};
+			returnedObj.fields[inputName].valid = true;
+			returnedObj.fields[inputName].message = message;
+			
+			// check if subfield validates
+   	   if( state == inputEx.stateRequired || state == inputEx.stateInvalid ) {
+				returnedObj.fields[inputName].valid = false;
+				returnedObj.validate = false;
+   	   }
+
+      }
+
+      return returnedObj;
+	},
    
    /**
     * Enable all fields in the group
@@ -405,7 +428,26 @@ lang.extend(inputEx.Group, inputEx.Field, {
 				}
 			}
 		}
-	}
+	},
+
+   
+   /**
+    * Purge all event listeners and remove the component from the dom
+    */
+   destroy: function() {
+      
+      var i, length, field;
+      
+      // Recursively destroy inputs
+      for (i = 0, length = this.inputs.length ; i < length ; i++) {
+         field = this.inputs[i];
+         field.destroy();
+      }
+      
+      // Destroy group itself
+      inputEx.Group.superclass.destroy.call(this);
+      
+   }
    
    
 });
@@ -413,11 +455,11 @@ lang.extend(inputEx.Group, inputEx.Field, {
    
 // Register this class as "group" type
 inputEx.registerType("group", inputEx.Group, [
-   { type: "string", inputParams:{label: "Name", name: "name", value: ''} },
-   { type: 'string', inputParams: { label: 'Legend', name:'legend'}},
-   { type: 'boolean', inputParams: {label: 'Collapsible', name:'collapsible', value: false}},
-   { type: 'boolean', inputParams: {label: 'Collapsed', name:'collapsed', value: false}},
-   { type: 'list', inputParams:{ label: 'Fields', name: 'fields', elementType: {type: 'type' } } }
+   { type: "string", label: "Name", name: "name", value: '' },
+   { type: 'string', label: 'Legend', name:'legend'},
+   { type: 'boolean', label: 'Collapsible', name:'collapsible', value: false},
+   { type: 'boolean', label: 'Collapsed', name:'collapsed', value: false},
+   { type: 'list', label: 'Fields', name: 'fields', elementType: {type: 'type' } }
 ], true);
 
 

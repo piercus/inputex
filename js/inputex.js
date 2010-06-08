@@ -8,16 +8,23 @@
  var lang = YAHOO.lang;
  
 /**
- * Build a field from an object like: { type: 'color' or fieldClass: inputEx.ColorField, inputParams: {} }<br />
- * The inputParams property is the object that will be passed as the <code>options</code> parameter to the field class constructor.<br />
+ * The inputEx method lets you create a field from the JSON definition:
+ * <pre>
+ *    inputEx({type: 'string', name: 'company', label: 'Your company' })
+ * </pre>
+ * Build a field from an object like: { type: 'color' or fieldClass: inputEx.ColorField, ... }<br />
  * If the neither type or fieldClass are found, it uses inputEx.StringField
+ *
  * @class inputEx
  * @static
  * @param {Object} fieldOptions
+ * @param {inputEx.Group|inputEx.Form|inputEx.ListField|inputEx.CombineField} (optional) parentField The parent field instance
  * @return {inputEx.Field} Created field instance
  */
-inputEx = function(fieldOptions) {
-   var fieldClass = null;
+inputEx = function(fieldOptions, parentField) {
+   var fieldClass = null,
+       inputInstance;
+   
 	if(fieldOptions.type) {
 	   fieldClass = inputEx.getFieldClass(fieldOptions.type);
 	   if(fieldClass === null) fieldClass = inputEx.StringField;
@@ -27,7 +34,20 @@ inputEx = function(fieldOptions) {
 	}
 
    // Instanciate the field
-   var inputInstance = new fieldClass(fieldOptions.inputParams);
+   
+   // Retro-compatibility with deprecated inputParams Object
+   if (lang.isObject(fieldOptions.inputParams)) {
+      inputInstance = new fieldClass(fieldOptions.inputParams);
+      
+   // New prefered way to instanciate a field
+   } else {
+      inputInstance = new fieldClass(fieldOptions);
+   }
+
+	// If the parentField argument is provided
+	if(parentField) {
+		inputInstance.setParentField(parentField);
+	}
 
    // Add the flatten attribute if present in the params
    /*if(fieldOptions.flatten) {
@@ -39,7 +59,7 @@ inputEx = function(fieldOptions) {
 
 lang.augmentObject(inputEx, {
    
-   VERSION: "0.4.0rc1",
+   VERSION: "0.5.0",
    
    /**
     * Url to the spacer image. This url schould be changed according to your project directories
@@ -158,8 +178,7 @@ lang.augmentObject(inputEx, {
    },
    
    /**
-    * Kept for backward compatibility
-    * @alias inputEx
+    * @deprecated Kept for backward compatibility (alias for inputEx() )
     * @param {Object} fieldOptions
     * @return {inputEx.Field} Created field instance
     */

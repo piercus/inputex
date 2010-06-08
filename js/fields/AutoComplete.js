@@ -9,24 +9,25 @@
  * @extends inputEx.StringField
  * @param {Object} options Added options for Autocompleter
  * <ul>
- *	  <li>datasource: the datasource</li>
- *	  <li>autoComp: autocompleter options</li>
+ *  <li>datasource: the datasource</li>
+ *  <li>autoComp: autocompleter options</li>
  *   <li>returnValue: function to format the returned value (optional)</li>
  * </ul>
  */
 inputEx.AutoComplete = function(options) {
    inputEx.AutoComplete.superclass.constructor.call(this, options);
+
 };
 
 lang.extend(inputEx.AutoComplete, inputEx.StringField, {
 
    /**
     * Adds autocomplete options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
       inputEx.AutoComplete.superclass.setOptions.call(this, options);
-      
+  
       // Overwrite options
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-AutoComplete';
       
@@ -34,6 +35,8 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       this.options.datasource = options.datasource;
       this.options.autoComp = options.autoComp;
       this.options.returnValue = options.returnValue;
+      this.options.generateRequest = options.generateRequest;
+      this.options.datasourceParameters = options.datasourceParameters;
    },
    
    /**
@@ -43,11 +46,10 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
     *   <li>listener to autocompleter textboxBlurEvent added in buildAutocomplete method</li>
     * </ul>
     */
-   initEvents: function() {	
-	   inputEx.AutoComplete.superclass.initEvents.call(this);
-	   
-	   // remove standard blur listener
-	   Event.removeBlurListener(this.el, this.onBlur);
+   initEvents: function() {
+      inputEx.AutoComplete.superclass.initEvents.call(this);
+
+      // remove standard blur listener
    },
 
    /**
@@ -66,7 +68,7 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       if(this.options.size) attributes.size = this.options.size;
       if(this.options.readonly) attributes.readonly = 'readonly';
       if(this.options.maxLength) attributes.maxLength = this.options.maxLength;
-   
+
       // Create the node
       this.el = inputEx.cn('input', attributes);
       
@@ -98,10 +100,22 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       if(!this._nElementsReady) { this._nElementsReady = 0; }
       this._nElementsReady++;
       if(this._nElementsReady != 2) return;
+
+      if(!lang.isUndefined(this.options.datasourceParameters))
+      {
+         for (param in this.options.datasourceParameters)
+         {
+            this.options.datasource[param] = this.options.datasourceParameters[param];
+         }
+      }
+
       
       // Instantiate AutoComplete
       this.oAutoComp = new YAHOO.widget.AutoComplete(this.el.id, this.listEl.id, this.options.datasource, this.options.autoComp);
-
+      if(!lang.isUndefined(this.options.generateRequest))
+      {
+          this.oAutoComp.generateRequest = this.options.generateRequest;
+      }
       // subscribe to the itemSelect event
       this.oAutoComp.itemSelectEvent.subscribe(this.itemSelectHandler, this, true);
       
@@ -118,24 +132,31 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
     * @param {} aArgs
     */
    itemSelectHandler: function(sType, aArgs) {
-   	var aData = aArgs[2];
-   	this.setValue( this.options.returnValue ? this.options.returnValue(aData) : aData[0] );
+      var aData = aArgs[2];
+      this.setValue( this.options.returnValue ? this.options.returnValue(aData) : aData[0] );
    },
-   
+
+   onBlur: function(e){
+	 if (this.hiddenEl.value != this.el.value && this.el.value != this.options.typeInvite) this.el.value = this.hiddenEl.value;
+	   if(this.el.value == '' && this.options.typeInvite) {
+	         Dom.addClass(this.divEl, "inputEx-typeInvite");
+			 if (this.el.value == '') this.el.value = this.options.typeInvite;
+     }
+},
    /**
     * onChange event handler
     * @param {Event} e The original 'change' event
     */
-	onChange: function(e) {
-	   this.setClassFromState();
-	   
-	   // Clear the field when no value 
+   onChange: function(e) {
+      this.setClassFromState();
+      // Clear the field when no value 
+	 if (this.hiddenEl.value != this.el.value) this.hiddenEl.value = this.el.value;
       lang.later(50, this, function() {
          if(this.el.value == "") {
             this.setValue("");
          }
       });
-	},
+   },
    
    /**
     * Set the value
@@ -143,17 +164,16 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
     * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
     */
    setValue: function(value, sendUpdatedEvt) {
-	
       this.hiddenEl.value = value || "";
-      
+      this.el.value  =  value || "";
       // "inherited" from inputex.Field :
       //    (can't inherit of inputex.StringField because would set this.el.value...)
       //
-	   // set corresponding style
-   	this.setClassFromState();
-	   
-	   if(sendUpdatedEvt !== false) {
-	      // fire update event
+   // set corresponding style
+   this.setClassFromState();
+
+   if(sendUpdatedEvt !== false) {
+      // fire update event
          this.fireUpdatedEvt();
       }
    },

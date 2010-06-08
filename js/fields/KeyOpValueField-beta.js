@@ -3,30 +3,37 @@
  * @class inputEx.KeyOpValueField
  * @constructor
  * @extend inputEx.KeyValueField
+ * @param {Object} options InputEx definition object with the "availableFields"
  */
-inputEx.KeyOpValueField = function(searchFormDef) {
-	
-   this.nameIndex = {};
-   var fieldNames = [], fieldLabels = [];
-   for(var i = 0 ; i < searchFormDef.fields.length ; i++) {
-      var field =  searchFormDef.fields[i];
-      this.nameIndex[field.inputParams.name] = field;
-      fieldNames.push(field.inputParams.name);
-		fieldLabels.push(field.inputParams.label || field.inputParams.name);
-   }
-   
-   var opts = {
-      fields: [
-         {type: 'select', inputParams: { selectValues: fieldNames, selectOptions: fieldLabels } },
-			{type: 'select', inputParams: { selectValues: ["=", ">", "<", ">=", "<=", "!=", "LIKE", "NOT LIKE", "IS NULL", "IS NOT NULL"]} },
-         searchFormDef.fields[0]
-      ],
-		parentEl: searchFormDef.parentEl
-   };
-
-
-   inputEx.KeyValueField.superclass.constructor.call(this, opts);
+inputEx.KeyOpValueField = function(options) {
+   inputEx.KeyValueField.superclass.constructor.call(this, options);
 };
-YAHOO.lang.extend( inputEx.KeyOpValueField, inputEx.KeyValueField, {});
+YAHOO.lang.extend( inputEx.KeyOpValueField, inputEx.KeyValueField, {
+	
+	/**
+	 * Setup the options.fields from the availableFields option
+	 */
+	setOptions: function(options) {
+		
+		var selectFieldConfig = this.generateSelectConfig(options.availableFields);
+		
+		var newOptions = {
+			fields: [
+				selectFieldConfig,
+				{type: 'select', selectValues: options.operators || ["=", ">", "<", ">=", "<=", "!=", "LIKE", "NOT LIKE", "IS NULL", "IS NOT NULL"] },
+				this.nameIndex[options.availableFields[0].name]
+			]
+		};
+		
+		if(options.operatorLabels) {
+			newOptions.fields[1].selectOptions = options.operatorLabels;
+		}
+		
+		YAHOO.lang.augmentObject(newOptions, options);
+		
+		inputEx.KeyValueField.superclass.setOptions.call(this, newOptions);
+	}
+	
+});
 
 inputEx.registerType("keyopvalue", inputEx.KeyOpValueField, {});

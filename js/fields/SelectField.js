@@ -20,7 +20,7 @@ inputEx.SelectField = function(options) {
 lang.extend(inputEx.SelectField, inputEx.Field, {
    /**
     * Set the default values of the options
-    * @param {Object} options Options object (inputEx inputParams) as passed to the constructor
+    * @param {Object} options Options object as passed to the constructor
     */
 	setOptions: function(options) {
 	   inputEx.SelectField.superclass.setOptions.call(this,options);
@@ -43,23 +43,26 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
     * Build a select tag with options
     */
    renderComponent: function() {
+      
+      var optionEl, i, length;
 
       this.el = inputEx.cn('select', {id: this.divEl.id?this.divEl.id+'-field':YAHOO.util.Dom.generateId(), name: this.options.name || ''});
       
       if (this.options.multiple) {this.el.multiple = true; this.el.size = this.options.selectValues.length;}
       
-      this.optionEls = {};
+      this.optionEls = [];
       
-      var optionEl;
-      for( var i = 0 ; i < this.options.selectValues.length ; i++) {
+      for(i = 0, length = this.options.selectValues.length; i < length ; i++) {
          
          optionEl = inputEx.cn('option', {value: this.options.selectValues[i]}, null, this.options.selectOptions[i]);
          
-         this.optionEls[this.options.selectOptions[i]] = optionEl;
+         this.optionEls.push(optionEl);
          this.el.appendChild(optionEl);
+
       }
+
       this.fieldContainer.appendChild(this.el);
-   },  
+   },
    
    /**
     * Register the "change" event
@@ -76,13 +79,19 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
     * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
     */
    setValue: function(value, sendUpdatedEvt) {
-      var index = 0;
-      var option;
-      for(var i = 0 ; i < this.options.selectValues.length ; i++) {
+	
+      var i, length, option;
+
+      for(i = 0, length = this.options.selectValues.length; i < length ; i++) {
+	
          if(value === this.options.selectValues[i]) {
+	
             option = this.el.childNodes[i];
 		      option.selected = "selected";
+		      break; // option node already found
+		
          }
+
       }
       
 		// Call Field.setValue to set class and fire updated event
@@ -120,7 +129,7 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
       var value = config.value,
 			 option = ""+(!lang.isUndefined(config.option) ? config.option : config.value),
 			 nbOptions = this.options.selectOptions.length,
-      	 position = nbOptions, // position of new option (default last)
+			 position = nbOptions, // position of new option (default last)
 			 i;
       
       if (lang.isNumber(config.position) && config.position >= 0 && config.position <= position) {
@@ -146,12 +155,12 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
       }
       
       // update values and options lists
-      this.options.selectValues = this.options.selectValues.slice(0,position).concat([value]).concat(this.options.selectValues.slice(position,nbOptions));
-      this.options.selectOptions = this.options.selectOptions.slice(0,position).concat([option]).concat(this.options.selectOptions.slice(position,nbOptions));
+      this.options.selectValues.splice(position,0,value); // insert value at position
+      this.options.selectOptions.splice(position,0,option);
 
       // new option in select
       var newOption = inputEx.cn('option', {value: value}, null, option);
-      this.optionEls[option] = newOption;
+      this.optionEls.splice(position,0,newOption);
       
       if (position<nbOptions) {
          YAHOO.util.Dom.insertBefore(newOption,this.el.childNodes[position]);
@@ -202,12 +211,12 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
       }
 
       // remove from selectValues / selectOptions array
-      this.options.selectValues.splice(position,1);
-      var removedOption = this.options.selectOptions.splice(position,1);
+      this.options.selectValues.splice(position,1); // remove 1 element at position
+      this.options.selectOptions.splice(position,1); // remove 1 element at position
 
       // remove from selector
-      this.el.removeChild(this.optionEls[removedOption]);
-      delete this.optionEls[removedOption];
+      this.el.removeChild(this.optionEls[position]);
+      this.optionEls.splice(position,1); // remove 1 element at position
       
       // clear if previous selected value doesn't exist anymore
       if (selectedIndex == position) {
@@ -219,8 +228,8 @@ lang.extend(inputEx.SelectField, inputEx.Field, {
 
 // Register this class as "select" type
 inputEx.registerType("select", inputEx.SelectField, [
-   {  type: 'list', inputParams: {name: 'selectValues', label: 'Values', elementType: {type: 'string'}, required: true } },
-   {  type: 'list', inputParams: {name: 'selectOptions', label: 'Options', elementType: {type: 'string'} } }
+   {  type: 'list', name: 'selectValues', label: 'Values', elementType: {type: 'string'}, required: true },
+   {  type: 'list', name: 'selectOptions', label: 'Options', elementType: {type: 'string'} }
 ]);
 
 })();
