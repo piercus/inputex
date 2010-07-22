@@ -327,8 +327,40 @@ Y.extend(inputEx.Group, inputEx.Field, {
       }
       return this.inputsNames[fieldName];
    },
-   
-   
+
+   /**
+    * Find a field anywhere in the hierarchy this group is a part of.
+    * @param {String} fieldName The name property
+    * @param {Boolean} descendOnly Set true to only look at children of this group
+    */
+   findFieldByName: function(fieldName, descendOnly) {
+      var search = this,
+          parent,
+          field;
+
+      if (descendOnly) {
+         if (this.inputsNames.hasOwnProperty(fieldName) && (field = this.inputsNames[fieldName])) {
+            for (var group, inputs = this.inputs, i = 0, len = inputs.length; i < len; ++i) {
+               group = inputs[i];
+               if (lang.isFunction(group.getFieldByName) &&
+                     (field = group.getFieldByName(fieldName, true))) {
+                  break;
+               }
+            }
+         }
+
+         return field;
+      }
+      else {
+         while ((parent = search.getParentField()) &&
+               lang.isFunction(parent.getFieldByName)) {
+            search = parent;
+         }
+         return search.getFieldByName(fieldName, true);
+      }
+   },
+
+
    /**
     * Called when one of the group subfields is updated.
     * @param {String} eventName Event name
