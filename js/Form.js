@@ -43,7 +43,7 @@ lang.extend(inputEx.Form, inputEx.Group, {
          this.options.ajax.method = options.ajax.method || 'POST';
          this.options.ajax.uri = options.ajax.uri || 'default.php';
          this.options.ajax.callback = options.ajax.callback || {};
-         this.options.ajax.callback.scope = options.ajax.callback.scope || this;
+         this.options.ajax.callback.scope = (options.ajax.callback && options.ajax.callback.scope) || this;
          this.options.ajax.showMask = lang.isUndefined(options.ajax.showMask) ? false : options.ajax.showMask;
 
 			this.options.ajax.contentType = options.ajax.contentType || "application/json";

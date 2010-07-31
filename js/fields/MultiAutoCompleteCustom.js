@@ -18,7 +18,12 @@
 inputEx.MultiAutoCompleteCustom = function(options) {
   this.maxItems = options.maxItems;	
   this.maxItemsAlert = options.maxItemsAlert;
-	inputEx.MultiSelectFieldCustom.superclass.constructor.call(this,options);
+  
+  // hack to avoid to reset the field after a blur event, we store the value into this variable
+  this.lastElemValue = "";
+  
+  
+	inputEx.MultiAutoCompleteCustom.superclass.constructor.call(this,options);
   //Event.removeBlurListener(this.el, this.onBlur);	
 
 };
@@ -54,11 +59,15 @@ YAHOO.lang.extend(inputEx.MultiAutoCompleteCustom, inputEx.MultiAutoComplete,{
    onAdd:function(e,a){
 		 this.ddlist.addItem({label: this.el.value});
 		 this.el.value = "";
-		 this.hiddenEl.value = "";
+		 this.hiddenEl.value = this.stringifyValue();
    	this.fireUpdatedEvt();
 
 	 },
-	 
+	 clear: function(){
+	   this.lastElemValue = "";
+	   this.el.value = "";
+	   this.setValue([]);
+	 },
 	    /**
     * onChange : Override the onChange of MultiAutoocmplete to fix a bug with the blurEvent in InputEx 0.5.0
     * <ul>
@@ -68,14 +77,15 @@ YAHOO.lang.extend(inputEx.MultiAutoCompleteCustom, inputEx.MultiAutoComplete,{
    onChange: function(e) {
       this.setClassFromState();
       // Clear the field when no value 
-	    if (this.hiddenEl.value != this.el.value) this.hiddenEl.value = this.el.value;
+	    if (this.lastElemValue != this.el.value) this.lastElemValue = this.el.value;
+	    this.hiddenEl.value = this.stringifyValue();
    },
 	    /**
     * onBlur : Override the onBlur of MultiAutocomplete to fix a bug with the blurEvent in InputEx 0.5.0
     */   
    onBlur: function(e){
 		 //the onBlur from an old version of inputex took in the AutoComplete.js file
-	   if (this.hiddenEl.value != this.el.value && this.el.value != this.options.typeInvite) this.el.value = this.hiddenEl.value;
+	   if (this.lastElemValue != this.el.value && this.el.value != this.options.typeInvite) this.el.value = this.lastElemValue;
 	     if(this.el.value == '' && this.options.typeInvite) {
 	          Dom.addClass(this.divEl, "inputEx-typeInvite");
 			   if (this.el.value == '') this.el.value = this.options.typeInvite;
@@ -83,4 +93,5 @@ YAHOO.lang.extend(inputEx.MultiAutoCompleteCustom, inputEx.MultiAutoComplete,{
   }
 
 });
+inputEx.registerType("multiautocompletecustom", inputEx.MultiAutoCompleteCustom);
 })();

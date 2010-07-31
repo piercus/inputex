@@ -109,7 +109,6 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
          }
       }
 
-      
       // Instantiate AutoComplete
       this.oAutoComp = new YAHOO.widget.AutoComplete(this.el.id, this.listEl.id, this.options.datasource, this.options.autoComp);
       if(!lang.isUndefined(this.options.generateRequest))
@@ -117,13 +116,22 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
           this.oAutoComp.generateRequest = this.options.generateRequest;
       }
       // subscribe to the itemSelect event
-      this.oAutoComp.itemSelectEvent.subscribe(this.itemSelectHandler, this, true);
-      
-      // subscribe to the textboxBlur event (instead of "blur" event on this.el)
-      //                                    |-------------- autocompleter ----------|
-      //    -> order : "blur" on this.el -> internal callback -> textboxBlur event -> this.onBlur callback
-      //    -> so fired after autocomp internal "blur" callback (which would erase typeInvite...)
-      this.oAutoComp.textboxBlurEvent.subscribe(this.onBlur, this, true);
+      if (this.oAutoComp.itemSelectEvent) {
+					this.oAutoComp.itemSelectEvent.subscribe(this.itemSelectHandler, this, true);
+				// subscribe to the textboxBlur event (instead of "blur" event on this.el)
+				//                                    |-------------- autocompleter ----------|
+				//    -> order : "blur" on this.el -> internal callback -> textboxBlur event -> this.onBlur callback
+				//    -> so fired after autocomp internal "blur" callback (which would erase typeInvite...)
+				this.oAutoComp.textboxBlurEvent.subscribe(this.onBlur, this, true);		  
+		  
+		  } else {// the itemSelectEvent doesn't exist when the form has not been rendered
+				var that = this;
+			  Event.onDOMReady(function(){
+					that.oAutoComp.itemSelectEvent.subscribe(that.itemSelectHandler, that, true);
+					that.oAutoComp.textboxBlurEvent.subscribe(that.onBlur, that, true);		 
+			  })
+			}
+
    },
    
    /**

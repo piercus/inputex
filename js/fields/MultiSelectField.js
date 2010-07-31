@@ -22,9 +22,17 @@ YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
    renderComponent: function() {
       inputEx.MultiSelectField.superclass.renderComponent.call(this);
       
-      this.ddlist = new inputEx.widget.DDList({parentEl: this.fieldContainer});
+      this.ddlist = new inputEx.widget.DDList({parentEl: this.fieldContainer}); 
+      this.el.name = ""; // we re-route the html submit features 
+      var hiddenAttrs = {
+         type: 'hidden',
+         value: ''
+      };
+      if(this.options.name) hiddenAttrs.name = this.options.name;
+      this.hiddenEl = inputEx.cn('input', hiddenAttrs);
+      this.fieldContainer.appendChild(this.hiddenEl);
    },  
-   
+
    /**
     * Register the "change" event
     */
@@ -41,6 +49,7 @@ YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
       var itemValue = params[0];
       var index = inputEx.indexOf(itemValue, this.options.selectValues);
       this.el.childNodes[index].disabled = false;
+      this.hiddenEl.value = this.stringifyValue();
       this.fireUpdatedEvt();
    },
    
@@ -58,7 +67,7 @@ YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
       
          // Return to the first Element
          this.el.selectedIndex = 0;
-         
+         this.hiddenEl.value = this.stringifyValue();
          this.fireUpdatedEvt();
       }
    },
@@ -92,7 +101,7 @@ YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
       // set ddlist value
       this.ddlist.setValue(ddlistValue);
       
-	   
+	   this.hiddenEl.value = this.stringifyValue();
 	   if(sendUpdatedEvt !== false) {
 	      // fire update event
          this.fireUpdatedEvt();
@@ -105,7 +114,15 @@ YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
     */
    getValue: function() {
       return this.ddlist.getValue();
-   }
+   },
+    /**
+    * Return a the value as a Json String
+    * @return JsonString 
+    */  
+   stringifyValue: function(){
+		return YAHOO.lang.JSON.stringify(this.getValue());
+	}
+
    
 });
 

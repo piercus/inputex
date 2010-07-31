@@ -34,7 +34,7 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
     */
 
    renderComponent: function() {
-      inputEx.MultiSelectField.superclass.renderComponent.call(this);
+      inputEx.MultiSelectFieldCustom.superclass.renderComponent.call(this);
       
       this.ddlist = new inputEx.widget.ListCustom({parentEl: this.fieldContainer,listSelectOptions: this.listSelectOptions, maxItems: this.maxItems, maxItemsAlert: this.maxItemsAlert });
       
@@ -64,12 +64,21 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
          this.fireUpdatedEvt();
       }
 	},
-	addItem: function(item) {
-      this.el.selectedIndex = item.getId()+1;
+	addItem: function(itemId) {
+      this.el.selectedIndex = itemId;
        
       this.onAddNewItem();
    },
+   disable: function(){
+	    inputEx.MultiSelectFieldCustom.superclass.disable.call(this);
+	    this.ddlist.disable();
+	 },
+   enable: function(){
+	    inputEx.MultiSelectFieldCustom.superclass.enable.call(this);
+	    this.ddlist.enable();
+	 }
    
 });
+inputEx.registerType("multiselectcustom", inputEx.MultiSelectFieldCustom);
 
 })();
