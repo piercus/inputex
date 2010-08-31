@@ -8,6 +8,7 @@ inputEx.widget.ListCustom = function(options) {
 	this.listSelectOptions = options.listSelectOptions;
 	this.maxItems = options.maxItems;
 	this.maxItemsAlert = options.maxItemsAlert;
+	this.uniqueness = options.uniqueness || false;
 
 	inputEx.widget.ListCustom.superclass.constructor.call(this,options);
 
@@ -24,6 +25,7 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
 				this.maxItemsAlert ? this.maxItemsAlert.call() : alert("You're limited to "+this.maxItems+" items");
 			  return;	
 			}
+
 			var iCopy = {};
       iCopy.label = (typeof item == "object") ? item.label : item	;
       iCopy.value = (typeof item == "object") ? item.value : item	;
@@ -58,7 +60,19 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
           this.value = (typeof obj == "object") ? obj.value : obj	;
           this.span.innerHTML = this.label;
 				}
-			}
+			}	
+			if (this.uniqueness){
+			  var newValue = iCopy.getValue();
+			  var values = [];
+			  for (var i = 0; i < this.items.length; i++){
+					var obj = this.items[i].getValue();
+				  if (newValue.label === obj.label && newValue.value === obj.value){
+					  // this object is already in the listCustom
+					  return;
+					}
+				}
+			}			
+			
       li.appendChild(iCopy.span);
  
 
@@ -115,8 +129,10 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
 	 },
    setValue: function(objs){	  
 			if(this.items.length > objs.length){
-			  for (var i = 0; i< this.items.length -objs.length; i++){
-				  this.removeItem(this.items.length-1-i);
+				// we copy the length value to avoid for-bugs
+				var l = this.items.length;
+			  for (var i = 0; i< l -objs.length; i++){
+				  this.removeItem(l-1-i);
 				}
 			}
 			for (var i = 0; i < objs.length; i++){

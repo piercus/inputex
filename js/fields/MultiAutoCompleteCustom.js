@@ -18,7 +18,7 @@
 inputEx.MultiAutoCompleteCustom = function(options) {
   this.maxItems = options.maxItems;	
   this.maxItemsAlert = options.maxItemsAlert;
-  
+  this.uniqueness = options.uniqueness;
   // hack to avoid to reset the field after a blur event, we store the value into this variable
   this.lastElemValue = "";
   
@@ -38,12 +38,12 @@ YAHOO.lang.extend(inputEx.MultiAutoCompleteCustom, inputEx.MultiAutoComplete,{
 
    renderComponent: function() {
       inputEx.MultiAutoComplete.superclass.renderComponent.call(this);
-      this.buttonAdd = inputEx.cn('button',{},{},'Add');
+      this.buttonAdd = inputEx.cn('div',{className: "addButton"},{},'Add');
       Event.addListener(this.buttonAdd, 'click',this.onAdd,this,true)
       this.el.parentNode.appendChild(this.buttonAdd);
 
       
-      this.ddlist = new inputEx.widget.ListCustom({parentEl: this.fieldContainer,maxItems: this.maxItems, maxItemsAlert: this.maxItemsAlert});
+      this.ddlist = new inputEx.widget.ListCustom({parentEl: this.fieldContainer,maxItems: this.maxItems, maxItemsAlert: this.maxItemsAlert, uniqueness: this.uniqueness });
       this.ddlist.itemRemovedEvt.subscribe(function() {
          this.setClassFromState();
          this.fireUpdatedEvt();
@@ -57,11 +57,19 @@ YAHOO.lang.extend(inputEx.MultiAutoCompleteCustom, inputEx.MultiAutoComplete,{
     * </ul>
     */
    onAdd:function(e,a){
-		 this.ddlist.addItem({label: this.el.value});
+		 if (this.el.value == "") return;
+		 if (this.el.value.split(",").length != 1){
+			  var values =  this.el.value.split(",");
+			  for( var i = 0 ; i< values.length; i++){
+				  this.ddlist.addItem({label: values[i]});
+				}
+		 } else {
+		   this.ddlist.addItem({label: this.el.value});
+		 }
 		 this.el.value = "";
+		 this.lastElemValue = "";
 		 this.hiddenEl.value = this.stringifyValue();
-   	this.fireUpdatedEvt();
-
+   	 this.fireUpdatedEvt();
 	 },
 	 clear: function(){
 	   this.lastElemValue = "";

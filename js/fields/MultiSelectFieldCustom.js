@@ -22,7 +22,7 @@ inputEx.MultiSelectFieldCustom = function(options) {
   this.maxItems = options.maxItems;	
   this.maxItemsAlert = options.maxItemsAlert;
 	inputEx.MultiSelectFieldCustom.superclass.constructor.call(this,options);
-	
+	this.confirmEmpty = options.confirmEmpty;
 };
 YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
    /**
@@ -36,9 +36,27 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
    renderComponent: function() {
       inputEx.MultiSelectFieldCustom.superclass.renderComponent.call(this);
       
-      this.ddlist = new inputEx.widget.ListCustom({parentEl: this.fieldContainer,listSelectOptions: this.listSelectOptions, maxItems: this.maxItems, maxItemsAlert: this.maxItemsAlert });
+      this.ddlist = new inputEx.widget.ListCustom({parentEl: this.fieldContainer,listSelectOptions: this.listSelectOptions, maxItems: this.maxItems, maxItemsAlert: this.maxItemsAlert});
       
-   },   
+   }, 
+   getState: function(){
+	   if (this.confirmEmpty && !this.confirmedEmpty ){
+			 if (this.getValue().length == 0){
+					if (typeof(this.confirmEmpty)  == "string"){
+						this.confirmedEmpty = ( confirm(this.confirmEmpty) ? "valid" : "invalid");
+			    } else if (typeof(this.confirmEmpty)  == "function"){
+				    this.confirmedEmpty = this.confirmEmpty();
+			    }
+			    return this.confirmedEmpty;
+			  }
+			} else if (this.confirmedEmpty) {
+				if (this.getValue().length == 0){
+			    return this.confirmedEmpty
+			  }
+			} else {
+			  inputEx.MultiSelectFieldCustom.superclass.getState.call(this);
+			}
+	 },  
    onItemRemoved: function(e,params) {
       var itemValue = params[0];
       var index = inputEx.indexOf(itemValue.value || itemValue, this.options.selectValues);
@@ -76,6 +94,10 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
    enable: function(){
 	    inputEx.MultiSelectFieldCustom.superclass.enable.call(this);
 	    this.ddlist.enable();
+	 },
+	 clear: function(){
+		  inputEx.MultiSelectFieldCustom.superclass.clear.call(this);
+		  this.setValue([]);
 	 }
    
 });
