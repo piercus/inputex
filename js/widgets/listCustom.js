@@ -9,7 +9,7 @@ inputEx.widget.ListCustom = function(options) {
 	this.maxItems = options.maxItems;
 	this.maxItemsAlert = options.maxItemsAlert;
 	this.uniqueness = options.uniqueness || false;
-
+  this.disabled = false;
 	inputEx.widget.ListCustom.superclass.constructor.call(this,options);
 
 	this.selects = [];
@@ -20,7 +20,9 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
     * @param {String|Object} item Either a string with the given value or an object with "label" and "value" attributes
     */
    addItem: function(item) {
-
+		  if (this.disabled){
+			  return false;
+			}
       if (this.maxItems && this.items.length >= this.maxItems){
 				this.maxItemsAlert ? this.maxItemsAlert.call() : alert("You're limited to "+this.maxItems+" items");
 			  return;	
@@ -95,6 +97,7 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
       this.ul.appendChild(li);
    },
    disable: function(){
+
       var selects = this.selects;
 	    for (var i = 0; i< selects.length; i++){
 			  selects[i].disable();
@@ -104,8 +107,10 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
 			  Event.removeListener(items[i].value+"-Close","click")
 			  YAHOO.util.Dom.addClass(items[i].value+"-Close","hidden");
 			}
+		  this.disabled = true;
 	 },
    enable: function(){
+
       var selects = this.selects;
 	    for (var i = 0; i< selects.length; i++){
 			  selects[i].enable();
@@ -119,6 +124,7 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
 	      }, this, true);
 			  YAHOO.util.Dom.removeClass(items[i].value+"-Close","hidden");	      
 			}	 
+			this.disabled = false;
 	 },
    getValue: function(){
 		 var results = [];
@@ -128,6 +134,9 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
 		 return results;
 	 },
    setValue: function(objs){	  
+		  if (this.disabled){
+			  return false;
+			}
 			if(this.items.length > objs.length){
 				// we copy the length value to avoid for-bugs
 				var l = this.items.length;

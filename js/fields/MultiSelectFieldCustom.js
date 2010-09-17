@@ -84,7 +84,6 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
 	},
 	addItem: function(itemId) {
       this.el.selectedIndex = itemId;
-       
       this.onAddNewItem();
    },
    disable: function(){

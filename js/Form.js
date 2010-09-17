@@ -137,6 +137,8 @@ lang.extend(inputEx.Form, inputEx.Group, {
       // Custom event to normalize form submits
       this.submitEvent = new util.CustomEvent("submit");
       
+      //CustomEvent to provide additionnal features afterValidation
+      this.afterValidation = new util.CustomEvent("afterValidation");
       
       // Two ways to trigger the form submitEvent firing
       //
@@ -179,6 +181,7 @@ lang.extend(inputEx.Form, inputEx.Group, {
 	   if ( !this.validate() ) {
 		   return; // no submit
 	   }
+	   this.afterValidation.fire();
 	   
 	   if(this.options.ajax) {
 	      this.asyncRequest(); // send ajax request
