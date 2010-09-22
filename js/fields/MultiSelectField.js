@@ -7,12 +7,12 @@
  * @constructor
  * @param {Object} options Added options:
  * <ul>
- *	   <li>selectValues: contains the list of options values</li>
- *	   <li>selectOptions: list of option element texts</li>
+ *     <li>selectValues: contains the list of options values</li>
+ *     <li>selectOptions: list of option element texts</li>
  * </ul>
  */
 inputEx.MultiSelectField = function(options) {
-	inputEx.MultiSelectField.superclass.constructor.call(this,options);
+  inputEx.MultiSelectField.superclass.constructor.call(this,options);
  };
 YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
    
@@ -67,7 +67,7 @@ YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
       
          // Return to the first Element
          this.el.selectedIndex = 0;
-         this.hiddenEl.value = this.stringifyValue();
+         inputEx.sn(this.hiddenEl,{"value": this.stringifyValue()});
          this.fireUpdatedEvt();
       }
    },
@@ -100,10 +100,9 @@ YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
       
       // set ddlist value
       this.ddlist.setValue(ddlistValue);
-      
-	   this.hiddenEl.value = this.stringifyValue();
-	   if(sendUpdatedEvt !== false) {
-	      // fire update event
+     inputEx.sn(this.hiddenEl,{"value": this.stringifyValue()});
+     if(sendUpdatedEvt !== false) {
+        // fire update event
          this.fireUpdatedEvt();
       }
    },
@@ -120,8 +119,8 @@ YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
     * @return JsonString 
     */  
    stringifyValue: function(){
-		return YAHOO.lang.JSON.stringify(this.getValue());
-	}
+    return YAHOO.lang.JSON.stringify(this.getValue());
+  }
 
    
 });
