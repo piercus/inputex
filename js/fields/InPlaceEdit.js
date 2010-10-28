@@ -32,13 +32,13 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       
       //this.options.buttonTypes = options.buttonTypes || {ok:"submit",cancel:"link"};
       this.options.buttonConfigs = options.buttonConfigs || [{
-               type: this.options.buttonTypes.ok,
+               type: "submit",
                parentEl: this.editorContainer,
                value: inputEx.messages.okEditor,
                className: "inputEx-Button "+CSS_PREFIX+'OkButton',
                onClick: {fn: this.onOkEditor, scope:this}
             },{
-               type: this.options.buttonTypes.cancel,
+               type: "link",
                parentEl: this.editorContainer,
                value: inputEx.messages.cancelEditor,
                className: "inputEx-Button "+CSS_PREFIX+'CancelLink',
