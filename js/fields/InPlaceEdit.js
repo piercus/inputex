@@ -30,7 +30,20 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       
       this.options.editorField = options.editorField;
       
-      this.options.buttonTypes = options.buttonTypes || {ok:"submit",cancel:"link"};
+      //this.options.buttonTypes = options.buttonTypes || {ok:"submit",cancel:"link"};
+      this.options.buttonConfigs = options.buttonConfigs || [{
+               type: this.options.buttonTypes.ok,
+               parentEl: this.editorContainer,
+               value: inputEx.messages.okEditor,
+               className: "inputEx-Button "+CSS_PREFIX+'OkButton',
+               onClick: {fn: this.onOkEditor, scope:this}
+            },{
+               type: this.options.buttonTypes.cancel,
+               parentEl: this.editorContainer,
+               value: inputEx.messages.cancelEditor,
+               className: "inputEx-Button "+CSS_PREFIX+'CancelLink',
+               onClick: {fn: this.onCancelEditor, scope:this}
+            }];
       
       this.options.animColors = options.animColors || null;
    },
@@ -40,7 +53,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     */
    renderComponent: function() {
       this.renderVisuDiv();
-	   this.renderEditor();
+     this.renderEditor();
    },
    
    /**
@@ -56,22 +69,10 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       
       this.editorContainer.appendChild( editorFieldEl );
       Dom.addClass( editorFieldEl , CSS_PREFIX+'editorDiv');
-      
-      this.okButton = new inputEx.widget.Button({
-         type: this.options.buttonTypes.ok,
-         parentEl: this.editorContainer,
-         value: inputEx.messages.okEditor,
-         className: "inputEx-Button "+CSS_PREFIX+'OkButton',
-         onClick: {fn: this.onOkEditor, scope:this}
-      });
-
-      this.cancelLink = new inputEx.widget.Button({
-         type: this.options.buttonTypes.cancel,
-         parentEl: this.editorContainer,
-         value: inputEx.messages.cancelEditor,
-         className: "inputEx-Button "+CSS_PREFIX+'CancelLink',
-         onClick: {fn: this.onCancelEditor, scope:this}
-      });
+      this.buttons = [];
+      for (var i = 0; i < this.options.buttonConfigs ; i++){
+        this.buttons.push(new inputEx.widget.Button(buttonConfigs[i]));
+      }
       
       // Line breaker ()
       this.editorContainer.appendChild( inputEx.cn('div',null, {clear: 'both'}) );
@@ -225,7 +226,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     */
    getValue: function() {
       var editorOpened = (this.editorContainer.style.display == '');
-	   return editorOpened ? this.editorField.getValue() : this.value;
+     return editorOpened ? this.editorField.getValue() : this.value;
    },
 
    /**
@@ -235,7 +236,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     */
    setValue: function(value, sendUpdatedEvt) {   
       // Store the value
-	   this.value = value;
+     this.value = value;
    
       if(lang.isUndefined(value) || value == "") {
          inputEx.renderVisu(this.options.visu, inputEx.messages.emptyInPlaceEdit, this.formattedContainer);
@@ -258,7 +259,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
    close: function() {
       this.editorContainer.style.display = 'none';
       this.formattedContainer.style.display = '';
-	}
+  }
 
 });
   
