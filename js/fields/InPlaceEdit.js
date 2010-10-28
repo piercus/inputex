@@ -31,15 +31,14 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       this.options.editorField = options.editorField;
       
       //this.options.buttonTypes = options.buttonTypes || {ok:"submit",cancel:"link"};
+      
       this.options.buttonConfigs = options.buttonConfigs || [{
                type: "submit",
-               parentEl: this.editorContainer,
                value: inputEx.messages.okEditor,
                className: "inputEx-Button "+CSS_PREFIX+'OkButton',
                onClick: {fn: this.onOkEditor, scope:this}
             },{
                type: "link",
-               parentEl: this.editorContainer,
                value: inputEx.messages.cancelEditor,
                className: "inputEx-Button "+CSS_PREFIX+'CancelLink',
                onClick: {fn: this.onCancelEditor, scope:this}
@@ -70,8 +69,11 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       this.editorContainer.appendChild( editorFieldEl );
       Dom.addClass( editorFieldEl , CSS_PREFIX+'editorDiv');
       this.buttons = [];
-      for (var i = 0; i < this.options.buttonConfigs ; i++){
-        this.buttons.push(new inputEx.widget.Button(buttonConfigs[i]));
+      for (var i = 0; i < this.options.buttonConfigs.length ; i++){
+        var config = this.options.buttonConfigs[i];
+        config.parentEl = this.editorContainer;
+        
+        this.buttons.push(new inputEx.widget.Button(config));
       }
       
       // Line breaker ()
