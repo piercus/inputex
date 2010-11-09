@@ -29,6 +29,14 @@ inputEx.ListField = function(options) {
    inputEx.ListField.superclass.constructor.call(this, options);
 };
 lang.extend(inputEx.ListField,inputEx.Field, {
+
+	/**
+	 * Colors for the animation
+	 */
+	arrowAnimColors: { 
+		from: '#eeee33',
+		to: '#eeeeee' 
+	},
 	   
 	/**
 	 * Set the ListField classname
@@ -175,11 +183,27 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	
 	   // Render the subField
 	   var subFieldEl = this.renderSubField(value);
-	      
+	
+		if(this.options.name) {
+	   	subFieldEl.setFieldName(this.options.name+"["+this.subFields.length+"]");
+		}
+	
 	   // Adds it to the local list
 	   this.subFields.push(subFieldEl);
 	   
 	   return subFieldEl;
+	},
+	
+	/**
+	 * Re-set the name of all the fields (when we remove an element)
+	 */
+	resetAllNames: function() {
+		if(this.options.name) {
+			for(var i = 0 ; i < this.subFields.length ; i++) {
+				var subFieldEl = this.subFields[i];
+				subFieldEl.setFieldName(this.options.name+"["+i+"]");
+			}
+		}
 	},
 	
 	/**
@@ -298,12 +322,15 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	      var temp = this.subFields[nodeIndex];
 	      this.subFields[nodeIndex] = this.subFields[nodeIndex-1];
 	      this.subFields[nodeIndex-1] = temp;
-	      
+	
+			// Note: not very efficient, we could just swap the names
+			this.resetAllNames();
+	
 	      // Color Animation
 	      if(this.arrowAnim) {
 	         this.arrowAnim.stop(true);
 	      }
-	      this.arrowAnim = new YAHOO.util.ColorAnim(insertedEl, {backgroundColor: { from: '#eeee33' , to: '#eeeeee' }}, 0.4);
+	      this.arrowAnim = new YAHOO.util.ColorAnim(insertedEl, {backgroundColor: this.arrowAnimColors}, 0.4);
 	      this.arrowAnim.onComplete.subscribe(function() { Dom.setStyle(insertedEl, 'background-color', ''); });
 	      this.arrowAnim.animate();
 	      
@@ -341,12 +368,15 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	      var temp = this.subFields[nodeIndex];
 	      this.subFields[nodeIndex] = this.subFields[nodeIndex+1];
 	      this.subFields[nodeIndex+1] = temp;
-	      
+	
+			// Note: not very efficient, we could just swap the names
+			this.resetAllNames();      
+	
 	      // Color Animation
 	      if(this.arrowAnim) {
 	         this.arrowAnim.stop(true);
 	      }
-	      this.arrowAnim = new YAHOO.util.ColorAnim(insertedEl, {backgroundColor: { from: '#eeee33' , to: '#eeeeee' }}, 1);
+	      this.arrowAnim = new YAHOO.util.ColorAnim(insertedEl, {backgroundColor: this.arrowAnimColors }, 1);
 	      this.arrowAnim.onComplete.subscribe(function() { Dom.setStyle(insertedEl, 'background-color', ''); });
 	      this.arrowAnim.animate();
 	      
@@ -386,7 +416,10 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	   if(index != -1) {
 	      this.removeElement(index);
 	   }
-	      
+		
+		// Note: not very efficient
+		this.resetAllNames();      
+	
 	   // Fire the updated event
 	   this.fireUpdatedEvt();
 	},

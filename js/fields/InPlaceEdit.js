@@ -16,6 +16,8 @@
  */
 inputEx.InPlaceEdit = function(options) {
    inputEx.InPlaceEdit.superclass.constructor.call(this, options);
+   this.openEditorEvt = new YAHOO.util.CustomEvent("openEditor");
+   this.closeEditorEvt = new YAHOO.util.CustomEvent("closeEditor");
 };
 
 lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
@@ -184,6 +186,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       
       this.editorContainer.style.display = 'none';
       this.formattedContainer.style.display = '';
+      this.closeEditorEvt.fire();
       
       var that = this;
       setTimeout(function() {that.updatedEvt.fire(newValue);}, 50);      
@@ -198,6 +201,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       Event.stopEvent(e);
       this.editorContainer.style.display = 'none';
       this.formattedContainer.style.display = '';
+      this.closeEditorEvt.fire();
    },
    
    /**
@@ -219,6 +223,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       if(this.editorField.el && lang.isFunction(this.editorField.el.setSelectionRange) && (!!value && !!value.length)) {
          this.editorField.el.setSelectionRange(0,value.length);
       }
+      this.openEditorEvt.fire();
       
    },
    
@@ -261,6 +266,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
    close: function() {
       this.editorContainer.style.display = 'none';
       this.formattedContainer.style.display = '';
+      this.closeEditorEvt.fire();
   }
 
 });

@@ -39,7 +39,9 @@ lang.extend(inputEx.StringField, inputEx.Field, {
 	   this.options.minLength = options.minLength;
 	   this.options.typeInvite = options.typeInvite;
 	   this.options.readonly = options.readonly;
-	   this.options.autocomplete = (options.autocomplete === false || options.autocomplete === "off") ? false : true;
+	   this.options.autocomplete = lang.isUndefined(options.autocomplete) ?
+	                                  inputEx.browserAutocomplete :
+	                                  (options.autocomplete === false || options.autocomplete === "off") ? false : true;
 	   this.options.trim = (options.trim === true) ? true : false;
    },
 
@@ -61,7 +63,7 @@ lang.extend(inputEx.StringField, inputEx.Field, {
       if(this.options.readonly) { attributes.readonly = 'readonly'; }
 
       if(this.options.maxLength) { attributes.maxLength = this.options.maxLength; }
-      if(!this.options.autocomplete) { attributes.autocomplete = 'off'; }
+      attributes.autocomplete = this.options.autocomplete ? 'on' : 'off';
 
       // Create the node
       this.el = inputEx.cn('input', attributes);
@@ -70,6 +72,13 @@ lang.extend(inputEx.StringField, inputEx.Field, {
       this.wrapEl.appendChild(this.el);
       this.fieldContainer.appendChild(this.wrapEl);
    },
+
+	/**
+	 * Set the name of the field (or hidden field)
+	 */
+	setFieldName: function(name) {
+		this.el.name = name;
+	},
 
    /**
     * Register the change, focus and blur events
@@ -158,6 +167,13 @@ lang.extend(inputEx.StringField, inputEx.Field, {
     */
    enable: function() {
       this.el.disabled = false;
+   },
+
+   /**
+    * Check if the field is disabled
+    */
+   isDisabled: function() {
+      return this.el.disabled;
    },
 
    /**

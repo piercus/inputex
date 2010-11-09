@@ -82,6 +82,13 @@ inputEx.Field.prototype = {
 	   this.options.required = lang.isUndefined(options.required) ? false : options.required;
 	   this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
 	},
+	
+	
+	/**
+	 * Set the name of the field (or hidden field)
+	 */
+	setFieldName: function(name) {
+	},
 
    /**
     * Default render of the dom element. Create a divEl that wraps the field.
@@ -292,6 +299,13 @@ inputEx.Field.prototype = {
 	},
 
    /**
+    * Check if the field is diabled
+    */
+   isDisabled: function() {
+      return false;
+   },
+
+   /**
     * Focus the field
     */
    focus: function() {
@@ -381,8 +395,8 @@ inputEx.Field.prototype = {
 };
 
 inputEx.Field.groupOptions = [
+	{ type: "string", label: "Name", name: "name", value: '', required: true },
    { type: "string", label: "Label", name: "label", value: '' },
-   { type: "string", label: "Name", name: "name", value: '' },
    { type: "string", label: "Description",name: "description", value: '' },
    { type: "boolean", label: "Required?",name: "required", value: false },
    { type: "boolean", label: "Show messages",name: "showMsg", value: false }
