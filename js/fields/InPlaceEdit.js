@@ -16,6 +16,8 @@
  */
 inputEx.InPlaceEdit = function(options) {
    inputEx.InPlaceEdit.superclass.constructor.call(this, options);
+   this.openEditorEvt = new YAHOO.util.CustomEvent('openEditor', this);
+   this.closeEditorEvt = new YAHOO.util.CustomEvent('closeEditor', this);
 };
 
 lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
@@ -30,7 +32,19 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       
       this.options.editorField = options.editorField;
       
-      this.options.buttonTypes = options.buttonTypes || {ok:"submit",cancel:"link"};
+      //this.options.buttonTypes = options.buttonTypes || {ok:"submit",cancel:"link"};
+      
+      this.options.buttonConfigs = options.buttonConfigs || [{
+               type: "submit",
+               value: inputEx.messages.okEditor,
+               className: "inputEx-Button "+CSS_PREFIX+'OkButton',
+               onClick: {fn: this.onOkEditor, scope:this}
+            },{
+               type: "link",
+               value: inputEx.messages.cancelEditor,
+               className: "inputEx-Button "+CSS_PREFIX+'CancelLink',
+               onClick: {fn: this.onCancelEditor, scope:this}
+            }];
       
       this.options.animColors = options.animColors || null;
    },
@@ -40,7 +54,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     */
    renderComponent: function() {
       this.renderVisuDiv();
-	   this.renderEditor();
+     this.renderEditor();
    },
    
    /**
@@ -56,22 +70,13 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       
       this.editorContainer.appendChild( editorFieldEl );
       Dom.addClass( editorFieldEl , CSS_PREFIX+'editorDiv');
-      
-      this.okButton = new inputEx.widget.Button({
-         type: this.options.buttonTypes.ok,
-         parentEl: this.editorContainer,
-         value: inputEx.messages.okEditor,
-         className: "inputEx-Button "+CSS_PREFIX+'OkButton',
-         onClick: {fn: this.onOkEditor, scope:this}
-      });
-
-      this.cancelLink = new inputEx.widget.Button({
-         type: this.options.buttonTypes.cancel,
-         parentEl: this.editorContainer,
-         value: inputEx.messages.cancelEditor,
-         className: "inputEx-Button "+CSS_PREFIX+'CancelLink',
-         onClick: {fn: this.onCancelEditor, scope:this}
-      });
+      this.buttons = [];
+      for (var i = 0; i < this.options.buttonConfigs.length ; i++){
+        var config = this.options.buttonConfigs[i];
+        config.parentEl = this.editorContainer;
+        
+        this.buttons.push(new inputEx.widget.Button(config));
+      }
       
       // Line breaker ()
       this.editorContainer.appendChild( inputEx.cn('div',null, {clear: 'both'}) );
@@ -179,8 +184,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       var newValue = this.editorField.getValue();
       this.setValue(newValue);
       
-      this.editorContainer.style.display = 'none';
-      this.formattedContainer.style.display = '';
+      this.closeEditor();
       
       var that = this;
       setTimeout(function() {that.updatedEvt.fire(newValue);}, 50);      
@@ -193,10 +197,18 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     */
    onCancelEditor: function(e) {
       Event.stopEvent(e);
+      this.closeEditor();
+   },
+   /**
+    * Close the editor on cancel (cancel button, blur event or escape key)
+    * @param {Event} e The original event (click, blur or keydown)
+    */
+   closeEditor: function() {
       this.editorContainer.style.display = 'none';
       this.formattedContainer.style.display = '';
-   },
-   
+      this.closeEditorEvt.fire()
+   },      
+      
    /**
     * Display the editor
     */
@@ -216,7 +228,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       if(this.editorField.el && lang.isFunction(this.editorField.el.setSelectionRange) && (!!value && !!value.length)) {
          this.editorField.el.setSelectionRange(0,value.length);
       }
-      
+      this.openEditorEvt.fire()
    },
    
    /**
@@ -225,7 +237,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     */
    getValue: function() {
       var editorOpened = (this.editorContainer.style.display == '');
-	   return editorOpened ? this.editorField.getValue() : this.value;
+     return editorOpened ? this.editorField.getValue() : this.value;
    },
 
    /**
@@ -235,7 +247,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     */
    setValue: function(value, sendUpdatedEvt) {   
       // Store the value
-	   this.value = value;
+     this.value = value;
    
       if(lang.isUndefined(value) || value == "") {
          inputEx.renderVisu(this.options.visu, inputEx.messages.emptyInPlaceEdit, this.formattedContainer);
@@ -258,7 +270,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
    close: function() {
       this.editorContainer.style.display = 'none';
       this.formattedContainer.style.display = '';
-	}
+  }
 
 });
   

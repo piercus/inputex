@@ -49,7 +49,9 @@ lang.extend(inputEx.MultiAutoComplete, inputEx.AutoComplete, {
    	var label = lang.isFunction(this.options.returnLabel) ? this.options.returnLabel(aData) : value;   	
    	this.ddlist.addItem({label: label, value: value});
    	this.el.value = "";
+   	this.hiddenEl.value = this.stringifyValue();
    	this.fireUpdatedEvt();
+   	this.onChange();
    },
    
    /**
@@ -103,7 +105,20 @@ lang.extend(inputEx.MultiAutoComplete, inputEx.AutoComplete, {
     * @param {Event} e The original 'change' event
     */
 	onChange: function(e) {
+	   if (this.hiddenEl.value != this.stringifyValue()){ 
+			 this.hiddenEl.value = this.stringifyValue();
+		 }
 	   // erase inherited version, so don't trash previous value if input is empty
+	},
+	onBlur : function(){
+		 this.el.value = '';
+		 if(this.el.value == '' && this.options.typeInvite) {
+	       Dom.addClass(this.divEl, "inputEx-typeInvite");
+			   if (this.el.value == '') this.el.value = this.options.typeInvite;
+     }
+  },
+   stringifyValue: function(){
+		return lang.JSON.stringify(this.getValue());
 	}
    
    
