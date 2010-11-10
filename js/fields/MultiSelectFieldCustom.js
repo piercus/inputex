@@ -57,24 +57,23 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
         inputEx.MultiSelectFieldCustom.superclass.getState.call(this);
       }
    },  
-   onItemRemoved: function(e,params) {
-      var itemValue = params[0];
-      var index = inputEx.indexOf(itemValue.value || itemValue, this.options.selectValues);
-      this.el.childNodes[index].disabled = false;
-      this.fireUpdatedEvt();
-   },
-   setValue: function(obj, sendUpdatedEvt) {
-
-      this.ddlist.setValue(obj);
+  setValue: function(obj, sendUpdatedEvt) {
+     var i, length, position, choice, ddlistValue = [];
       
-      // Re-enable all options
-      for(var i = 0 ; i < this.el.childNodes.length ; i++) {
-         this.el.childNodes[i].disabled = false;
+      if (!YAHOO.lang.isArray(obj)) {
+        return;
       }
-      // disable selected options
+      
+      // Re-enable all choices
+      for (i = 0, length=this.choicesList.length ; i < length ; i += 1) {
+        this.enableChoice(i);
+      }
+      this.ddlist.setValue(obj);
+      // disable selected choices and fill ddlist value
       for(i = 0 ; i < obj.length ; i++) {
-         var index = inputEx.indexOf(obj[i].value || obj[i], this.options.selectValues);
-         this.el.childNodes[index].disabled = true;
+         position = this.getChoicePosition({ value : obj[i].value || obj[i] });
+         choice = this.choicesList[position];
+         this.hideChoice({ position: position });
       }
      inputEx.sn(this.hiddenEl,{"value": this.stringifyValue()});
      if(sendUpdatedEvt !== false) {
@@ -82,10 +81,7 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
          this.fireUpdatedEvt();
       }
   },
-  addItem: function(itemId) {
-      this.el.selectedIndex = itemId;
-      this.onAddNewItem();
-   },
+
    disable: function(){
       inputEx.MultiSelectFieldCustom.superclass.disable.call(this);
       this.ddlist.disable();

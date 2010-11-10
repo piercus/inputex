@@ -59,7 +59,15 @@
         
         // Get the selector value
         value = inputEx.MultiSelectField.superclass.getValue.call(this);
+        this.addValue(value);
         
+        
+      }
+    },
+     /**
+     * add the value to the ddlist
+     */
+    addValue: function(value){
         position = this.getChoicePosition({ value : value });
         choice = this.choicesList[position];
         
@@ -70,17 +78,14 @@
         this.el.selectedIndex = 0;
         
         this.fireUpdatedEvt();
-        
-      }
+      
     },
-  
     /**
      * Set the value of the list
      * @param {String} value The value to set
      * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
      */
     setValue: function(value, sendUpdatedEvt) {
-      
       var i, length, position, choice, ddlistValue = [];
       
       if (!YAHOO.lang.isArray(value)) {
@@ -119,7 +124,14 @@
      */
     getValue: function() {
       return this.ddlist.getValue();
+    },
+    /**
+     * stringify the value (usefull for classic send of the form)
+     */    
+    stringifyValue: function(){
+      return YAHOO.lang.JSON.stringify(this.getValue());
     }
+    
     
   });
   

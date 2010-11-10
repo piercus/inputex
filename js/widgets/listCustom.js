@@ -144,6 +144,7 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
           this.removeItem(l-1-i);
         }
       }
+
       for (var i = 0; i < objs.length; i++){
         if (this.items[i]){
          this.items[i].setValue(objs[i]);
