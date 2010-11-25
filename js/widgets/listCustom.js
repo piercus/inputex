@@ -11,7 +11,7 @@ inputEx.widget.ListCustom = function(options) {
   this.uniqueness = options.uniqueness || false;
   this.disabled = false;
   inputEx.widget.ListCustom.superclass.constructor.call(this,options);
-
+  this.listChangeEvt = new YAHOO.util.CustomEvent("changeListCustom");
   this.selects = [];
 };
 YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
@@ -36,6 +36,7 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
 
       if(this.listSelectOptions){
         var select = new inputEx.SelectField(this.listSelectOptions); 
+        select.updatedEvt.subscribe(function(){this.listChangeEvt.fire();},this,true)
         this.selects.push(select);
         li.appendChild(select.el);
         iCopy.getValue = function(){
