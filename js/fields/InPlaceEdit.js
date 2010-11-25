@@ -218,7 +218,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     enable: function(){
       this.disabled = false;
       inputEx.sn(this.formattedContainer, {className: 'inputEx-InPlaceEdit-visu'});
-    },
+    },  
   /**
     * Override disable to Disable openEditor
     */   
