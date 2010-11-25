@@ -47,8 +47,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
             }];
       
       this.options.animColors = options.animColors || null;
-   },
-
+   },  
    /**
     * Override renderComponent to create 2 divs: the visualization one, and the edit in place form
     */
@@ -90,6 +89,9 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     * @param {Event} e The original mouseover event
     */
    onVisuMouseOver: function(e) {
+      // to totally disable the visual effect on mouse enter, you should change css options inputEx-InPlaceEdit-visu:hover
+      if(this.disabled) return;
+      
       if(this.colorAnim) {
          this.colorAnim.stop(true);
       }
@@ -101,6 +103,8 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     * @param {Event} e The original mouseout event
     */
    onVisuMouseOut: function(e) {
+      if(this.disabled) return;
+      
       // Start animation
       if(this.colorAnim) {
          this.colorAnim.stop(true);
@@ -208,11 +212,25 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       this.formattedContainer.style.display = '';
       this.closeEditorEvt.fire()
    },      
-      
+  /**
+    * Override enable to Enable openEditor
+    */
+    enable: function(){
+      this.disabled = false;
+      inputEx.sn(this.formattedContainer, {className: 'inputEx-InPlaceEdit-visu'});
+    },
+  /**
+    * Override disable to Disable openEditor
+    */   
+    disable: function(){
+      this.disabled = true;
+      inputEx.sn(this.formattedContainer, {className: 'inputEx-InPlaceEdit-visu-disable'});
+    },
    /**
     * Display the editor
     */
    openEditor: function() {
+      if(this.disabled) return;
       var value = this.getValue();
       this.editorContainer.style.display = '';
       this.formattedContainer.style.display = 'none';

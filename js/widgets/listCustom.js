@@ -36,7 +36,9 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
 
       if(this.listSelectOptions){
         var select = new inputEx.SelectField(this.listSelectOptions); 
-        select.updatedEvt.subscribe(function(){this.listChangeEvt.fire();},this,true)
+        select.updatedEvt.subscribe(function(){
+           this.listChangeEvt.fire();
+        },this,true)
         this.selects.push(select);
         li.appendChild(select.el);
         iCopy.getValue = function(){

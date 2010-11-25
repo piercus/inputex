@@ -49,7 +49,6 @@ YAHOO.lang.extend(inputEx.MultiAutoCompleteCustom, inputEx.MultiAutoComplete,{
          this.fireUpdatedEvt();
       }, this, true);
       this.ddlist.listReorderedEvt.subscribe(this.fireUpdatedEvt, this, true);
-      this.ddlist.listChangeEvt.subscribe(this.fireUpdatedEvt, this, true);
    },    
    /**
     * onAdd : fired when someone click on the field button

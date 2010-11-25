@@ -37,7 +37,8 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
       inputEx.MultiSelectFieldCustom.superclass.renderComponent.call(this);
       
       this.ddlist = new inputEx.widget.ListCustom({parentEl: this.fieldContainer,listSelectOptions: this.listSelectOptions, maxItems: this.maxItems, uniqueness: true, maxItemsAlert: this.maxItemsAlert});
-      
+      this.ddlist.listChangeEvt.subscribe(this.fireUpdatedEvt, this, true);
+
    }, 
    getState: function(){
      if (this.confirmEmpty && !this.confirmedEmpty ){
