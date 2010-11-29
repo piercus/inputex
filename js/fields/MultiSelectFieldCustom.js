@@ -69,7 +69,7 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
       for (i = 0, length=this.choicesList.length ; i < length ; i += 1) {
         this.enableChoice(i);
       }
-      this.ddlist.setValue(obj);
+      this.ddlist.setValue(obj,false);
       // disable selected choices and fill ddlist value
       for(i = 0 ; i < obj.length ; i++) {
          position = this.getChoicePosition({ value : obj[i].value || obj[i] });
@@ -82,7 +82,16 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
          this.fireUpdatedEvt();
       }
   },
+     // override to add sendUpdatedEvt option 
+  onItemRemoved: function(e,params) {
 
+   this.showChoice({ value : params[0] });
+   this.el.selectedIndex = 0;
+   if(!(params[1] == false)){
+      this.fireUpdatedEvt();
+   }  
+
+   }, 
    disable: function(){
       inputEx.MultiSelectFieldCustom.superclass.disable.call(this);
       this.ddlist.disable();

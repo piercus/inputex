@@ -44,14 +44,14 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
         iCopy.getValue = function(){
           return {select: select.getValue(), label: this.label, value: this.value};
         }
-        iCopy.setValue = function(obj){
+        iCopy.setValue = function(obj, sendUpdatedEvt){
           var label = (typeof obj == "object") ? obj.label : obj;
           var value = (typeof obj == "object") ? obj.value : obj;
           var selectValue = (typeof obj == "object") ? obj.selectValue : obj;
           this.span.innerHTML = label;
           this.label = label;
           this.value = value;
-          select.setValue(selectValue);
+          select.setValue(selectValue, sendUpdatedEvt);
         }
       } else {
         iCopy.getValue = function(){
@@ -60,7 +60,7 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
           if(this.label) result.label = this.label;
           return result;
         }       
-        iCopy.setValue = function(obj){
+        iCopy.setValue = function(obj, sendUpdatedEvt){
           this.label = (typeof obj == "object") ? obj.label : obj ;
           this.value = (typeof obj == "object") ? obj.value : obj ;
           this.span.innerHTML = this.label;
@@ -136,7 +136,7 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
      }
      return results;
    },
-   setValue: function(objs){    
+   setValue: function(objs, sendUpdatedEvt){    
       if (this.disabled){
         return false;
       }
@@ -144,18 +144,24 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
         // we copy the length value to avoid for-bugs
         var l = this.items.length;
         for (var i = 0; i< l -objs.length; i++){
-          this.removeItem(l-1-i);
+          this.removeItem(l-1-i, sendUpdatedEvt);
         }
       }
 
       for (var i = 0; i < objs.length; i++){
         if (this.items[i]){
-         this.items[i].setValue(objs[i]);
+         this.items[i].setValue(objs[i], sendUpdatedEvt);
         } else {
-         this.addItem(objs[i]);
+         this.addItem(objs[i], sendUpdatedEvt);
         }
       } 
-   }
+   },
+   // override to add sendUpdatedEvt option 
+   removeItem: function(index, sendUpdatedEvt) {
+     var itemValue = this._removeItem(index);
+     // Fire the itemRemoved Event
+     this.itemRemovedEvt.fire(itemValue,  sendUpdatedEvt);
+  } 
 }); 
 
 })();
