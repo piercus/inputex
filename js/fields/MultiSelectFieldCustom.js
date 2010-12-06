@@ -23,6 +23,8 @@ inputEx.MultiSelectFieldCustom = function(options) {
   this.maxItemsAlert = options.maxItemsAlert;
   inputEx.MultiSelectFieldCustom.superclass.constructor.call(this,options);
   this.confirmEmpty = options.confirmEmpty;
+  //for html send
+  this.updatedEvt.subscribe(this.stringifyOnUpdate,this,true);
 };
 YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
    /**
@@ -38,6 +40,14 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
       
       this.ddlist = new inputEx.widget.ListCustom({parentEl: this.fieldContainer,listSelectOptions: this.listSelectOptions, maxItems: this.maxItems, uniqueness: true, maxItemsAlert: this.maxItemsAlert});
       this.ddlist.listChangeEvt.subscribe(this.fireUpdatedEvt, this, true);
+      this.el.name = ""; // we re-route the html submit features 
+      var hiddenAttrs = {
+         type: 'hidden',
+         value: ''
+      };
+      if(this.options.name) hiddenAttrs.name = this.options.name;
+      this.hiddenEl = inputEx.cn('input', hiddenAttrs);
+      this.fieldContainer.appendChild(this.hiddenEl);
 
    }, 
    getState: function(){
@@ -95,7 +105,10 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
       inputEx.MultiSelectFieldCustom.superclass.clear.call(this);
       this.ddlist.enable();
       this.setValue([]);
-   }
+   },
+   stringifyOnUpdate: function(){
+     this.hiddenEl.value = this.stringifyValue();
+   },
    
 });
 inputEx.registerType("multiselectcustom", inputEx.MultiSelectFieldCustom);

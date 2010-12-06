@@ -21,6 +21,7 @@ inputEx.MultiAutoCompleteCustom = function(options) {
   this.uniqueness = options.uniqueness;
   // hack to avoid to reset the field after a blur event, we store the value into this variable
   this.lastElemValue = "";
+  this.labelAddButton = options.labelAddButton || "Add";
   
   
   inputEx.MultiAutoCompleteCustom.superclass.constructor.call(this,options);
@@ -38,7 +39,7 @@ YAHOO.lang.extend(inputEx.MultiAutoCompleteCustom, inputEx.MultiAutoComplete,{
 
    renderComponent: function() {
       inputEx.MultiAutoComplete.superclass.renderComponent.call(this);
-      this.buttonAdd = inputEx.cn('div',{className: "addButton"},{},'Add');
+      this.buttonAdd = inputEx.cn('div',{className: "addButton"},{},this.labelAddButton);
       Event.addListener(this.buttonAdd, 'click',this.onAdd,this,true)
       this.el.parentNode.appendChild(this.buttonAdd);
 
