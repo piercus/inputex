@@ -117,7 +117,7 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
    },
    stringifyOnUpdate: function(){
      this.hiddenEl.value = this.stringifyValue();
-   },
+   }
    
 });
 inputEx.registerType("multiselectcustom", inputEx.MultiSelectFieldCustom);
