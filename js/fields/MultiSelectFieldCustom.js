@@ -23,6 +23,7 @@ inputEx.MultiSelectFieldCustom = function(options) {
   this.maxItemsAlert = options.maxItemsAlert;
   inputEx.MultiSelectFieldCustom.superclass.constructor.call(this,options);
   this.confirmEmpty = options.confirmEmpty;
+ 
 };
 YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
    /**
@@ -82,10 +83,7 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
          this.fireUpdatedEvt();
       }
   },
-  addItem: function(itemId) {
-      this.el.selectedIndex = itemId;
-      this.onAddNewItem();
-   },
+  
    disable: function(){
       inputEx.MultiSelectFieldCustom.superclass.disable.call(this);
       this.ddlist.disable();

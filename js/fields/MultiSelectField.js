@@ -59,21 +59,25 @@
 				
 				// Get the selector value
 				value = inputEx.MultiSelectField.superclass.getValue.call(this);
-				
-				position = this.getChoicePosition({ value : value });
-				choice = this.choicesList[position];
-				
-				this.ddlist.addItem({ value: value, label: choice.label });
-				
-				// hide choice (+ select first choice)
-				this.hideChoice({ position : position });
-				this.el.selectedIndex = 0;
-				
-				this.fireUpdatedEvt();
+        this.addValue(value);
 				
 			}
 		},
-	
+    /**
+    * add an item from a value (can be call outside)
+    * @param {value} value The value to add
+    */
+    addValue: function(value) {
+        position = this.getChoicePosition({ value : value });
+        choice = this.choicesList[position];
+                    
+        this.ddlist.addItem({ value: value, label: choice.label });
+        
+        // hide choice (+ select first choice)
+        this.hideChoice({ position : position });
+        this.el.selectedIndex = 0;
+        this.fireUpdatedEvt();
+    }, 
 		/**
 		 * Set the value of the list
 		 * @param {String} value The value to set
