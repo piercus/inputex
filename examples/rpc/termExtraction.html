@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+<head>
+<title>term Extraction with inputEx RPC</title>
+
+<!-- YUI CSS -->
+<link rel="stylesheet" type="text/css" href="../../lib/yui/reset-fonts/reset-fonts.css">
+<link rel="stylesheet" type="text/css" href="../../lib/yui/container/assets/container.css"> 
+<link rel="stylesheet" type="text/css" href="../../lib/yui/assets/skins/sam/skin.css">
+
+<!-- InputEx CSS -->
+<link type='text/css' rel='stylesheet' href='../../css/inputEx.css' />
+
+<style>
+#mainBox {
+	margin:40px auto;
+	width: 80%;
+	background-color: #ccccff;
+	padding: 20px;
+}
+p {
+	margin: 10px;
+	font-weight: bold;
+}
+</style>
+</head>
+
+<body class="yui-skin-sam">
+	
+	<div id='mainBox'>
+		
+		
+		<p>Form generated from this SMD: <a href="yuiExtractor.smd">smd/yuiExtractor.smd</a></p>
+		<div id='formContainer'>
+		</div>
+		
+		<p>Results :</p>
+		<div id='treeContainer'>
+		</div>
+		
+		<div style='clear: both;'></div>
+		
+	</div>
+
+<!-- YUI -->
+<script type="text/javascript" src="../../lib/yui/utilities/utilities.js"></script>
+<script type="text/javascript" src="../../lib/yui/get/get-min.js"></script>
+<script type="text/javascript" src="../../lib/yui/json/json-min.js"></script>
+
+<!-- inputEx -->
+<script type="text/javascript" src="../../js/inputex.js"></script>
+<script type="text/javascript" src="../../js/mixins/choice.js"></script>
+<script type="text/javascript" src="../../js/Field.js"></script>
+<script type="text/javascript" src="../../js/Group.js"></script>
+<script type="text/javascript" src="../../js/widgets/Button.js"></script>
+<script type="text/javascript" src="../../js/Form.js"></script>
+<script type="text/javascript" src="../../js/fields/StringField.js"></script>
+<script type="text/javascript" src="../../js/fields/SelectField.js"></script>
+<script type="text/javascript" src="../../js/fields/TextArea.js"></script>
+<script type="text/javascript" src="../../js/fields/IntegerField.js"></script>
+<script type="text/javascript" src="../../js/json-schema.js"></script> 
+<script type="text/javascript" src="../../js/rpc/inputex-rpc.js"></script> 
+<script type="text/javascript" src="../../js/widgets/json-tree-inspector.js"></script>
+
+<script>
+
+YAHOO.util.Event.onDOMReady(function() {
+
+	/**
+	 * generate a form from the service.questionSearch method
+	 */
+	var onServiceReady = function() {
+        
+        var callback= {
+            success: function(){
+              console.log(arguments,this)
+              
+            },
+            failure: function(){
+              console.log(arguments,this)
+            }
+          }
+          service.getTags({context: "A performance test is an assessment that requires an examinee to actually perform a task or activity, rather than simply answering questions referring to specific parts.[1] The purpose is to ensure greater fidelity to what is being tested.An example is a behind-the-wheel driving test to obtain a driver's license. Rather than only answering simple multiple-choice items regarding the driving of an automobile, a student is required to actually drive one while being evaluated.Performance tests are commonly used in workplace and professional applications, such as professional certification and licensure. When used for personnel selection, the tests might be referred to as a work sample. A licensure example would be cosmetologists being required to demonstrate a haircut or manicure on a live person.Some performance tests are simulations. For instance, the assessment to become certified as an ophthalmic technician includes two components, a multiple-choice examination and a computerized skill simulation. The examinee must demonstrate the ability to complete seven tasks commonly performed on the job, such as retinoscopy, that are simulated on a computer"}, 
+          {
+           success: function(results) {
+					var treeContainer = YAHOO.util.Dom.get('treeContainer');
+					treeContainer.innerHTML = "";
+					new inputEx.widget.JsonTreeInspector(treeContainer, results);
+				},
+          failure: function() {
+            if(YAHOO.lang.isObject(callback) && YAHOO.lang.isFunction(callback.success)) {
+                   callback.failure.call(callback.scope || this, results);
+            }
+           } }); /*
+		inputEx.RPC.generateServiceForm(service.getTags, { parentEl: 'formContainer' },{
+				success: function(results) {
+					var treeContainer = YAHOO.util.Dom.get('treeContainer');
+					treeContainer.innerHTML = "";
+					new inputEx.widget.JsonTreeInspector(treeContainer, results);
+				}
+			});*/
+	}
+
+	/**
+	 * automatically creates service method from the smd description
+	 */
+	var service = new inputEx.RPC.Service("yuiExtractor.smd",{ success: onServiceReady }	);
+  
+  
+
+
+});
+
+</script>
+
+</body>
+</html>
