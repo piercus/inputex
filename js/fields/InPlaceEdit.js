@@ -16,8 +16,8 @@
  */
 inputEx.InPlaceEdit = function(options) {
    inputEx.InPlaceEdit.superclass.constructor.call(this, options);
-   this.openEditorEvt = new YAHOO.util.CustomEvent("openEditor");
-   this.closeEditorEvt = new YAHOO.util.CustomEvent("closeEditor");
+   this.openEditorEvt = new YAHOO.util.CustomEvent('openEditor', this);
+   this.closeEditorEvt = new YAHOO.util.CustomEvent('closeEditor', this);
 };
 
 lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
@@ -47,8 +47,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
             }];
       
       this.options.animColors = options.animColors || null;
-   },
-
+   },  
    /**
     * Override renderComponent to create 2 divs: the visualization one, and the edit in place form
     */
@@ -90,6 +89,9 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     * @param {Event} e The original mouseover event
     */
    onVisuMouseOver: function(e) {
+      // to totally disable the visual effect on mouse enter, you should change css options inputEx-InPlaceEdit-visu:hover
+      if(this.disabled) return;
+      
       if(this.colorAnim) {
          this.colorAnim.stop(true);
       }
@@ -101,6 +103,8 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     * @param {Event} e The original mouseout event
     */
    onVisuMouseOut: function(e) {
+      if(this.disabled) return;
+      
       // Start animation
       if(this.colorAnim) {
          this.colorAnim.stop(true);
@@ -183,10 +187,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       
       var newValue = this.editorField.getValue();
       this.setValue(newValue);
-      
-      this.editorContainer.style.display = 'none';
-      this.formattedContainer.style.display = '';
-      this.closeEditorEvt.fire();
+      this.closeEditor();
       
       var that = this;
       setTimeout(function() {that.updatedEvt.fire(newValue);}, 50);      
@@ -199,15 +200,36 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     */
    onCancelEditor: function(e) {
       Event.stopEvent(e);
+      this.closeEditor();
+   },
+   /**
+    * Close the editor on cancel (cancel button, blur event or escape key)
+    * @param {Event} e The original event (click, blur or keydown)
+    */
+   closeEditor: function() {
       this.editorContainer.style.display = 'none';
       this.formattedContainer.style.display = '';
-      this.closeEditorEvt.fire();
-   },
-   
+      this.closeEditorEvt.fire()
+   },      
+  /**
+    * Override enable to Enable openEditor
+    */
+    enable: function(){
+      this.disabled = false;
+      inputEx.sn(this.formattedContainer, {className: 'inputEx-InPlaceEdit-visu'});
+    },  
+  /**
+    * Override disable to Disable openEditor
+    */   
+    disable: function(){
+      this.disabled = true;
+      inputEx.sn(this.formattedContainer, {className: 'inputEx-InPlaceEdit-visu-disable'});
+    },
    /**
     * Display the editor
     */
    openEditor: function() {
+      if(this.disabled) return;
       var value = this.getValue();
       this.editorContainer.style.display = '';
       this.formattedContainer.style.display = 'none';
@@ -223,8 +245,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       if(this.editorField.el && lang.isFunction(this.editorField.el.setSelectionRange) && (!!value && !!value.length)) {
          this.editorField.el.setSelectionRange(0,value.length);
       }
-      this.openEditorEvt.fire();
-      
+      this.openEditorEvt.fire()
    },
    
    /**
