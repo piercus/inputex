@@ -16,6 +16,7 @@
  *  <li><b>nStars</b>: <i>integer</i> number of stars (default : 5) </li>
  *  <li><b>disabled</b>: disable voting  </li>
  *  <li><b>message</b>: <i>string</i> C-like with % convention string for display Message (default 'Rating: % (% votes cast)') </li>
+ *  *  <li><b>disableMessage</b>: <i>string</i> String to show when mouse pass hover the stars and stars are disabled</li>
  * </ul>
  */
 inputEx.RatingStars = function(options) {
@@ -44,6 +45,7 @@ lang.extend(inputEx.RatingStars, inputEx.Field,{
     
     // Overwrite options
     this.options.message = options.message || inputEx.messages.ratingMsg;
+    this.options.disableMessage = options.disableMessage;
     this.options.className = options.className ? options.className : 'inputEx-Field inputEx-RatingStars';
     this.setMessage();
 
@@ -120,6 +122,10 @@ lang.extend(inputEx.RatingStars, inputEx.Field,{
       
         if(this.options.starsMessages){
           this.showMessage("<span class=\"inputEx-starMess\">"+this.options.starsMessages[whichStar]+"</span>");
+        }
+      } else {
+        if(this.options.disableMessage){
+          this.showMessage("<span class=\"inputEx-disableMessage\">"+this.options.disableMessage+"</span>")
         }
       }
     },  
