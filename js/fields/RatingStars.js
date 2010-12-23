@@ -198,6 +198,7 @@ lang.extend(inputEx.RatingStars, inputEx.Field,{
       this.dontReset = true;
       this.disable();
       this.rateEvt.fire(value);  
+      
     },
     afterRating: function(){
       this.showMessage("<span class=\"thanks\">"+inputEx.messages.thanksRate+"</span>");      
