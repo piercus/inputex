@@ -200,6 +200,9 @@ lang.extend(inputEx.RatingStars, inputEx.Field,{
     * @method onClickRating
     */
     onClickRating: function(value){
+      if(this.disabled){
+        return
+      }
       this.setValue(value);
       this.dontReset = true;
       this.disable();
