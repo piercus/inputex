@@ -81,7 +81,8 @@ lang.extend(inputEx.RatingStars, inputEx.Field,{
         that.onHoverStar(this.index);
       }
       star.onClick = function(){
-        that.onClickRating(this.index);
+        //by convention the value of the field goes from 1 to 5, as the number of stars. It's weird because there's no 0, but this is it.
+        that.onClickRating(this.index+1);
       }
       this.starsEls.push(star);
       var a = inputEx.cn('a',{href:'#' + i},null,i);
