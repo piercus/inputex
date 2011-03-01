@@ -21,10 +21,10 @@ YAHOO.lang.extend(inputEx.SliderField, inputEx.Field, {
       inputEx.SliderField.superclass.setOptions.call(this, options);
       
       this.options.className = options.className ? options.className : 'inputEx-SliderField';
-   	   
+       
       this.options.minValue = lang.isUndefined(options.minValue) ? 0 : options.minValue;
       this.options.maxValue = lang.isUndefined(options.maxValue) ? 100 : options.maxValue;
-      
+      this.options.pixelEnd  = lang.isUndefined(options.pixelEnd) ? 100 : options.pixelEnd;
       this.options.displayValue = lang.isUndefined(options.displayValue) ? true : options.displayValue;
    },
       
@@ -45,7 +45,7 @@ YAHOO.lang.extend(inputEx.SliderField, inputEx.Field, {
       
       this.fieldContainer.appendChild( inputEx.cn('div',null,{clear: 'both'}) );
             
-      this.slider = YAHOO.widget.Slider.getHorizSlider(this.sliderbg, this.sliderthumb, 0,100);
+      this.slider = YAHOO.widget.Slider.getHorizSlider(this.sliderbg, this.sliderthumb, 0,this.options.pixelEnd);
    },
    
    initEvents: function() {
