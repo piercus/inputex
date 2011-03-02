@@ -78,7 +78,7 @@ YAHOO.lang.extend(inputEx.SliderField, inputEx.Field, {
          v = this.options.maxValue;
       }
       
-      var percent = Math.floor(v-this.options.minValue)*100/this.options.maxValue;
+      var percent = Math.floor(v-this.options.minValue)*this.options.pixelEnd/this.options.maxValue;
       
       this.slider.setValue(percent);
       
@@ -90,7 +90,7 @@ YAHOO.lang.extend(inputEx.SliderField, inputEx.Field, {
     * @return {int} The integer value
     */
    getValue: function() {
-      var val = Math.floor(this.options.minValue+(this.options.maxValue-this.options.minValue)*this.slider.getValue()/100);
+      var val = Math.floor(this.options.minValue+(this.options.maxValue-this.options.minValue)*this.slider.getValue()/this.options.pixelEnd);
       return val;
    }
     
