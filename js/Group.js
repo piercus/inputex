@@ -439,7 +439,15 @@ lang.extend(inputEx.Group, inputEx.Field, {
 			}
 		}
 	},
-
+   /**
+    * Compatibility with classic forms in listField for instance
+    */
+    setFieldName: function(name){
+			var l = this.inputs.length;
+			for (var i = 0; i < l; i++){
+				this.inputs[i].setFieldName(name+""+((this.inputs[i].el && this.inputs[i].el.name )|| "group-"+i ));
+			}
+    },
    
    /**
     * Purge all event listeners and remove the component from the dom
