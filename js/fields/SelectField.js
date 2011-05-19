@@ -225,7 +225,11 @@
 				this.el.appendChild(node);
 				
 			}
-		}
+		},	
+		// Add stringField setFieldName for classic form in group in listField
+		setFieldName: function(name) {
+			this.el.name = name;
+    },
 		
 	});
 	
