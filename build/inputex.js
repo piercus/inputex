@@ -4007,16 +4007,30 @@ lang.extend(inputEx.DateSplitField, inputEx.CombineField, {
       var values = [];
       
       // !value catches "" (empty field), and invalid dates
-      if(!value || !lang.isFunction(value.getTime) || !lang.isNumber(value.getTime()) ) {
+      if (!value || !lang.isFunction(value.getTime) || !lang.isNumber(value.getTime()) ) {
          values[this.monthIndex] = "";
          values[this.yearIndex] = "";
          values[this.dayIndex] = "";
       } else {
          for(var i = 0 ; i < 3 ; i++) {
-            values.push( i == this.dayIndex ? value.getDate() : (i==this.yearIndex ? value.getFullYear() : value.getMonth()+1 ) );
+            values.push( i === this.dayIndex ?   this.ensureTwoChars(value.getDate()) :
+                         i === this.monthIndex ? this.ensureTwoChars(value.getMonth() + 1) :
+                                                 value.getFullYear());
          }
       }
       inputEx.DateSplitField.superclass.setValue.call(this, values, sendUpdatedEvt);
+   },
+   
+   ensureTwoChars: function (val) {
+      
+      val = val + ""; // convert into string if not
+      
+      // prefix with "0" if 1-char string
+      if (val.length === 1) {
+         val = "0" + val;
+      }
+      
+      return val;
    },
    
    getValue: function() {
@@ -4290,10 +4304,14 @@ lang.extend(inputEx.DatePickerField, inputEx.DateField, {
  	 */
    beforeShowOverlay: function(e) {
 	
-      var date = this.getValue(true);
       if (!!this.calendar) {
          
-			if(!!date) {
+         var date = this.getValue(true), valid = this.validate();
+         
+         // check if valid to exclude invalid dates (that are truthy !)
+         // check date to exclude empty values ('')
+			if (valid && !!date) {
+			   
          	// HACK: don't fire Field updatedEvt when selecting date
          	this.ignoreBeforeShowOverlayCall = true;
          	// select the previous date in calendar
