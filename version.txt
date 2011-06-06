@@ -15,6 +15,9 @@ next version :
  - Fixes :
     * RadioField: fix remaining bug when radio default value option is equal to
                   allowAny field default value
+    * DateSplitField: day and month are displayed on two chars (with "0" prefix if necessary)
+    * DatePickerField : fix bug in 'readonly: false' mode that displayed a broken calendar
+                        if invalid user input in field
 
 version 0.7.1 :
 ---------------
