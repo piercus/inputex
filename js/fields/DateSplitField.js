@@ -19,13 +19,13 @@ inputEx.DateSplitField = function(options) {
    options.fields = [];
    for(var i = 0 ; i < 3 ; i++) {
       if(i == this.dayIndex) {
-         options.fields.push({type: 'integer', typeInvite: inputEx.messages.dayTypeInvite, size: 2 });
+         options.fields.push({type: 'integer', typeInvite: inputEx.messages.dayTypeInvite, size: 2, trim: true });
       }
       else if(i == this.yearIndex) {
-         options.fields.push({type: 'integer', typeInvite: inputEx.messages.yearTypeInvite, size: 4 });
+         options.fields.push({type: 'integer', typeInvite: inputEx.messages.yearTypeInvite, size: 4, trim: true });
       }
       else {
-         options.fields.push({type: 'integer', typeInvite: inputEx.messages.monthTypeInvite, size: 2 });
+         options.fields.push({type: 'integer', typeInvite: inputEx.messages.monthTypeInvite, size: 2, trim: true });
       }
    }
 
@@ -47,16 +47,30 @@ lang.extend(inputEx.DateSplitField, inputEx.CombineField, {
       var values = [];
       
       // !value catches "" (empty field), and invalid dates
-      if(!value || !lang.isFunction(value.getTime) || !lang.isNumber(value.getTime()) ) {
+      if (!value || !lang.isFunction(value.getTime) || !lang.isNumber(value.getTime()) ) {
          values[this.monthIndex] = "";
          values[this.yearIndex] = "";
          values[this.dayIndex] = "";
       } else {
          for(var i = 0 ; i < 3 ; i++) {
-            values.push( i == this.dayIndex ? value.getDate() : (i==this.yearIndex ? value.getFullYear() : value.getMonth()+1 ) );
+            values.push( i === this.dayIndex ?   this.ensureTwoChars(value.getDate()) :
+                         i === this.monthIndex ? this.ensureTwoChars(value.getMonth() + 1) :
+                                                 value.getFullYear());
          }
       }
       inputEx.DateSplitField.superclass.setValue.call(this, values, sendUpdatedEvt);
+   },
+   
+   ensureTwoChars: function (val) {
+      
+      val = val + ""; // convert into string if not
+      
+      // prefix with "0" if 1-char string
+      if (val.length === 1) {
+         val = "0" + val;
+      }
+      
+      return val;
    },
    
    getValue: function() {

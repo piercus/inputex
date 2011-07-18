@@ -180,10 +180,14 @@ lang.extend(inputEx.DatePickerField, inputEx.DateField, {
  	 */
    beforeShowOverlay: function(e) {
 	
-      var date = this.getValue(true);
       if (!!this.calendar) {
          
-			if(!!date) {
+         var date = this.getValue(true), valid = this.validate();
+         
+         // check if valid to exclude invalid dates (that are truthy !)
+         // check date to exclude empty values ('')
+			if (valid && !!date) {
+			   
          	// HACK: don't fire Field updatedEvt when selecting date
          	this.ignoreBeforeShowOverlayCall = true;
          	// select the previous date in calendar

@@ -1,8 +1,6 @@
 (function() {
 
-   var lang = YAHOO.lang;
-   var inputEx = YAHOO.inputEx;
-   var Event = YAHOO.util.Event;
+   var lang = YAHOO.lang, Evt = YAHOO.util.Event;
 inputEx.widget.ListCustom = function(options) {
   
   this.listSelectOptions = options.listSelectOptions;
@@ -85,8 +83,8 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
     if(!!this.options.allowDelete){
       var removeLink = inputEx.cn('div', {id: iCopy.value+"-Close" ,className:"removeButton"}, null, ""); 
         li.appendChild( removeLink );
-        Event.addListener(removeLink, 'click', function(e) {
-           var a = Event.getTarget(e);
+        Evt.addListener(removeLink, 'click', function(e) {
+           var a = Evt.getTarget(e);
            var li = a.parentNode;
            this.removeItem( inputEx.indexOf(li,this.ul.childNodes) );
         }, this, true);
@@ -107,7 +105,7 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
       }
       var items = this.items;
       for (var i = 0; i< items.length; i++){
-        Event.removeListener(items[i].value+"-Close","click")
+        Evt.removeListener(items[i].value+"-Close","click")
         YAHOO.util.Dom.addClass(items[i].value+"-Close","hidden");
       }
       this.disabled = true;
@@ -120,8 +118,8 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
       }
       var items = this.items;
       for (var i = 0; i< items.length; i++){
-        Event.addListener(items[i].value+"-Close",'click', function(e) {
-           var a = Event.getTarget(e);
+        Evt.addListener(items[i].value+"-Close",'click', function(e) {
+           var a = Evt.getTarget(e);
            var li = a.parentNode;
            this.removeItem( inputEx.indexOf(li,this.ul.childNodes) );
         }, this, true);

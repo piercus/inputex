@@ -24,8 +24,6 @@ inputEx.MultiSelectFieldCustom = function(options) {
   inputEx.MultiSelectFieldCustom.superclass.constructor.call(this,options);
   this.confirmEmpty = options.confirmEmpty;
   
-  //for html send
-  this.updatedEvt.subscribe(this.stringifyOnUpdate,this,true);
 };
 YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
    /**
@@ -87,7 +85,6 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
          choice = this.choicesList[position];
          this.hideChoice({ position: position });
       }
-     inputEx.sn(this.hiddenEl,{"value": this.stringifyValue()});
      if(sendUpdatedEvt !== false) {
         // fire update event
          this.fireUpdatedEvt();
@@ -116,9 +113,6 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
       inputEx.MultiSelectFieldCustom.superclass.clear.call(this);
       this.ddlist.enable();
       this.setValue([]);
-   },
-   stringifyOnUpdate: function(){
-     this.hiddenEl.value = this.stringifyValue();
    }
    
 });
