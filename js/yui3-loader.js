@@ -310,7 +310,7 @@ YUI().use(function(Y) {
 						requires: ['inputex-multiselect', 'inputex-pie-listcustom']
 					},
 					'inputex-pie-multiautocomplete':{
-						path: 'js/fields/MultiAutocompleteCustom.js',
+						path: 'js/fields/MultiAutoCompleteCustom.js',
 						requires: ['inputex-multiautocomplete', 'inputex-pie-listcustom']
 					}
 				}
