@@ -141,7 +141,7 @@ YUI().use(function(Y) {
 					},
 					'inputex-autocomplete': {
 						path: 'js/fields/AutoComplete.js',
-						requires: ['inputex-string', 'yui2-autocomplete']
+						requires: ['inputex-string', 'yui2-autocomplete','yui2-json']
 					},
 					'inputex-checkbox': {
 						path: 'js/fields/CheckBox.js',
@@ -303,7 +303,7 @@ YUI().use(function(Y) {
 					// Piercus widgets
 					'inputex-pie-listcustom': {
 						path: 'js/widgets/listCustom.js',
-						requires: ['inputex-ddlist']
+						requires: ['inputex-ddlist','yui2-json']
 					},
 					'inputex-pie-multiselect':{
 						path: 'js/fields/MultiSelectFieldCustom.js',
