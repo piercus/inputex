@@ -1,5 +1,7 @@
-(function() {
+YUI.add("inputex-multiselect", function(Y) {
 
+  var inputEx = Y.inputEx;
+  var lang = Y.Lang;
 	/**
 	 * Create a multi select field
 	 * @class inputEx.MultiSelectField
@@ -14,7 +16,7 @@
 		inputEx.MultiSelectField.superclass.constructor.call(this,options);
 	};
 	
-	YAHOO.lang.extend(inputEx.MultiSelectField, inputEx.SelectField,{
+	Y.extend(inputEx.MultiSelectField, inputEx.SelectField,{
 		
 		/**
 		 * Build the DDList
@@ -31,17 +33,17 @@
 		 * Register the "change" event
 		 */
 		initEvents: function() {
-			YAHOO.util.Event.addListener(this.el,"change", this.onAddNewItem, this, true);
-			this.ddlist.itemRemovedEvt.subscribe(this.onItemRemoved, this, true);
-			this.ddlist.listReorderedEvt.subscribe(this.fireUpdatedEvt, this, true);
+			Y.on("change", this.onAddNewItem, this.el, this);
+			this.ddlist.on("itemRemoved",this.onItemRemoved, this);
+			this.ddlist.on("listReordered",this.fireUpdatedEvt, this);
 		},
 		
 		/**
 		 * Re-enable the option element when an item is removed by the user
 		 */
-		onItemRemoved: function(e,params) {
+		onItemRemoved: function(params) {
 			
-			this.showChoice({ value : params[0] });
+			this.showChoice({ value : params });
 			this.el.selectedIndex = 0;
 			
 			this.fireUpdatedEvt();
@@ -83,7 +85,7 @@
 			
 			var i, length, position, choice, ddlistValue = [];
 			
-			if (!YAHOO.lang.isArray(value)) {
+			if (!lang.isArray(value)) {
 				return;
 			}
 			
@@ -128,4 +130,6 @@
 	// Register this class as "multiselect" type
 	inputEx.registerType("multiselect", inputEx.MultiSelectField);
 
-}());
+}, '0.1.1',{
+  requires: ["inputex-select","inputex-ddlist"]
+});

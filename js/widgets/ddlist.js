@@ -1,7 +1,8 @@
-(function() {
+YUI.add("inputex-ddlist", function(Y){
 
-   var DD = YAHOO.util.DragDropMgr, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event, lang = YAHOO.lang;
-   
+   //var DD = YAHOO.util.DragDropMgr, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event, lang = YAHOO.lang;
+   var lang = Y.Lang;
+   var inputEx = Y.inputEx;
 /**
  * DDProxy for DDList items (used by DDList)
  * @class inputEx.widget.DDListItem
@@ -9,23 +10,29 @@
  * @constructor
  * @param {String} id
  */
-inputEx.widget.DDListItem = function(id) {
-
-    inputEx.widget.DDListItem.superclass.constructor.call(this, id);
-
-    // Prevent lateral draggability
+inputEx.widget.DDListItem = function(options) {
+     
+    this.group = options.group;
+    var dragMode = 'intersect';
+    var node = options.node;
+    
+    
+    //inputEx.widget.DDListItem.superclass.constructor.call(this, {groups : [this.group], node: this.node});
+    //this.initEvents();
+    
+  /*  // Prevent lateral draggability
     this.setXConstraint(0,0);
 
     this.goingUp = false;
-    this.lastY = 0;
+    this.lastY = 0;*/
 };
 
-YAHOO.extend(inputEx.widget.DDListItem, YAHOO.util.DDProxy, {
+Y.extend(inputEx.widget.DDListItem, Y.DD.Drag, {
 
    /**
     * Create the proxy element
     */
-   startDrag: function(x, y) {
+  /* startDrag: function(x, y) {
         // make the proxy look like the source element
         var dragEl = this.getDragEl();
         var clickEl = this.getEl();
@@ -33,12 +40,12 @@ YAHOO.extend(inputEx.widget.DDListItem, YAHOO.util.DDProxy, {
         this._originalIndex = inputEx.indexOf(clickEl ,clickEl.parentNode.childNodes);
         dragEl.className = clickEl.className;
         dragEl.innerHTML = clickEl.innerHTML;
-    },
+    },*/
 
     /**
      * Handle the endDrag and eventually fire the listReordered event
      */
-    endDrag: function(e) {
+  /*  endDrag: function(e) {
         Dom.setStyle(this.id, "visibility", "");
         
         // Fire the reordered event if position in list has changed
@@ -47,12 +54,12 @@ YAHOO.extend(inputEx.widget.DDListItem, YAHOO.util.DDProxy, {
         if(this._originalIndex != newIndex) {
            this._list.onReordered(this._originalIndex, newIndex);
         }
-    },
+    },*/
 
     /**
      * @method onDragDrop
      */
-    onDragDrop: function(e, id) {
+  /*  onDragDrop: function(e, id) {
 
         // If there is one drop interaction, the li was dropped either on the list,
         // or it was dropped on the current location of the source element.
@@ -78,12 +85,12 @@ YAHOO.extend(inputEx.widget.DDListItem, YAHOO.util.DDProxy, {
             }
 
         }
-    },
+    },*/
 
     /**
      * Keep track of the direction of the drag for use during onDragOver
      */
-    onDrag: function(e) {
+  /*  onDrag: function(e) {
         var y = Event.getPageY(e);
 
         if (y < this.lastY) {
@@ -93,12 +100,12 @@ YAHOO.extend(inputEx.widget.DDListItem, YAHOO.util.DDProxy, {
         }
 
         this.lastY = y;
-    },
+    },*/
 
     /**
      * @method onDragOver
      */
-    onDragOver: function(e, id) {
+   /* onDragOver: function(e, id) {
     
         var srcEl = this.getEl();
         var destEl = Dom.get(id);
@@ -117,7 +124,7 @@ YAHOO.extend(inputEx.widget.DDListItem, YAHOO.util.DDProxy, {
 
             DD.refreshCache();
         }
-    }
+    }*/
 });
 
 
@@ -143,18 +150,17 @@ inputEx.widget.DDList = function(options) {
 	 * @event YAHOO custom event fired when an item is removed
 	 * @param {Any} itemValue value of the removed item
 	 */
-	this.itemRemovedEvt = new YAHOO.util.CustomEvent('itemRemoved', this);
-	
+	this.publish("itemRemoved");
 	/**
 	 * @event YAHOO custom event fired when the list is reordered
 	 */
-   this.listReorderedEvt = new YAHOO.util.CustomEvent('listReordered', this);
+	this.publish("listReordered")
    
 
    // append it immediatly to the parent DOM element
 	if(options.parentEl) {
 	   if( lang.isString(options.parentEl) ) {
-	     Dom.get(options.parentEl).appendChild(this.ul);  
+	     Y.one('#'+options.parentEl).appendChild(this.ul);  
 	   }
 	   else {
 	      options.parentEl.appendChild(this.ul);
@@ -179,6 +185,8 @@ inputEx.widget.DDList.prototype = {
 		   if(options.value) {
 		      this.setValue(options.value);
 		   }
+		   
+		   this.group = Y.guid();
 
    },	
 
@@ -194,14 +202,14 @@ inputEx.widget.DDList.prototype = {
 		if(!!this.options.allowDelete){
 			var removeLink = inputEx.cn('a', null, null, "remove"); 
 	      li.appendChild( removeLink );
-	      Event.addListener(removeLink, 'click', function(e) {
-	         var a = Event.getTarget(e);
+	      Y.on( 'click', function(e) {
+	         var a = e.currentTarget._node;
 	         var li = a.parentNode;
 	         this.removeItem( inputEx.indexOf(li,this.ul.childNodes) );
-	      }, this, true);
+	      }, removeLink, this);
       }
 
-      var dditem = new inputEx.widget.DDListItem(li);
+      var dditem = new inputEx.widget.DDListItem({node: li, group: this.group});
       dditem._list = this;
       
       this.items.push( (typeof item == "object") ? item.value : item );
@@ -234,7 +242,7 @@ inputEx.widget.DDList.prototype = {
       var itemValue = this._removeItem(index);
       
       // Fire the itemRemoved Event
-      this.itemRemovedEvt.fire(itemValue);
+      this.fire("itemRemoved",itemValue);
    },
    
    /**
@@ -251,7 +259,7 @@ inputEx.widget.DDList.prototype = {
       }      
       this.items = inputEx.compactArray(this.items);
       
-      this.listReorderedEvt.fire();
+      this.fire("listReordered");
    },
    
    /**
@@ -301,6 +309,8 @@ inputEx.widget.DDList.prototype = {
    }
    
 };
+Y.augment(inputEx.widget.DDList, Y.EventTarget, null, null, {});
 
-
-})();
+}, '0.1.1',{
+  requires: ["inputex","dd","event-custom"]
+});

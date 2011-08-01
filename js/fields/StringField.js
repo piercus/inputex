@@ -1,6 +1,7 @@
-(function() {
 
-   var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
+YUI.add("inputex-string", function(Y){
+   var lang = Y.Lang;//, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
+   var inputEx = Y.inputEx;
 
 /**
  * Basic string field (equivalent to the input type "text")
@@ -24,8 +25,8 @@ inputEx.StringField = function(options) {
 	     this.updateTypeInvite();
 	  }
 };
-
-lang.extend(inputEx.StringField, inputEx.Field, {
+inputEx.messages.stringTooShort = ["This field should contain at least "," numbers or characters"];
+Y.extend(inputEx.StringField, inputEx.Field, {
    /**
     * Set the default values of the options
     * @param {Object} options Options object as passed to the constructor
@@ -57,7 +58,7 @@ lang.extend(inputEx.StringField, inputEx.Field, {
       // Attributes of the input field
       var attributes = {};
       attributes.type = 'text';
-      attributes.id = this.divEl.id?this.divEl.id+'-field':YAHOO.util.Dom.generateId();
+      attributes.id = this.divEl.id?this.divEl.id+'-field':Y.guid();
       if(this.options.size) { attributes.size = this.options.size; }
       if(this.options.name) { attributes.name = this.options.name; }
       if(this.options.readonly) { attributes.readonly = 'readonly'; }
@@ -84,20 +85,20 @@ lang.extend(inputEx.StringField, inputEx.Field, {
     * Register the change, focus and blur events
     */
    initEvents: function() {
-	   Event.addListener(this.el, "change", this.onChange, this, true);
+     Y.on("change", this.onChange,this.el, this);
 
-       if (YAHOO.env.ua.ie){ // refer to inputEx-95
+       if (Y.UA.ie > 0){ // refer to inputEx-95
             var field = this.el;
-            new YAHOO.util.KeyListener(this.el, {keys:[13]}, {fn:function(){
-                field.blur();
-                field.focus();
-            }}).enable();
+            Y.on("key", function(e){
+              field.blur();
+              field.focus();
+            }, this.el,'down:13', this);
        }
 
-	   Event.addFocusListener(this.el, this.onFocus, this, true);
-		Event.addBlurListener(this.el, this.onBlur, this, true);
-	   Event.addListener(this.el, "keypress", this.onKeyPress, this, true);
-	   Event.addListener(this.el, "keyup", this.onKeyUp, this, true);
+     Y.on("focus", this.onFocus,this.el, this);
+     Y.on("blur", this.onBlur,this.el, this);
+     Y.on("key", this.onKeyPress,this.el, "press",this,this);
+     //Y.on("key", this.onKeyUp,this.el, 'up:',this);
    },
 
    /**
@@ -111,7 +112,7 @@ lang.extend(inputEx.StringField, inputEx.Field, {
       value = (this.options.typeInvite && this.el.value == this.options.typeInvite) ? '' : this.el.value;
       
       if (this.options.trim) {
-         value = YAHOO.lang.trim(value);
+         value = lang.trim(value);
       }
       
 	   return value;
@@ -211,27 +212,27 @@ lang.extend(inputEx.StringField, inputEx.Field, {
 	updateTypeInvite: function() {
 
 	   // field not focused
-      if (!Dom.hasClass(this.divEl, "inputEx-focused")) {
+      if (!Y.one(this.divEl).hasClass( "inputEx-focused")) {
 
          // show type invite if field is empty
          if(this.isEmpty()) {
-	         Dom.addClass(this.divEl, "inputEx-typeInvite");
+	         Y.one(this.divEl).addClass( "inputEx-typeInvite");
 	         this.el.value = this.options.typeInvite;
 
 	      // important for setValue to work with typeInvite
          } else {
-            Dom.removeClass(this.divEl, "inputEx-typeInvite");
+            Y.one(this.divEl).removeClass("inputEx-typeInvite");
          }
 
       // field focused : remove type invite
       } else {
-	      if(Dom.hasClass(this.divEl,"inputEx-typeInvite")) {
+	      if(Y.one(this.divEl).hasClass("inputEx-typeInvite")) {
 	         // remove text
 	         this.el.value = "";
 
 	         // remove the "empty" state and class
 	         this.previousState = null;
-	         Dom.removeClass(this.divEl,"inputEx-typeInvite");
+	         Y.one(this.divEl).removeClass("inputEx-typeInvite");
          }
       }
 	},
@@ -265,7 +266,7 @@ lang.extend(inputEx.StringField, inputEx.Field, {
 });
 
 
-inputEx.messages.stringTooShort = ["This field should contain at least "," numbers or characters"];
+
 
 // Register this class as "string" type
 inputEx.registerType("string", inputEx.StringField, [
@@ -274,4 +275,6 @@ inputEx.registerType("string", inputEx.StringField, [
     { type: 'integer', label: 'Min. length', name: 'minLength', value: 0}
 ]);
 
-})();
+}, '0.1.1',{
+  requires: ["inputex-field","event-key"]
+});

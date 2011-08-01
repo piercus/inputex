@@ -1,8 +1,8 @@
-(function () {
+YUI.add("inputex-choice", function(Y){
 	
 	// shortcuts
-	var lang = YAHOO.lang;
-	
+	var lang = Y.Lang;
+	var inputEx = Y.inputEx;
 	
 	inputEx.mixin.choice = {
 		
@@ -237,4 +237,6 @@
 		
 	};
 	
-}());
+}, '0.1.1',{
+  requires: ["inputex"]
+});

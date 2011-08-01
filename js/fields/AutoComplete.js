@@ -1,7 +1,8 @@
-(function() {
+YUI.add("inputex-autocomplete",function(Y){
 
-   var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
-
+  // var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
+  var lang = Y.Lang;
+  var inputEx = Y.inputEx;
 /**
  * An autocomplete field that wraps the YUI autocompleter
  * @class inputEx.AutoComplete
@@ -19,7 +20,7 @@ inputEx.AutoComplete = function(options) {
 
 };
 
-lang.extend(inputEx.AutoComplete, inputEx.StringField, {
+Y.extend(inputEx.AutoComplete, inputEx.StringField, {
 
    /**
     * Adds autocomplete options
@@ -32,11 +33,8 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-AutoComplete';
       
       // Added options
-      this.options.datasource = options.datasource;
       this.options.autoComp = options.autoComp;
       this.options.returnValue = options.returnValue;
-      this.options.generateRequest = options.generateRequest;
-      this.options.datasourceParameters = options.datasourceParameters;
    },
    
    /**
@@ -63,7 +61,7 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       // Attributes of the input field
       var attributes = {
          type: 'text',
-         id: YAHOO.util.Dom.generateId()
+         id: Y.guid()
       };
       if(this.options.size) attributes.size = this.options.size;
       if(this.options.readonly) attributes.readonly = 'readonly';
@@ -86,10 +84,13 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       this.fieldContainer.appendChild(this.wrapEl);
    
       // Render the list :
-      this.listEl = inputEx.cn('div', {id: Dom.generateId() });
+      var listId = Y.guid()
+      this.listEl = inputEx.cn('div', {id: listId });
       this.fieldContainer.appendChild(this.listEl);
-       
-      Event.onAvailable([this.el, this.listEl], this.buildAutocomplete, this, true);
+      
+      Y.on('available', this.buildAutocomplete, "#"+attributes.id, this);
+      Y.on('available', this.buildAutocomplete, "#"+listId, this);
+      //Y.on("domready", function(e){alert(e+"domready");});
    },
    
    /**
@@ -108,30 +109,13 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
             this.options.datasource[param] = this.options.datasourceParameters[param];
          }
       }
+    
+      var yEl = Y.one(this.el)
+      yEl.plug(Y.Plugin.AutoComplete, this.options.autoComp);
 
       // Instantiate AutoComplete
-      this.oAutoComp = new YAHOO.widget.AutoComplete(this.el.id, this.listEl.id, this.options.datasource, this.options.autoComp);
-      if(!lang.isUndefined(this.options.generateRequest))
-      {
-          this.oAutoComp.generateRequest = this.options.generateRequest;
-      }
-      // subscribe to the itemSelect event
-      if (this.oAutoComp.itemSelectEvent) {
-					this.oAutoComp.itemSelectEvent.subscribe(this.itemSelectHandler, this, true);
-				// subscribe to the textboxBlur event (instead of "blur" event on this.el)
-				//                                    |-------------- autocompleter ----------|
-				//    -> order : "blur" on this.el -> internal callback -> textboxBlur event -> this.onBlur callback
-				//    -> so fired after autocomp internal "blur" callback (which would erase typeInvite...)
-				this.oAutoComp.textboxBlurEvent.subscribe(this.onBlur, this, true);		  
-		  
-		  } else {// the itemSelectEvent doesn't exist when the form has not been rendered
-				var that = this;
-			  Event.onDOMReady(function(){
-					that.oAutoComp.itemSelectEvent.subscribe(that.itemSelectHandler, that, true);
-					that.oAutoComp.textboxBlurEvent.subscribe(that.onBlur, that, true);		 
-			  })
-			}
-
+      yEl.ac.on("select",this.itemSelectHandler, this);
+      yEl.on("blur", this.onBlur, this);
    },
    
    /**
@@ -139,32 +123,18 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
     * @param {} sType
     * @param {} aArgs
     */
-   itemSelectHandler: function(sType, aArgs) {
-      var aData = aArgs[2];
+   itemSelectHandler: function(o) {
+      var aData = o.result.raw;
       this.setValue( this.options.returnValue ? this.options.returnValue(aData) : aData[0] );
    },
 
    onBlur: function(e){
-	 if (this.hiddenEl.value != this.el.value && this.el.value != this.options.typeInvite) this.el.value = this.hiddenEl.value;
-	   if(this.el.value == '' && this.options.typeInvite) {
-	         Dom.addClass(this.divEl, "inputEx-typeInvite");
-			 if (this.el.value == '') this.el.value = this.options.typeInvite;
+     if(this.el.value == '' && this.options.typeInvite) {
+       Y.one(this.divEl).addClass("inputEx-typeInvite")
+       if (this.el.value == '') this.el.value = this.options.typeInvite;
      }
-},
-   /**
-    * onChange event handler
-    * @param {Event} e The original 'change' event
-    */
-   onChange: function(e) {
-      this.setClassFromState();
-      // Clear the field when no value 
-	 if (this.hiddenEl.value != this.el.value) this.hiddenEl.value = this.el.value;
-      lang.later(50, this, function() {
-         if(this.el.value == "") {
-            this.setValue("");
-         }
-      });
-   },
+  },
+
    
    /**
     * Set the value
@@ -199,4 +169,6 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
 // Register this class as "autocomplete" type
 inputEx.registerType("autocomplete", inputEx.AutoComplete);
 
-})();
+}, '0.1.1',{
+  requires: ["inputex-string","autocomplete", "autocomplete-filters", "autocomplete-highlighters"]
+})

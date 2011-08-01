@@ -18,7 +18,7 @@
 
  </head>
 
- <body class="yui-skin-sam">
+ <body class="yui3-skin-sam">
 
 <h1>inputEx - MultiAutoComplete Usage</h1>
 
@@ -34,33 +34,46 @@
 <script src="../js/fields/StringField.js"  type='text/javascript'></script>
 <script src="../js/fields/AutoComplete.js"  type='text/javascript'></script>
 <script src="../js/widgets/ddlist.js"  type='text/javascript'></script>
+<script src="../js/widgets/listCustom.js"  type='text/javascript'></script>
 <script src="../js/fields/MultiAutoComplete.js"  type='text/javascript'></script>
-
+<script src="../js/fields/MultiAutoCompleteCustom.js"  type='text/javascript'></script>
 
 <script src="js/dpSyntaxHighlighter.js"></script>
 <script src="inputex-examples.js"></script>
 
-
+<style>
+ .removeButton{
+   width: 10px;
+   height: 10px;
+   position: absolute;
+   border: 1px solid black;
+   right: 0px;
+   top: 3px;
+  }
+</style>
 
 
 <!-- Example 1 -->
 <div class='exampleDiv'>
- <h2>Basic MultiAutoComplete creation</h2>
+ <h2>Basic MultiAutoCompleteCustom creation</h2>
  <p>Use the following code to create a basic inputEx MultiAutoComplete. (note: this example doesn't work offline)</p>
  <div class='demoContainer' id='container1'></div>
  <div class='codeContainer'>
   <textarea name="code" class="JScript">
-      var field = new inputEx.MultiAutoComplete({
-        parentEl: 'container1', 
-        label: 'Search US state',
-
-        // autocompleter options
-        autoComp: {
-          source: ["aaa","bbb","cccc","ccc","dddddd"],
-          minQueryLength: 2,
-          maxResultsDisplayed: 50
-        }
-		  });
+      var field = new inputEx.MultiAutoCompleteCustom(	{
+				      label: 'Tags',
+				      parentEl: 'container1',
+				      maxItems:6,
+				      uniqueness: true,
+				      maxItemsAlert:function(){alert("You're limited to 6 tags")},
+				      // autocompleter options
+				      autoComp: {
+				        forceSelection: true,
+				        minQueryLength: 2,
+				        maxResultsDisplayed: 50,
+				        source: ["tag1","tag2","tag4","tag25"]
+				      }
+				    });
 
 		var logDiv = inputEx.cn('div', null, null, "");
 		Y.one('#container1').appendChild(logDiv);

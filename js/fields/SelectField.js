@@ -1,6 +1,7 @@
-(function () {
+YUI.add("inputex-select",function(Y){
 
-	var Event = YAHOO.util.Event, lang = YAHOO.lang;
+	var lang = Y.Lang;
+	var inputEx = Y.inputEx;
 
 	/**
 	 * Create a select field
@@ -16,7 +17,7 @@
 		inputEx.SelectField.superclass.constructor.call(this, options);
 	};
 
-	lang.extend(inputEx.SelectField, inputEx.Field, {
+	Y.extend(inputEx.SelectField, inputEx.Field, {
 		
 		/**
 		 * Set the default values of the options
@@ -55,7 +56,7 @@
 			// create DOM <select> node
 			this.el = inputEx.cn('select', {
 			
-				id: this.divEl.id ? this.divEl.id + '-field' : YAHOO.util.Dom.generateId(),
+				id: this.divEl.id ? this.divEl.id + '-field' : Y.guid(),
 				name: this.options.name || ''
 			
 			});
@@ -76,9 +77,9 @@
 		 * Register the "change" event
 		 */
 		initEvents: function () {
-			Event.addListener(this.el, "change", this.onChange, this, true);
-			Event.addFocusListener(this.el, this.onFocus, this, true);
-			Event.addBlurListener(this.el, this.onBlur, this, true);
+			Y.on("change", this.onChange, this.el, this);
+			Y.on("focus", this.onFocus, this.el,this);
+			Y.on("blur", this.onBlur, this.el,this);
 		},
 	
 		/**
@@ -217,9 +218,7 @@
 			
 			// Insert in DOM
 			if (domPosition < this.el.childNodes.length) {
-				
-				YAHOO.util.Dom.insertBefore(node, this.el.childNodes[domPosition]);
-				
+				Y.one(this.el).insert(node,domPosition)
 			} else {
 				
 				this.el.appendChild(node);
@@ -234,7 +233,7 @@
 	});
 	
 	// Augment prototype with choice mixin (functions : addChoice, removeChoice, etc.)
-	lang.augmentObject(inputEx.SelectField.prototype, inputEx.mixin.choice);
+	Y.mix(inputEx.SelectField.prototype, inputEx.mixin.choice);
 	
 	
 	// Register this class as "select" type
@@ -255,4 +254,6 @@
 		}
 	]);
 
-}());
+}, '0.1.1',{
+  requires: ['inputex-field','inputex-choice']
+});
