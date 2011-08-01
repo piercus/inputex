@@ -97,8 +97,10 @@ Y.extend(inputEx.StringField, inputEx.Field, {
 
      Y.on("focus", this.onFocus,this.el, this);
      Y.on("blur", this.onBlur,this.el, this);
-     Y.on("key", this.onKeyPress,this.el, "press",this,this);
-     //Y.on("key", this.onKeyUp,this.el, 'up:',this);
+     // bug to scope event handlers in this context
+     var that = this;
+     Y.on("key", function(e,scope){ that.onKeyPress.call(that,e)},this.el, "press",this);
+     Y.on("key", function(e,scope){ that.onKeyUp.call(that,e)},this.el, 'up',this);
    },
 
    /**

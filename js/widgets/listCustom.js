@@ -4,12 +4,13 @@ YUI.add("inputex-pie-listcustom", function(Y) {
    var inputEx = Y.inputEx;
    
 inputEx.widget.ListCustom = function(options) {
-  
+  this.options = {};
   this.listSelectOptions = options.listSelectOptions;
   this.maxItems = options.maxItems;
   this.maxItemsAlert = options.maxItemsAlert;
   this.uniqueness = options.uniqueness || false;
   this.disabled = false;
+  this.classRemoveButton = options.classRemoveButton;
   inputEx.widget.ListCustom.superclass.constructor.call(this,options);
   this.publish("listChanged");
   this.selects = [];
@@ -84,7 +85,7 @@ Y.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
 
       // Option for the "remove" link (default: true)
     if(!!this.options.allowDelete){
-      var removeLink = inputEx.cn('div', {id: iCopy.value+"-Close" ,className:"removeButton"}, null, ""); 
+      var removeLink = inputEx.cn('div', {id: iCopy.value+"-Close" ,className: this.classRemoveButton || "removeButton"}, null, ""); 
         li.appendChild( removeLink );
         Y.on('click', this.onRemove,removeLink, this);
       }

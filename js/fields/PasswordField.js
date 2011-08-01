@@ -1,6 +1,6 @@
-(function() {
-	
-   var Event=YAHOO.util.Event,lang=YAHOO.lang;
+YUI.add("inputex-password", function(Y){
+
+   var inputEx = Y.inputEx,lang=Y.Lang;
 	
 /**
  * Create a password field.
@@ -24,7 +24,7 @@ inputEx.PasswordField = function(options) {
  */
 inputEx.PasswordField.byId = {}; 
 
-lang.extend(inputEx.PasswordField, inputEx.StringField, {
+Y.extend(inputEx.PasswordField, inputEx.StringField, {
    
 	/**
 	 * Add the password regexp, strengthIndicator, capsLockWarning
@@ -39,10 +39,10 @@ lang.extend(inputEx.PasswordField, inputEx.StringField, {
 	   this.options.regexp = options.regexp || inputEx.regexps.password;
 	  
 		// display a strength indicator
-		this.options.strengthIndicator = YAHOO.lang.isUndefined(options.strengthIndicator) ? false : options.strengthIndicator;
+		this.options.strengthIndicator = lang.isUndefined(options.strengthIndicator) ? false : options.strengthIndicator;
 		
 		// capsLockWarning
-		this.options.capsLockWarning = YAHOO.lang.isUndefined(options.capsLockWarning) ? false : options.capsLockWarning;
+		this.options.capsLockWarning = lang.isUndefined(options.capsLockWarning) ? false : options.capsLockWarning;
 		
 		// confirm option, pass the id of the password field to confirm
 		inputEx.PasswordField.byId[options.id] = this;
@@ -143,7 +143,6 @@ lang.extend(inputEx.PasswordField, inputEx.StringField, {
 	 */
 	onKeyPress: function(e) {
 	   inputEx.PasswordField.superclass.onKeyPress.call(this,e);
-	   
 	   if(this.options.capsLockWarning) {
          var ev = e ? e : window.event;
          if (!ev) {
@@ -196,7 +195,7 @@ lang.extend(inputEx.PasswordField, inputEx.StringField, {
   	     var strength = inputEx.PasswordField.getPasswordStrength(this.getValue());
         for(var i = 0 ; i < 4 ; i++) {
            var on = (strength >= i*25) && (strength>0);
-           YAHOO.util.Dom.setStyle(this.strengthBlocks[i],"background-color", on ? "#4AE817" : "#FFFFFF");
+           Y.one(this.strengthBlocks[i]).setStyle("background-color", on ? "#4AE817" : "#FFFFFF");
 		  }
      }
    
@@ -262,4 +261,6 @@ inputEx.registerType("password", inputEx.PasswordField, [
    {type: 'boolean', label: 'CapsLock warning', name: 'capsLockWarning', value: false }
 ]);
 	
-})();
+},'0.1.1',{
+  requires: ["inputex-string"]
+});

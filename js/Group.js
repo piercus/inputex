@@ -167,11 +167,11 @@ Y.extend(inputEx.Group, inputEx.Field, {
     * Toggle the collapse state
     */
    toggleCollapse: function() {
-      if(Dom.hasClass(this.fieldset, 'inputEx-Expanded')) {
-         Dom.replaceClass(this.fieldset, 'inputEx-Expanded', 'inputEx-Collapsed');
+      if(Y.one(this.fieldset).hasClass( 'inputEx-Expanded')) {
+        Y.one(this.fieldset).replaceClass('inputEx-Expanded', 'inputEx-Collapsed');
       }
       else {
-         Dom.replaceClass(this.fieldset, 'inputEx-Collapsed','inputEx-Expanded');
+         Y.one(this.fieldset).replaceClass( 'inputEx-Collapsed','inputEx-Expanded');
       }
    },
    
@@ -329,11 +329,9 @@ Y.extend(inputEx.Group, inputEx.Field, {
     * @param {String} eventName Event name
     * @param {Array} args Array of [fieldValue, fieldInstance] 
     */
-   onChange: function(eventName, args) {
+   onChange: function(fieldValue, fieldInstance) {
 
       // Run interactions
-      var fieldValue = args[0];
-      var fieldInstance = args[1];
       this.runInteractions(fieldInstance,fieldValue);
       
       //this.setClassFromState();
@@ -348,10 +346,10 @@ Y.extend(inputEx.Group, inputEx.Field, {
     */
    runAction: function(action, triggerValue) {
       var field = this.getFieldByName(action.name);
-      if( YAHOO.lang.isFunction(field[action.action]) ) {
+      if( lang.isFunction(field[action.action]) ) {
          field[action.action].call(field);
       }
-      else if( YAHOO.lang.isFunction(action.action) ) {
+      else if( lang.isFunction(action.action) ) {
          action.action.call(field, triggerValue);
       }
       else {
@@ -368,7 +366,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
       
       var index = inputEx.indexOf(fieldInstance, this.inputs);
       var fieldConfig = this.options.fields[index];
-      if( YAHOO.lang.isUndefined(fieldConfig.interactions) ) return;
+      if(lang.isUndefined(fieldConfig.interactions) ) return;
       
       // Let's run the interactions !
       var interactions = fieldConfig.interactions;
@@ -414,7 +412,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
 	 */
 	setErrors: function(errors) {	
 		var i,k;
-		if(YAHOO.lang.isArray(errors)) {
+		if(lang.isArray(errors)) {
 			for(i = 0 ; i < errors.length ; i++) {
 				k = errors[i][0];
 				value = errors[i][1];
@@ -426,7 +424,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
 				}
 			}
 		}
-		else if(YAHOO.lang.isObject(errors)) {
+		else if(lang.isObject(errors)) {
 			for(k in errors) {
 				if(errors.hasOwnProperty(k)) {
 					if(this.inputsNames[k]) {

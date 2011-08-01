@@ -73,7 +73,7 @@ YUI.add("inputex-field",function(Y) {
      	this.options.id = options.id || Y.guid();
      	this.options.label = options.label;
      	this.options.description = options.description;
-     
+      this.options.wrapperClassName = options.wrapperClassName;
         // Define default messages
 	     this.options.messages = {};
 	     this.options.messages.required = (options.messages && options.messages.required) ? options.messages.required : inputEx.messages.required;
@@ -99,7 +99,7 @@ YUI.add("inputex-field",function(Y) {
 	  render: function() {
 	
 	     // Create a DIV element to wrap the editing el and the image
-	     this.divEl = inputEx.cn('div', {className: 'inputEx-fieldWrapper'});
+	     this.divEl = inputEx.cn('div', {className: this.options.wrapperClassName || 'inputEx-fieldWrapper'});
 	     if(this.options.id) {
 	        this.divEl.id = this.options.id;
 	     }

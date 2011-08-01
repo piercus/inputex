@@ -1,4 +1,4 @@
-YUI({filter: "raw"}).use("inputex-form","inputex-email","inputex-url", function(Y){
+YUI({filter: "raw"}).use("inputex-autocomplete", function(Y){
 	
 	/**
 	 * Utilities to run inputEx examples

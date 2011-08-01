@@ -15,14 +15,16 @@ YUI.add("inputex-pie-multiautocompletecustom",function(Y){
    */
   
   inputEx.MultiAutoCompleteCustom = function(options) {
+    this.options = {};
     this.maxItems = options.maxItems; 
     this.maxItemsAlert = options.maxItemsAlert;
+
     this.uniqueness = options.uniqueness;
     // hack to avoid to reset the field after a blur event, we store the value into this variable
     this.lastElemValue = "";
     this.labelAddButton = options.labelAddButton || "Add";
     
-    
+    this.classRemoveButton = options.classRemoveButton || "removeButton";
     inputEx.MultiAutoCompleteCustom.superclass.constructor.call(this,options);
 
   };
@@ -41,7 +43,12 @@ YUI.add("inputex-pie-multiautocompletecustom",function(Y){
       Y.on('click',this.onAdd, this.buttonAdd,this)
       this.el.parentNode.appendChild(this.buttonAdd);
 
-      this.ddlist = new inputEx.widget.ListCustom({parentEl: this.fieldContainer,maxItems: this.maxItems, maxItemsAlert: this.maxItemsAlert, uniqueness: this.uniqueness });
+      this.ddlist = new inputEx.widget.ListCustom({
+         parentEl: this.fieldContainer,
+         maxItems: this.maxItems, 
+         classRemoveButton: this.classRemoveButton,
+         maxItemsAlert: this.maxItemsAlert, 
+         uniqueness: this.uniqueness });
       this.ddlist.on("itemRemoved",function() {
          this.setClassFromState();
          this.fireUpdatedEvt();
@@ -101,9 +108,10 @@ YUI.add("inputex-pie-multiautocompletecustom",function(Y){
      }
     },
      
-    onKeyPress: function(e,self){
+    onKeyPress: function(e){
       if(e.keyCode == 13){
-        self.onAdd();
+        e.halt();
+         this.onAdd();
       }
     }
   });

@@ -21,8 +21,10 @@ inputEx.MultiSelectCustomField = function(options) {
   this.listSelectOptions= options.listSelectOptions;
   this.maxItems = options.maxItems; 
   this.maxItemsAlert = options.maxItemsAlert;
+  this.classRemoveButton = options.classRemoveButton;  
   inputEx.MultiSelectCustomField.superclass.constructor.call(this,options);
   this.confirmEmpty = options.confirmEmpty;
+
   
 };
 Y.extend(inputEx.MultiSelectCustomField, inputEx.MultiSelectField,{
@@ -37,7 +39,7 @@ Y.extend(inputEx.MultiSelectCustomField, inputEx.MultiSelectField,{
    renderComponent: function() {
       inputEx.MultiSelectCustomField.superclass.renderComponent.call(this);
       
-      this.ddlist = new inputEx.widget.ListCustom({parentEl: this.fieldContainer,listSelectOptions: this.listSelectOptions, maxItems: this.maxItems, uniqueness: true, maxItemsAlert: this.maxItemsAlert});
+      this.ddlist = new inputEx.widget.ListCustom({classRemoveButton: this.classRemoveButton,parentEl: this.fieldContainer,listSelectOptions: this.listSelectOptions, maxItems: this.maxItems, uniqueness: true, maxItemsAlert: this.maxItemsAlert});
       this.ddlist.on("listChanged",this.fireUpdatedEvt, this, true);
       this.el.name = ""; // we re-route the html submit features 
       var hiddenAttrs = {
