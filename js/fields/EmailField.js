@@ -1,5 +1,5 @@
-(function() {
-
+YUI.add("inputex-email",function(Y){
+  var inputEx = Y.inputEx;
 /**
  * Field that adds the email regexp for validation. Result is always lower case.
  * @class inputEx.EmailField
@@ -10,7 +10,7 @@
 inputEx.EmailField = function(options) {
    inputEx.EmailField.superclass.constructor.call(this,options);
 };
-YAHOO.lang.extend(inputEx.EmailField, inputEx.StringField, {
+Y.extend(inputEx.EmailField, inputEx.StringField, {
    
    /**
     * Set the email regexp and invalid message
@@ -24,7 +24,7 @@ YAHOO.lang.extend(inputEx.EmailField, inputEx.StringField, {
       this.options.regexp = inputEx.regexps.email;
 		
 		// Validate the domain name ( false by default )
-		this.options.fixdomain = (YAHOO.lang.isUndefined(options.fixdomain) ? false : !!options.fixdomain);
+		this.options.fixdomain = (Y.Lang.isUndefined(options.fixdomain) ? false : !!options.fixdomain);
    },
    
 	validateDomain : function() {
@@ -87,16 +87,16 @@ YAHOO.lang.extend(inputEx.EmailField, inputEx.StringField, {
 					}
 				}
 				else if ( domain === groupDomain[j] ) {
-					var linkId = YAHOO.util.Dom.generateId();
+					var linkId = Y.guid();
 					var that = this;
 					
 					// Add a listener to the link to allow the user to replace his bad email by clicking the link
-					YAHOO.util.Event.addListener(linkId, 'click', function(e){
-						YAHOO.util.Event.stopEvent(e);
+					Y.on("click",  function(e){
+						e.handle();
 						var reg = new RegExp(domain, "i");
 						var fixedVal = val.replace(reg, groupDomain[0]);
 						that.setValue( fixedVal );
-					});
+					},this);
 					
 					// Display the message with the link
 					this.options.messages.invalid = inputEx.messages.didYouMeant+"<a href='' id='"+linkId+"' style='color:blue;'>@"+groupDomain[0]+" ?</a>";
@@ -146,4 +146,6 @@ inputEx.messages.didYouMeant = "Did you mean : ";
 // Register this class as "email" type
 inputEx.registerType("email", inputEx.EmailField, []);
 
-})();
+}, '0.1.1',{
+  requires: ["inputex-string"]
+});

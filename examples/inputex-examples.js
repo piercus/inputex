@@ -1,4 +1,4 @@
-YUI({filter: "raw"}).use("inputex-textarea", function(Y){
+YUI({filter: "raw"}).use("inputex-form","inputex-email","inputex-url", function(Y){
 	
 	/**
 	 * Utilities to run inputEx examples

@@ -327,7 +327,7 @@ YUI.add("inputex-field",function(Y) {
         Y.Event.purgeElement(el, true);
         
         // Remove from DOM
-        if(el.inDoc()) {
+        if(Y.one(el).inDoc()) {
            el.parentNode.removeChild(el);
         }
         

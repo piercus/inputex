@@ -1,5 +1,7 @@
-(function () {
-   var util = YAHOO.util, lang = YAHOO.lang, Event = util.Event, Dom = util.Dom;
+YUI.add("inputex-form", function(Y){
+  // var util = YAHOO.util, 
+  var lang = Y.Lang;//, Event = util.Event, Dom = util.Dom;
+  var inputEx = Y.inputEx;
 
 /**
  * Create a group of fields within a FORM tag and adds buttons
@@ -17,7 +19,7 @@ inputEx.Form = function(options) {
    inputEx.Form.superclass.constructor.call(this, options);
 };
 
-lang.extend(inputEx.Form, inputEx.Group, {
+Y.extend(inputEx.Form, inputEx.Group, {
 
    /**
     * Adds buttons and set ajax default parameters
@@ -135,39 +137,39 @@ lang.extend(inputEx.Form, inputEx.Group, {
       
       
       // Custom event to normalize form submits
-      this.submitEvent = new util.CustomEvent("submit");
+      this.publish("submit")
       
       //CustomEvent to provide additionnal features afterValidation
-      this.afterValidation = new util.CustomEvent("afterValidation");
+      this.publish("afterValidation")
       
       // Two ways to trigger the form submitEvent firing
       //
       //
       // 1. catch a 'submit' event on form (say a user pressed <Enter> in a field)
       //
-         Event.addListener(this.form, 'submit', function(e) {
+      Y.on("submit",function(e) {
          
             // always stop event
-            Event.stopEvent(e);
+            e.halt();
          
             // replace with custom event
-            this.submitEvent.fire();
+            this.fire("submit");
          
-         },this,true);
+      },this.form,this);
       
       
       //
       // 2. click on a 'submit' or 'submit-link' button
       //
          for(i=0, length=this.buttons.length; i<length; i++) {
-         
-            this.buttons[i].submitEvent.subscribe(function() { this.submitEvent.fire(); }, this, true);
+            
+            this.buttons[i].on("submit",function() { this.fire("submit"); }, this);
          
          }
       
       
       // When form submitEvent is fired, call onSubmit
-      this.submitEvent.subscribe(this.options.onSubmit || this.onSubmit, this, true);
+      this.on("submit", this.options.onSubmit || this.onSubmit,this)
    },
 
    /**
@@ -181,7 +183,7 @@ lang.extend(inputEx.Form, inputEx.Group, {
 	   if ( !this.validate() ) {
 		   return; // no submit
 	   }
-	   this.afterValidation.fire();
+	   this.fire("afterValidation");
 	   
 	   if(this.options.ajax) {
 	      this.asyncRequest(); // send ajax request
@@ -199,67 +201,70 @@ lang.extend(inputEx.Form, inputEx.Group, {
    asyncRequest: function() {
 
       if(this.options.ajax.showMask) { this.showMask(); }
-	
-		var formValue = this.getValue();
-	
-		// options.ajax.uri and options.ajax.method can also be functions that return a the uri/method depending of the value of the form
-		var uri = lang.isFunction(this.options.ajax.uri) ? this.options.ajax.uri(formValue) : this.options.ajax.uri;
-		var method = lang.isFunction(this.options.ajax.method) ? this.options.ajax.method(formValue) : this.options.ajax.method;
-	
-		var postData = null;
-		
-		// Classic application/x-www-form-urlencoded (like html forms)
-		if(this.options.ajax.contentType == "application/x-www-form-urlencoded" && method != "PUT") {
-			var params = [];
-			for(var key in formValue) {
-				if(formValue.hasOwnProperty(key)) {
-					var pName = (this.options.ajax.wrapObject ? this.options.ajax.wrapObject+'[' : '')+key+(this.options.ajax.wrapObject ? ']' : '');
-					params.push( pName+"="+window.encodeURIComponent(formValue[key]));
-				}
-			}
-			postData = params.join('&');
-		}
-		// The only other contentType available is "application/json"
-		else {
-			YAHOO.util.Connect.initHeader("Content-Type" , "application/json" , false);
-			
-			// method PUT don't send as x-www-form-urlencoded but in JSON
-			if(method == "PUT") {
-				var formVal = this.getValue();
-				var p;
-				if(this.options.ajax.wrapObject) {
-					p = {};
-					p[this.options.ajax.wrapObject] = formVal;
-				}
-				else {
-					p = formVal;
-				}
-				postData = lang.JSON.stringify(p);
-			}
-			else {
-				// We keep this case for backward compatibility, but should not be used
-				// Used when we send in JSON in POST or GET
-				postData = "value="+window.encodeURIComponent(lang.JSON.stringify(this.getValue()));
-			}
-		}
-		
-      util.Connect.asyncRequest( method, uri, {
-         success: function(o) {
+
+    var formValue = this.getValue();
+
+      // options.ajax.uri and options.ajax.method can also be functions that return a the uri/method depending of the value of the form
+      var uri = lang.isFunction(this.options.ajax.uri) ? this.options.ajax.uri(formValue) : this.options.ajax.uri;
+      var method = lang.isFunction(this.options.ajax.method) ? this.options.ajax.method(formValue) : this.options.ajax.method;
+
+      var postData = null;
+
+      // Classic application/x-www-form-urlencoded (like html forms)
+      if(this.options.ajax.contentType == "application/x-www-form-urlencoded" && method != "PUT") {
+        var params = [];
+        for(var key in formValue) {
+          if(formValue.hasOwnProperty(key)) {
+            var pName = (this.options.ajax.wrapObject ? this.options.ajax.wrapObject+'[' : '')+key+(this.options.ajax.wrapObject ? ']' : '');
+            params.push( pName+"="+window.encodeURIComponent(formValue[key]));
+          }
+        }
+        postData = params.join('&');
+      }
+      // The only other contentType available is "application/json"
+      else {
+        Y.io.header('Content-Type', 'application/json');
+
+        // method PUT don't send as x-www-form-urlencoded but in JSON
+        if(method == "PUT") {
+          var formVal = this.getValue();
+          var p;
+          if(this.options.ajax.wrapObject) {
+            p = {};
+            p[this.options.ajax.wrapObject] = formVal;
+          }
+          else {
+            p = formVal;
+          }
+          postData = Y.JSON.stringify(p);
+        }
+        else {
+          // We keep this case for backward compatibility, but should not be used
+          // Used when we send in JSON in POST or GET
+          postData = "value="+window.encodeURIComponent(Y.JSON.stringify(this.getValue()));
+        }
+      }
+      var onSuccess = function(o) {
             if(this.options.ajax.showMask) { this.hideMask(); }
             if( lang.isFunction(this.options.ajax.callback.success) ) {
                this.options.ajax.callback.success.call(this.options.ajax.callback.scope,o);
             }
-         },
-
-         failure: function(o) {
+      };
+      var onFailure = function(o) {
             if(this.options.ajax.showMask) { this.hideMask(); }
             if( lang.isFunction(this.options.ajax.callback.failure) ) {
                this.options.ajax.callback.failure.call(this.options.ajax.callback.scope,o);
             }
-         },
-
-         scope:this
-      }, postData);
+      };
+      Y.io(uri,{
+        method:method,
+        data: postData,
+        on : {
+          sucess: onSuccess,
+          failure: onFailure
+        },
+        context: this
+      });
    },
 
    /**
@@ -269,10 +274,10 @@ lang.extend(inputEx.Form, inputEx.Group, {
       if(this.maskRendered) return;
 
       // position as "relative" to position formMask inside as "absolute"
-      Dom.setStyle(this.divEl, "position", "relative");
+      Y.one(this.divEl).setStyle( "position", "relative");
 
       // set zoom = 1 to fix hasLayout issue with IE6/7
-      if (YAHOO.env.ua.ie) { Dom.setStyle(this.divEl, "zoom", 1); }
+      if (Y.UA.ie > 0) { Y.one(this.divEl).setStyle("zoom", 1); }
 
       // Render mask over the divEl
       this.formMask = inputEx.cn('div', {className: 'inputEx-Form-Mask'},
@@ -316,15 +321,12 @@ lang.extend(inputEx.Form, inputEx.Group, {
    */
    toggleSelectsInIE: function(show) {
       // IE 6 only
-      if (!!YAHOO.env.ua.ie && YAHOO.env.ua.ie < 7) {
-         var method = !!show ? YAHOO.util.Dom.removeClass : YAHOO.util.Dom.addClass;
+      if (!!Y.UA.ie && Y.UA.ie < 7) {
+         var methodName = !!show ? "removeClass" : "addClass";
          var that = this;
-         YAHOO.util.Dom.getElementsBy(
-            function() {return true;},
-            "select",
-            this.divEl,
-            function(el) {method.call(that,el,"inputEx-hidden");}
-         );
+         Y.one(this.divEl).all("select").each(function(e){
+           e[methodName]("inputEx-hidden")
+         });
       }
    },
 
@@ -360,7 +362,7 @@ lang.extend(inputEx.Form, inputEx.Group, {
       var i, length, button;
       
       // Unsubscribe all listeners to submit event
-      this.submitEvent.unsubscribeAll();
+      Y.Event.purgeElement(this.form);
       
       // Recursively destroy buttons
       for (i = 0, length = this.buttons.length ; i < length ; i++) {
@@ -396,4 +398,6 @@ inputEx.registerType("form", inputEx.Form, [
 ]);
 
 
-})();
+},'0.1.1',{
+  requires: ["io-base","inputex-group","json","inputex-button"]
+});

@@ -1,7 +1,7 @@
-(function() {
+YUI.add("inputex-group", function(Y){
    
-   var lang = YAHOO.lang, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
-   
+   var lang = Y.Lang;//, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
+   var inputEx = Y.inputEx;
 /**
  * Handle a group of fields
  * @class inputEx.Group
@@ -24,7 +24,7 @@ inputEx.Group = function(options) {
       this.runFieldsInteractions();
    }
 };
-lang.extend(inputEx.Group, inputEx.Field, {
+Y.extend(inputEx.Group, inputEx.Field, {
    
    /**
     * Adds some options: legend, collapsible, fields...
@@ -149,7 +149,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
       }
       
 	   // Subscribe to the field "updated" event to send the group "updated" event
-      fieldInstance.updatedEvt.subscribe(this.onChange, this, true);
+      fieldInstance.on("updated",this.onChange, this);
    	  
       return fieldInstance;
    },
@@ -159,7 +159,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
     */
    initEvents: function() {
       if(this.options.collapsible) {
-         Event.addListener(this.legend, "click", this.toggleCollapse, this, true);
+         Y.on("click", this.toggleCollapse,this.legend, this);
       }
    },
 
@@ -283,7 +283,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
 	      var v = this.inputs[i].getValue();
 	      if(this.inputs[i].options.name) {
 	         if(this.inputs[i].options.flatten && lang.isObject(v) ) {
-	            lang.augmentObject( o, v);
+	            Y.mix( o, v);
 	         }
 	         else {
 		         o[this.inputs[i].options.name] = v;
@@ -421,7 +421,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
 				if(this.inputsNames[k]) {
 					if(this.inputsNames[k].options.showMsg) {
 						this.inputsNames[k].displayMessage(value);
-						Dom.replaceClass(this.inputsNames[k].divEl, "inputEx-valid", "inputEx-invalid" );
+						Y.one(this.inputsNames[k]).replaceClass("inputEx-valid", "inputEx-invalid" );
 					}
 				}
 			}
@@ -432,7 +432,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
 					if(this.inputsNames[k]) {
 						if(this.inputsNames[k].options.showMsg) {
 							this.inputsNames[k].displayMessage(errors[k]);
-							Dom.replaceClass(this.inputsNames[k].divEl, "inputEx-valid", "inputEx-invalid" );
+							Y.one(this.inputsNames[k].divEl).replaceClass("inputEx-valid", "inputEx-invalid" );
 						}
 					}
 				}
@@ -481,4 +481,6 @@ inputEx.registerType("group", inputEx.Group, [
 ], true);
 
 
-})();
+}, '0.1.1',{
+  requires: ["inputex-field"]
+});
