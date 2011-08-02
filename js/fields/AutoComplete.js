@@ -110,12 +110,12 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
          }
       }
     
-      var yEl = Y.one(this.el)
-      yEl.plug(Y.Plugin.AutoComplete, this.options.autoComp);
+      this.yEl = Y.one(this.el)
+      this.yEl.plug(Y.Plugin.AutoComplete, this.options.autoComp);
 
       // Instantiate AutoComplete
-      yEl.ac.on("select",this.itemSelectHandler, this);
-      yEl.on("blur", this.onBlur, this);
+      this.yEl.ac.on("select",this.itemSelectHandler, this);
+      this.yEl.on("blur", this.onBlur, this);
    },
    
    /**

@@ -1,6 +1,6 @@
-(function() {
+YUI.add("inputex-inplaceedit", function(Y){
 
-   var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom, CSS_PREFIX = 'inputEx-InPlaceEdit-';
+   var lang = Y.Lang;//, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom, CSS_PREFIX = 'inputEx-InPlaceEdit-';
 
 /**
  * Meta field providing in place editing (the editor appears when you click on the formatted value). 
@@ -16,8 +16,8 @@
  */
 inputEx.InPlaceEdit = function(options) {
    inputEx.InPlaceEdit.superclass.constructor.call(this, options);
-   this.openEditorEvt = new YAHOO.util.CustomEvent('openEditor', this);
-   this.closeEditorEvt = new YAHOO.util.CustomEvent('closeEditor', this);
+   this.publish('openEditor');
+   this.publish('closeEditor');
 };
 
 lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
@@ -68,12 +68,11 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       var editorFieldEl = this.editorField.getEl();
       
       this.editorContainer.appendChild( editorFieldEl );
-      Dom.addClass( editorFieldEl , CSS_PREFIX+'editorDiv');
+      Y.one(editorFieldEl).addClass(CSS_PREFIX+'editorDiv');
       this.buttons = [];
       for (var i = 0; i < this.options.buttonConfigs.length ; i++){
         var config = this.options.buttonConfigs[i];
         config.parentEl = this.editorContainer;
-        
         this.buttons.push(new inputEx.widget.Button(config));
       }
       
@@ -103,15 +102,34 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     * @param {Event} e The original mouseout event
     */
    onVisuMouseOut: function(e) {
+      var optionsAnim;
       if(this.disabled) return;
       
       // Start animation
       if(this.colorAnim) {
          this.colorAnim.stop(true);
       }
-      this.colorAnim = new YAHOO.util.ColorAnim(this.formattedContainer, {backgroundColor: this.options.animColors}, 1);
-      this.colorAnim.onComplete.subscribe(function() { Dom.setStyle(this.formattedContainer, 'background-color', ''); }, this, true);
-      this.colorAnim.animate();
+      if(!this.options.animColors) return;
+
+      optionsAnim =  {
+        node: Y.one(this.formattedContainer), 
+      }
+      if(this.options.animColors.from){
+        optionsAnim.from = {
+          backgroundColor : this.options.animColors.from
+        }
+      }
+      if(this.options.animColors.from){
+        optionsAnim.to = {
+          backgroundColor : this.options.animColors.to
+        }
+      }
+      this.colorAnim = new Y.Anim(optionsAnim);
+      this.colorAnim.on("end",function() { 
+        Y.one(this.formattedContainer).setStyle('background-color', ''); 
+      });
+      this.colorAnim.run();
+      
    },
    
    /**
@@ -138,18 +156,19 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     * Adds the events for the editor and color animations
     */
    initEvents: function() {  
-      Event.addListener(this.formattedContainer, "click", this.openEditor, this, true);
+      Y.one(this.formattedContainer).on("click", this.openEditor, this, true);
             
       // For color animation (if specified)
       if (this.options.animColors) {
-         Event.addListener(this.formattedContainer, 'mouseover', this.onVisuMouseOver, this, true);
-         Event.addListener(this.formattedContainer, 'mouseout', this.onVisuMouseOut, this, true);
+         Y.one(this.formattedContainer).on('mouseover', this.onVisuMouseOver, this);
+         Y.one(this.formattedContainer).on('mouseout', this.onVisuMouseOut, this);
       }
       
       if(this.editorField.el) {
+         var that = this;
          // Register some listeners
-         Event.addListener(this.editorField.el, "keyup", this.onKeyUp, this, true);
-         Event.addListener(this.editorField.el, "keydown", this.onKeyDown, this, true);
+         Y.on("key", function(){ that.onKeyUp },"#"+Y.one(this.editorField.el).get("id"),"up:");
+         Y.on("key", function(){ that.onKeyDown },"#"+Y.one(this.editorField.el).get("id"),"down:" );
       }
    },
    
@@ -183,14 +202,14 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     * Validate the editor (ok button, enter key or tabulation key)
     */
    onOkEditor: function(e) {
-      Event.stopEvent(e);
+      e.halt();
       
       var newValue = this.editorField.getValue();
       this.setValue(newValue);
       this.closeEditor();
       
       var that = this;
-      setTimeout(function() {that.updatedEvt.fire(newValue);}, 50);      
+      setTimeout(function() {that.fire("updated",newValue);}, 50);      
    },
 
    
@@ -199,7 +218,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     * @param {Event} e The original event (click, blur or keydown)
     */
    onCancelEditor: function(e) {
-      Event.stopEvent(e);
+      e.halt();
       this.closeEditor();
    },
    /**
@@ -209,7 +228,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
    closeEditor: function() {
       this.editorContainer.style.display = 'none';
       this.formattedContainer.style.display = '';
-      this.closeEditorEvt.fire()
+      this.fire("closeEditor")
    },      
   /**
     * Override enable to Enable openEditor
@@ -245,7 +264,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       if(this.editorField.el && lang.isFunction(this.editorField.el.setSelectionRange) && (!!value && !!value.length)) {
          this.editorField.el.setSelectionRange(0,value.length);
       }
-      this.openEditorEvt.fire()
+      this.fire("openEditor");
    },
    
    /**
@@ -287,7 +306,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
    close: function() {
       this.editorContainer.style.display = 'none';
       this.formattedContainer.style.display = '';
-      this.closeEditorEvt.fire();
+      this.fire("openEditor");
   }
 
 });
@@ -301,4 +320,6 @@ inputEx.registerType("inplaceedit", inputEx.InPlaceEdit, [
    { type:'type', label: 'Editor', name: 'editorField'}
 ]);
 
-})();
+}, '0.1.1', {
+  requires:["anim","inputex-field","inputex-button"]
+})

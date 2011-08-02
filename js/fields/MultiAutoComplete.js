@@ -45,6 +45,8 @@ Y.extend(inputEx.MultiAutoComplete, inputEx.AutoComplete, {
     * Handle item selection in the autocompleter to add it to the list
     */
    itemSelectHandler: function(v) {
+    v.halt();
+
    	var aData = v.result;
    	var value = lang.isFunction(this.options.returnValue) ? this.options.returnValue(aData) : aData.raw;
    	var label = lang.isFunction(this.options.returnLabel) ? this.options.returnLabel(aData) : value;   	
@@ -53,6 +55,7 @@ Y.extend(inputEx.MultiAutoComplete, inputEx.AutoComplete, {
    	this.hiddenEl.value = this.stringifyValue();
    	this.fireUpdatedEvt();
    	this.onChange();
+   	this.yEl.ac.hide();
    },
    
    /**

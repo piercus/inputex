@@ -1,7 +1,7 @@
-(function() {
+YUI.add("inputex-checkbox",function(Y){
 	
-	var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
-	
+	var lang = Y.Lang;//, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
+	var inputEx = Y.inputEx;
 /**
  * Create a checkbox.
  * @class inputEx.CheckBox
@@ -16,7 +16,7 @@ inputEx.CheckBox = function(options) {
 	inputEx.CheckBox.superclass.constructor.call(this,options);
 };
 	
-lang.extend(inputEx.CheckBox, inputEx.Field, {
+Y.extend(inputEx.CheckBox, inputEx.Field, {
 	   
 	/**
 	 * Adds the CheckBox specific options
@@ -42,7 +42,7 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
 	 */
 	renderComponent: function() {
 	
-   	var checkBoxId = this.divEl.id?this.divEl.id+'-field':YAHOO.util.Dom.generateId();
+   	var checkBoxId = this.divEl.id?this.divEl.id+'-field':Y.guid();
 	   this.el = inputEx.cn('input', { id: checkBoxId, type: 'checkbox' });
 
 	   this.fieldContainer.appendChild(this.el);
@@ -66,14 +66,14 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
 	   /*if( YAHOO.env.ua.ie && parseInt(YAHOO.env.ua.ie,10) != 7 ) {
 	      Event.addListener(this.el, "click", function() { this.fireUpdatedEvt(); }, this, true);	
 	   }*/
-	   if( YAHOO.env.ua.ie ) {
-	      Event.addListener(this.el, "click", function(e) { YAHOO.lang.later(10,this,function(){this.onChange(e);}); }, this, true);	
+	   if( Y.UA.ie ) {
+	      Y.one(this.el).on("click", function(e) { Y.later(10,this,function(){this.onChange(e);}); }, this);	
 	   } else {
-	      Event.addListener(this.el, "change", this.onChange, this, true);
+	     Y.one(this.el).on("change", this.onChange, this, true);
 	   }
 	   
-	   Event.addFocusListener(this.el, this.onFocus, this, true);
-	   Event.addBlurListener(this.el, this.onBlur, this, true);
+	   Y.one(this.el).on("focus", this.onFocus, this, true);
+	   Y.one(this.el).on("blur", this.onBlur, this, true);
 	},
 	   
 	/**
@@ -110,7 +110,7 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
 			// hacks for IE6, because input is not operational at init, 
 			// so "this.el.checked = true" would work for default values !
 			// (but still work for later setValue calls)
-			if (YAHOO.env.ua.ie === 6) {
+			if (Y.UA.ie === 6) {
 			   this.el.setAttribute("defaultChecked","checked"); // for IE6
 		   }
 		}
@@ -127,7 +127,7 @@ lang.extend(inputEx.CheckBox, inputEx.Field, {
 			// hacks for IE6, because input is not operational at init, 
 			// so "this.el.checked = false" would work for default values !
 			// (but still work for later setValue calls)
-			if (YAHOO.env.ua.ie === 6) {
+			if (Y.UA.ie === 6) {
 			   this.el.removeAttribute("defaultChecked"); // for IE6
 		   }
 		}
@@ -157,4 +157,6 @@ inputEx.registerType("boolean", inputEx.CheckBox, [
    {type: 'string', label: 'Right Label', name: 'rightLabel'}
 ]);
 	
-})();
+}, '0.0.1',{
+  requires: ["inputex-field"]
+});

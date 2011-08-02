@@ -74,6 +74,7 @@ YUI.add("inputex-field",function(Y) {
      	this.options.label = options.label;
      	this.options.description = options.description;
       this.options.wrapperClassName = options.wrapperClassName;
+      
         // Define default messages
 	     this.options.messages = {};
 	     this.options.messages.required = (options.messages && options.messages.required) ? options.messages.required : inputEx.messages.required;

@@ -18,7 +18,7 @@ YUI.add("inputex-pie-multiautocompletecustom",function(Y){
     this.options = {};
     this.maxItems = options.maxItems; 
     this.maxItemsAlert = options.maxItemsAlert;
-
+    this.animColors = options.animColors;
     this.uniqueness = options.uniqueness;
     // hack to avoid to reset the field after a blur event, we store the value into this variable
     this.lastElemValue = "";
@@ -48,6 +48,7 @@ YUI.add("inputex-pie-multiautocompletecustom",function(Y){
          maxItems: this.maxItems, 
          classRemoveButton: this.classRemoveButton,
          maxItemsAlert: this.maxItemsAlert, 
+         animColors: this.animColors,
          uniqueness: this.uniqueness });
       this.ddlist.on("itemRemoved",function() {
          this.setClassFromState();
@@ -69,7 +70,7 @@ YUI.add("inputex-pie-multiautocompletecustom",function(Y){
           this.ddlist.addItem({label: values[i], value: values[i]});
         }
       } else {
-       this.ddlist.addItem({label: this.el.value, value: this.el.value});
+        this.ddlist.addItem({label: this.el.value, value: this.el.value});
       }
       this.el.value = "";
       this.lastElemValue = "";
@@ -103,7 +104,9 @@ YUI.add("inputex-pie-multiautocompletecustom",function(Y){
      if(this.el.value == '' && this.options.typeInvite) {
         Y.one(this.divEl).addClass( "inputEx-typeInvite");
         this.el.value = this.options.typeInvite;
-     } else if (this.el.value !== '') {
+     }  else if (e.target.ac){ 
+             return; //do nothing
+     } else if(this.el.value !== ''){
        this.onAdd();
      }
     },

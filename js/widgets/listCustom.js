@@ -7,6 +7,7 @@ inputEx.widget.ListCustom = function(options) {
   this.options = {};
   this.listSelectOptions = options.listSelectOptions;
   this.maxItems = options.maxItems;
+  this.animColors = options.animColors || false;
   this.maxItemsAlert = options.maxItemsAlert;
   this.uniqueness = options.uniqueness || false;
   this.disabled = false;
@@ -81,6 +82,9 @@ Y.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
       }     
       
       li.appendChild(iCopy.span);
+      if(this.animColors){
+        this.buildAnim(li).run();
+      }
  
 
       // Option for the "remove" link (default: true)
@@ -162,9 +166,19 @@ Y.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
      var itemValue = this._removeItem(index);
      // Fire the itemRemoved Event
      this.fire("itemRemoved",itemValue, sendUpdatedEvt);
-  } 
+  },
+  buildAnim: function(el){
+    var node = Y.one(el);
+ 
+    var anim = new Y.Anim(Y.mix({
+      node: node,
+      duration:0.5
+    },this.animColors));
+    anim.on("end", function(){node.setStyle("background","transparent")})
+    return anim;
+  }
 }); 
 
 }, '0.1.1',{
-  requires: ["inputex-ddlist"]
+  requires: ["inputex-ddlist","anim"]
 });
