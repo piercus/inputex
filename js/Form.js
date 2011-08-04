@@ -260,7 +260,7 @@ Y.extend(inputEx.Form, inputEx.Group, {
         method:method,
         data: postData,
         on : {
-          sucess: onSuccess,
+          success: onSuccess,
           failure: onFailure
         },
         context: this

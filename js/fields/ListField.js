@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-list",function(Y){
 	
-   var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
+   var lang = Y.Lang;//, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
+   var inputEx = Y.inputEx;
 	
 /**
  * Meta field to create a list of other fields
@@ -28,7 +29,7 @@ inputEx.ListField = function(options) {
 	   
    inputEx.ListField.superclass.constructor.call(this, options);
 };
-lang.extend(inputEx.ListField,inputEx.Field, {
+Y.extend(inputEx.ListField,inputEx.Field, {
 
 	/**
 	 * Colors for the animation
@@ -88,7 +89,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	 * Handle the click event on the add button
 	 */
 	initEvents: function() {
-	   Event.addListener(this.addButton, 'click', this.onAddButton, this, true);
+	   Y.one(this.addButton).on('click', this.onAddButton, this, true);
 	},
 	
 	/**
@@ -211,7 +212,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	 * @param {Event} e The original click event
 	 */
 	onAddButton: function(e) {
-	   Event.stopEvent(e);
+	   e.halt();
 	   
 	   // Prevent adding a new field if already at maxItems
 	   if( lang.isNumber(this.options.maxItems) && this.subFields.length >= this.options.maxItems ) {
@@ -241,12 +242,12 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	   // Delete button
 	   if(this.options.useButtons) {
 	      delButton = inputEx.cn('img', {src: inputEx.spacerUrl, className: 'inputEx-ListField-delButton'});
-	      Event.addListener( delButton, 'click', this.onDelete, this, true);
+	      Y.one(delButton).on('click', this.onDelete, this);
 	      newDiv.appendChild( delButton );
       }
 	      
 	   // Instantiate the new subField
-	   var opts = lang.merge({}, this.options.elementType);
+	   var opts = Y.merge({}, this.options.elementType);
 	   
 	   // Retro-compatibility with deprecated inputParams Object : TODO -> remove
       if(lang.isObject(opts.inputParams) && !lang.isUndefined(value)) {
@@ -260,18 +261,18 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	   var el = inputEx(opts,this);
 	   
 	   var subFieldEl = el.getEl();
-		YAHOO.util.Dom.addClass(subFieldEl, 'inputEx-ListField-subFieldEl');
+		 Y.one(subFieldEl).addClass('inputEx-ListField-subFieldEl');
 	   newDiv.appendChild( subFieldEl );
 	   
 	   // Subscribe the onChange event to resend it 
-	   el.updatedEvt.subscribe(this.onChange, this, true);
+	   el.on("updated",this.onChange, this, true);
 	
 	   // Arrows to order:
 	   if(this.options.sortable) {
 	      var arrowUp = inputEx.cn('div', {className: 'inputEx-ListField-Arrow inputEx-ListField-ArrowUp'});
-	      Event.addListener(arrowUp, 'click', this.onArrowUp, this, true);
+	      Y.one(arrowUp).on('click', this.onArrowUp, this);
 	      var arrowDown = inputEx.cn('div', {className: 'inputEx-ListField-Arrow inputEx-ListField-ArrowDown'});
-	      Event.addListener(arrowDown, 'click', this.onArrowDown, this, true);
+	      Y.one(arrowDow).on('click', this.onArrowDown, this, true);
 	      newDiv.appendChild( arrowUp );
 	      newDiv.appendChild( arrowDown );
 	   }
@@ -279,7 +280,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	   // Delete link
 	   if(!this.options.useButtons) {
 	      delButton = inputEx.cn('a', {className: 'inputEx-List-link'}, null, this.options.listRemoveLabel);
-	      Event.addListener( delButton, 'click', this.onDelete, this, true);
+	      Y.one(delButton).on('click', this.onDelete, this);
 	      newDiv.appendChild( delButton );
       }
 	
@@ -297,7 +298,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	 * @param {Event} e Original click event
 	 */
 	onArrowUp: function(e) {
-	   var childElement = Event.getTarget(e).parentNode;
+	   var childElement = e.target._node.parentNode;
 	   
 	   var previousChildNode = null;
 	   var nodeIndex = -1;
@@ -329,9 +330,9 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	      if(this.arrowAnim) {
 	         this.arrowAnim.stop(true);
 	      }
-	      this.arrowAnim = new YAHOO.util.ColorAnim(insertedEl, {backgroundColor: this.arrowAnimColors}, 0.4);
-	      this.arrowAnim.onComplete.subscribe(function() { Dom.setStyle(insertedEl, 'background-color', ''); });
-	      this.arrowAnim.animate();
+	      this.arrowAnim = new Y.Anim({node:Y.one(insertedEl), to : {backgroundColor: this.arrowAnimColors },duration: 0.4});
+	      this.arrowAnim.on("end",function() { Y.one(insertedEl).setStyle('background-color', ''); });
+	      this.arrowAnim.run();
 	      
 	      // Fire updated !
 	      this.fireUpdatedEvt();
@@ -344,7 +345,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	 * @param {Event} e Original click event
 	 */
 	onArrowDown: function(e) {
-	   var childElement = Event.getTarget(e).parentNode;
+	   var childElement = e.target._node.parentNode;
 	   
 	   var nodeIndex = -1;
 	   var nextChildNode = null;
@@ -361,7 +362,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	      // Remove the line
 	      var removedEl = this.childContainer.removeChild(childElement);
 	      // Adds it after the nextChildNode
-	      var insertedEl = Dom.insertAfter(removedEl, nextChildNode);
+	      var insertedEl = Y.one(removedEl).insert(nextChildNode,"after");
 	      
 	      // Swap this.subFields elements (i,i+1)
 	      var temp = this.subFields[nodeIndex];
@@ -375,9 +376,9 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	      if(this.arrowAnim) {
 	         this.arrowAnim.stop(true);
 	      }
-	      this.arrowAnim = new YAHOO.util.ColorAnim(insertedEl, {backgroundColor: this.arrowAnimColors }, 1);
-	      this.arrowAnim.onComplete.subscribe(function() { Dom.setStyle(insertedEl, 'background-color', ''); });
-	      this.arrowAnim.animate();
+	      this.arrowAnim = new Y.Anim({node:Y.one(insertedEl), to : {backgroundColor: this.arrowAnimColors }, duration: 1});
+	      this.arrowAnim.on("end",function() { Y.one(insertedEl).setStyle( 'background-color', ''); });
+	      this.arrowAnim.run();
 	      
 	      // Fire updated !
 	      this.fireUpdatedEvt();
@@ -390,7 +391,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	 */
 	onDelete: function(e) {
 	      
-	   Event.stopEvent(e);
+	   e.halt();
 	   
 	   // Prevent removing a field if already at minItems
 	   if( lang.isNumber(this.options.minItems) && this.subFields.length <= this.options.minItems ) {
@@ -398,7 +399,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	   }
 	      
 	   // Get the wrapping div element
-	   var elementDiv = Event.getTarget(e).parentNode;
+	   var elementDiv = e.target._node.parentNode;
 	   
 	   // Get the index of the subField
 	   var index = -1;
@@ -449,4 +450,6 @@ inputEx.registerType("list", inputEx.ListField, [
 inputEx.messages.listAddLink = "Add";
 inputEx.messages.listRemoveLink = "remove";
 	
-})();
+},'0.1.1',{
+  requires: ["inputex-field","anim"]
+});

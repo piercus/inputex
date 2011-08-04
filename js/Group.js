@@ -141,6 +141,11 @@ Y.extend(inputEx.Group, inputEx.Field, {
       // Create an index to access fields by their name
       if(fieldInstance.options.name) {
          this.inputsNames[fieldInstance.options.name] = fieldInstance;
+      } 
+      // when the instance is a flatten group, we consider his fields as our fields
+      if(fieldInstance.options.flatten && lang.isObject(fieldInstance.inputsNames)){
+        Y.mix(this.inputsNames,fieldInstance.inputsNames)
+        this.inputs = this.inputs.concat(fieldInstance.inputs)
       }
       
       // Create the this.hasInteractions to run interactions at startup

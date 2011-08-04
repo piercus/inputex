@@ -129,7 +129,9 @@ Y.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
       var items = this.items;
       for (var i = 0; i< items.length; i++){
         var yEl = Y.one(items[i].value+"-Close");
-        yEl.removeClass("hidden")
+        if(yEl){
+          yEl.removeClass("hidden");
+        }
         Y.on("click", this.onClose, yEl, this, true);
       }  
       this.disabled = false;
