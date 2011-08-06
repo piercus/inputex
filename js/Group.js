@@ -1,7 +1,7 @@
-(function() {
+YUI.add("inputex-group", function(Y){
    
-   var lang = YAHOO.lang, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
-   
+   var lang = Y.Lang;//, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
+   var inputEx = Y.inputEx;
 /**
  * Handle a group of fields
  * @class inputEx.Group
@@ -24,7 +24,7 @@ inputEx.Group = function(options) {
       this.runFieldsInteractions();
    }
 };
-lang.extend(inputEx.Group, inputEx.Field, {
+Y.extend(inputEx.Group, inputEx.Field, {
    
    /**
     * Adds some options: legend, collapsible, fields...
@@ -141,6 +141,11 @@ lang.extend(inputEx.Group, inputEx.Field, {
       // Create an index to access fields by their name
       if(fieldInstance.options.name) {
          this.inputsNames[fieldInstance.options.name] = fieldInstance;
+      } 
+      // when the instance is a flatten group, we consider his fields as our fields
+      if(fieldInstance.options.flatten && lang.isObject(fieldInstance.inputsNames)){
+        Y.mix(this.inputsNames,fieldInstance.inputsNames)
+        this.inputs = this.inputs.concat(fieldInstance.inputs)
       }
       
       // Create the this.hasInteractions to run interactions at startup
@@ -149,7 +154,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
       }
       
 	   // Subscribe to the field "updated" event to send the group "updated" event
-      fieldInstance.updatedEvt.subscribe(this.onChange, this, true);
+      fieldInstance.on("updated",this.onChange, this);
    	  
       return fieldInstance;
    },
@@ -159,7 +164,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
     */
    initEvents: function() {
       if(this.options.collapsible) {
-         Event.addListener(this.legend, "click", this.toggleCollapse, this, true);
+         Y.on("click", this.toggleCollapse,this.legend, this);
       }
    },
 
@@ -167,11 +172,11 @@ lang.extend(inputEx.Group, inputEx.Field, {
     * Toggle the collapse state
     */
    toggleCollapse: function() {
-      if(Dom.hasClass(this.fieldset, 'inputEx-Expanded')) {
-         Dom.replaceClass(this.fieldset, 'inputEx-Expanded', 'inputEx-Collapsed');
+      if(Y.one(this.fieldset).hasClass( 'inputEx-Expanded')) {
+        Y.one(this.fieldset).replaceClass('inputEx-Expanded', 'inputEx-Collapsed');
       }
       else {
-         Dom.replaceClass(this.fieldset, 'inputEx-Collapsed','inputEx-Expanded');
+         Y.one(this.fieldset).replaceClass( 'inputEx-Collapsed','inputEx-Expanded');
       }
    },
    
@@ -283,7 +288,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
 	      var v = this.inputs[i].getValue();
 	      if(this.inputs[i].options.name) {
 	         if(this.inputs[i].options.flatten && lang.isObject(v) ) {
-	            lang.augmentObject( o, v);
+	            Y.mix( o, v);
 	         }
 	         else {
 		         o[this.inputs[i].options.name] = v;
@@ -329,11 +334,9 @@ lang.extend(inputEx.Group, inputEx.Field, {
     * @param {String} eventName Event name
     * @param {Array} args Array of [fieldValue, fieldInstance] 
     */
-   onChange: function(eventName, args) {
+   onChange: function(fieldValue, fieldInstance) {
 
       // Run interactions
-      var fieldValue = args[0];
-      var fieldInstance = args[1];
       this.runInteractions(fieldInstance,fieldValue);
       
       //this.setClassFromState();
@@ -348,10 +351,10 @@ lang.extend(inputEx.Group, inputEx.Field, {
     */
    runAction: function(action, triggerValue) {
       var field = this.getFieldByName(action.name);
-      if( YAHOO.lang.isFunction(field[action.action]) ) {
+      if( lang.isFunction(field[action.action]) ) {
          field[action.action].call(field);
       }
-      else if( YAHOO.lang.isFunction(action.action) ) {
+      else if( lang.isFunction(action.action) ) {
          action.action.call(field, triggerValue);
       }
       else {
@@ -368,7 +371,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
       
       var index = inputEx.indexOf(fieldInstance, this.inputs);
       var fieldConfig = this.options.fields[index];
-      if( YAHOO.lang.isUndefined(fieldConfig.interactions) ) return;
+      if(lang.isUndefined(fieldConfig.interactions) ) return;
       
       // Let's run the interactions !
       var interactions = fieldConfig.interactions;
@@ -414,25 +417,25 @@ lang.extend(inputEx.Group, inputEx.Field, {
 	 */
 	setErrors: function(errors) {	
 		var i,k;
-		if(YAHOO.lang.isArray(errors)) {
+		if(lang.isArray(errors)) {
 			for(i = 0 ; i < errors.length ; i++) {
 				k = errors[i][0];
 				value = errors[i][1];
 				if(this.inputsNames[k]) {
 					if(this.inputsNames[k].options.showMsg) {
 						this.inputsNames[k].displayMessage(value);
-						Dom.replaceClass(this.inputsNames[k].divEl, "inputEx-valid", "inputEx-invalid" );
+						Y.one(this.inputsNames[k]).replaceClass("inputEx-valid", "inputEx-invalid" );
 					}
 				}
 			}
 		}
-		else if(YAHOO.lang.isObject(errors)) {
+		else if(lang.isObject(errors)) {
 			for(k in errors) {
 				if(errors.hasOwnProperty(k)) {
 					if(this.inputsNames[k]) {
 						if(this.inputsNames[k].options.showMsg) {
 							this.inputsNames[k].displayMessage(errors[k]);
-							Dom.replaceClass(this.inputsNames[k].divEl, "inputEx-valid", "inputEx-invalid" );
+							Y.one(this.inputsNames[k].divEl).replaceClass("inputEx-valid", "inputEx-invalid" );
 						}
 					}
 				}
@@ -481,4 +484,6 @@ inputEx.registerType("group", inputEx.Group, [
 ], true);
 
 
-})();
+}, '0.1.1',{
+  requires: ["inputex-field"]
+});

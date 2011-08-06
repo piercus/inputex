@@ -1,4 +1,5 @@
-(function() {
+YUI.add("inputex-hidden", function(Y){
+  var inputEx = Y.inputEx;
 
 /**
  * Create a hidden input, inherits from inputEx.Field
@@ -11,7 +12,7 @@ inputEx.HiddenField = function(options) {
 	inputEx.HiddenField.superclass.constructor.call(this,options);
 };
 
-YAHOO.lang.extend(inputEx.HiddenField, inputEx.Field, {
+Y.extend(inputEx.HiddenField, inputEx.Field, {
    
    /**
     * Doesn't render much...
@@ -57,4 +58,6 @@ YAHOO.lang.extend(inputEx.HiddenField, inputEx.Field, {
 // Register this class as "hidden" type
 inputEx.registerType("hidden", inputEx.HiddenField);
 
-})();
+}, '0.0.1',{
+  requires:["inputex-field"]
+});

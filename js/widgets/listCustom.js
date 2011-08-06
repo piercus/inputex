@@ -1,18 +1,23 @@
-(function() {
+YUI.add("inputex-pie-listcustom", function(Y) {
 
-   var lang = YAHOO.lang, Evt = YAHOO.util.Event;
+   //var lang = YAHOO.lang, Evt = YAHOO.util.Event;
+   var inputEx = Y.inputEx;
+   
 inputEx.widget.ListCustom = function(options) {
-  
+  this.options = {};
   this.listSelectOptions = options.listSelectOptions;
   this.maxItems = options.maxItems;
+  this.animColors = options.animColors || false;
   this.maxItemsAlert = options.maxItemsAlert;
   this.uniqueness = options.uniqueness || false;
   this.disabled = false;
+  this.classRemoveButton = options.classRemoveButton;
   inputEx.widget.ListCustom.superclass.constructor.call(this,options);
-  this.listChangeEvt = new YAHOO.util.CustomEvent("changeListCustom");
+  this.publish("listChanged");
   this.selects = [];
 };
-YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
+
+Y.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
 /**
     * Add an item to the list
     * @param {String|Object} item Either a string with the given value or an object with "label" and "value" attributes
@@ -34,8 +39,8 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
 
       if(this.listSelectOptions){
         var select = new inputEx.SelectField(this.listSelectOptions); 
-        select.updatedEvt.subscribe(function(){
-           this.listChangeEvt.fire();
+        select.on("updated",function(){
+           this.fire("listChanged");
         },this,true)
         this.selects.push(select);
         li.appendChild(select.el);
@@ -77,17 +82,16 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
       }     
       
       li.appendChild(iCopy.span);
+      if(this.animColors){
+        this.buildAnim(li).run();
+      }
  
 
       // Option for the "remove" link (default: true)
     if(!!this.options.allowDelete){
-      var removeLink = inputEx.cn('div', {id: iCopy.value+"-Close" ,className:"removeButton"}, null, ""); 
+      var removeLink = inputEx.cn('div', {id: iCopy.value+"-Close" ,className: this.classRemoveButton || "removeButton"}, null, ""); 
         li.appendChild( removeLink );
-        Evt.addListener(removeLink, 'click', function(e) {
-           var a = Evt.getTarget(e);
-           var li = a.parentNode;
-           this.removeItem( inputEx.indexOf(li,this.ul.childNodes) );
-        }, this, true);
+        Y.on('click', this.onRemove,removeLink, this);
       }
       // Don't want any drag and drop
       //var dditem = new inputEx.widget.DDListItem(li);
@@ -105,10 +109,16 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
       }
       var items = this.items;
       for (var i = 0; i< items.length; i++){
-        Evt.removeListener(items[i].value+"-Close","click")
-        YAHOO.util.Dom.addClass(items[i].value+"-Close","hidden");
+        var yEl = Y.one(items[i].value+"-Close");
+        yEl.addClass("hidden")
+        Y.detach("click", this.onClose, yEl, this, true);
       }
       this.disabled = true;
+   },
+   onRemove: function(e){
+           var a = e.target._node;
+           var li = a.parentNode;
+           this.removeItem( inputEx.indexOf(li,this.ul.childNodes) );
    },
    enable: function(){
 
@@ -118,12 +128,11 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
       }
       var items = this.items;
       for (var i = 0; i< items.length; i++){
-        Evt.addListener(items[i].value+"-Close",'click', function(e) {
-           var a = Evt.getTarget(e);
-           var li = a.parentNode;
-           this.removeItem( inputEx.indexOf(li,this.ul.childNodes) );
-        }, this, true);
-        YAHOO.util.Dom.removeClass(items[i].value+"-Close","hidden");       
+        var yEl = Y.one(items[i].value+"-Close");
+        if(yEl){
+          yEl.removeClass("hidden");
+        }
+        Y.on("click", this.onClose, yEl, this, true);
       }  
       this.disabled = false;
    },
@@ -158,8 +167,20 @@ YAHOO.lang.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
    removeItem: function(index, sendUpdatedEvt) {
      var itemValue = this._removeItem(index);
      // Fire the itemRemoved Event
-     this.itemRemovedEvt.fire(itemValue,  sendUpdatedEvt);
-  } 
+     this.fire("itemRemoved",itemValue, sendUpdatedEvt);
+  },
+  buildAnim: function(el){
+    var node = Y.one(el);
+ 
+    var anim = new Y.Anim(Y.mix({
+      node: node,
+      duration:0.5
+    },this.animColors));
+    anim.on("end", function(){node.setStyle("background","transparent")})
+    return anim;
+  }
 }); 
 
-})();
+}, '0.1.1',{
+  requires: ["inputex-ddlist","anim"]
+});

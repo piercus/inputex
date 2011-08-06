@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-visus",function(Y){
    
-   var lang = YAHOO.lang;
+   var lang = Y.Lang;
+   var inputEx = Y.inputEx;
 /**
  * Contains the various visualization methods
  * @class inputEx.visus
@@ -94,4 +95,6 @@ inputEx.renderVisu = function(visuOptions,data, parentEl) {
    return v;
 };
 
-})();
+},'0.1.1',{
+  requires: ["inputex","dump"]
+});

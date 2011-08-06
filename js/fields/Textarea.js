@@ -1,7 +1,6 @@
-(function() {
+YUI.add("inputex-textarea",function(Y){
 
-   var Event = YAHOO.util.Event;
-
+   var inputEx = Y.inputEx;
 /**
  * Create a textarea input
  * @class inputEx.Textarea
@@ -16,7 +15,7 @@
 inputEx.Textarea = function(options) {
 	inputEx.Textarea.superclass.constructor.call(this,options);
 };
-YAHOO.lang.extend(inputEx.Textarea, inputEx.StringField, {
+Y.extend(inputEx.Textarea, inputEx.StringField, {
 
    /**
     * Set the specific options (rows and cols)
@@ -122,4 +121,6 @@ inputEx.registerType("text", inputEx.Textarea, [
    { type: 'integer', label: 'Cols', name: 'cols', value: 23 }
 ]);
 
-})();
+}, '0.1.1',{
+  requires: ["inputex-string"]
+});

@@ -1,4 +1,4 @@
-(function () {
+YUI({filter: "raw"}).use("inputex-autocomplete", function(Y){
 	
 	/**
 	 * Utilities to run inputEx examples
@@ -128,14 +128,15 @@
 	
 	
 	// Required for the ListField
-	inputEx.spacerUrl = "../images/space.gif";
+	Y.inputEx.spacerUrl = "../images/space.gif";
 	
 	
-	YAHOO.util.Event.onDOMReady(function() {
+	Y.on("domready",function() {
 		
-		var examples, i, length, textarea, code;
+		var examples = [], i, length, textarea, code;
 		
-		examples = YAHOO.util.Dom.getElementsByClassName('JScript');
+		// i'm not proud of using n._node ... but the method getDOMNode (http://developer.yahoo.com/yui/3/api/Node.html#method_getDOMNode) is not implemented yet
+		Y.all('.JScript').each(function(n){ examples.push(n._node);},this);
 		
 		for(i = 0, length = examples.length ; i < length ; i += 1) {
 			
@@ -148,7 +149,7 @@
 				// wrap in anonymous to create a separate context for local variables
 				// (avoid collision between variables from different examples !)
 				code = "(function () {"+code+"}());";
-				
+				var inputEx = Y.inputEx;
 				eval(code);
 			}
 			catch(ex) {
@@ -161,4 +162,6 @@
 		dp.SyntaxHighlighter.HighlightAll('code');
 	});
 
-}());
+});
+
+

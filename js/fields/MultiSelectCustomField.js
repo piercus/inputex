@@ -1,10 +1,10 @@
-(function() {   
+YUI.add("inputex-pie-multiselectcustom", function(Y) {
   
-  var inputEx = YAHOO.inputEx;
+  var inputEx = Y.inputEx, lang = Y.Lang;
 
   /**
  * Create a multi Select field customized
- * @class inputEx.MultiSelectFieldCustom
+ * @class inputEx.MultiSelectCustomField
  * @extends inputEx.MultiSelectField
  * @constructor
  * @param {Object} options Added options:
@@ -16,16 +16,18 @@
  */
 
 
-inputEx.MultiSelectFieldCustom = function(options) {
+inputEx.MultiSelectCustomField = function(options) {
   this.options = this.options || {};
   this.listSelectOptions= options.listSelectOptions;
   this.maxItems = options.maxItems; 
   this.maxItemsAlert = options.maxItemsAlert;
-  inputEx.MultiSelectFieldCustom.superclass.constructor.call(this,options);
+  this.classRemoveButton = options.classRemoveButton;  
+  inputEx.MultiSelectCustomField.superclass.constructor.call(this,options);
   this.confirmEmpty = options.confirmEmpty;
+
   
 };
-YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
+Y.extend(inputEx.MultiSelectCustomField, inputEx.MultiSelectField,{
    /**
     * renderComponent : override the MultiSelectField renderComponent function
     * <ul>
@@ -35,10 +37,10 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
     */
 
    renderComponent: function() {
-      inputEx.MultiSelectFieldCustom.superclass.renderComponent.call(this);
+      inputEx.MultiSelectCustomField.superclass.renderComponent.call(this);
       
-      this.ddlist = new inputEx.widget.ListCustom({parentEl: this.fieldContainer,listSelectOptions: this.listSelectOptions, maxItems: this.maxItems, uniqueness: true, maxItemsAlert: this.maxItemsAlert});
-      this.ddlist.listChangeEvt.subscribe(this.fireUpdatedEvt, this, true);
+      this.ddlist = new inputEx.widget.ListCustom({classRemoveButton: this.classRemoveButton,parentEl: this.fieldContainer,listSelectOptions: this.listSelectOptions, maxItems: this.maxItems, uniqueness: true, maxItemsAlert: this.maxItemsAlert});
+      this.ddlist.on("listChanged",this.fireUpdatedEvt, this, true);
       this.el.name = ""; // we re-route the html submit features 
       var hiddenAttrs = {
          type: 'hidden',
@@ -64,13 +66,13 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
           return this.confirmedEmpty
         }
       } else {
-        inputEx.MultiSelectFieldCustom.superclass.getState.call(this);
+        inputEx.MultiSelectCustomField.superclass.getState.call(this);
       }
    },  
   setValue: function(obj, sendUpdatedEvt) {
      var i, length, position, choice, ddlistValue = [];
       
-      if (!YAHOO.lang.isArray(obj)) {
+      if (!lang.isArray(obj)) {
         return;
       }
       
@@ -92,30 +94,30 @@ YAHOO.lang.extend(inputEx.MultiSelectFieldCustom, inputEx.MultiSelectField,{
   },
 
      // override to add sendUpdatedEvt option 
-  onItemRemoved: function(e,params) {
-
-   this.showChoice({ value : params[0] });
-   this.el.selectedIndex = 0;
-   if(!(params[1] == false)){
-      this.fireUpdatedEvt();
-   }  
-
+  onItemRemoved: function(v,sendUpdatedEvt) {
+     this.showChoice({ value : v.value });
+     this.el.selectedIndex = 0;
+     if(!(sendUpdatedEvt == false)){
+        this.fireUpdatedEvt();
+     }  
    }, 
    disable: function(){
-      inputEx.MultiSelectFieldCustom.superclass.disable.call(this);
+      inputEx.MultiSelectCustomField.superclass.disable.call(this);
       this.ddlist.disable();
    },
    enable: function(){
-      inputEx.MultiSelectFieldCustom.superclass.enable.call(this);
+      inputEx.MultiSelectCustomField.superclass.enable.call(this);
       this.ddlist.enable();
    },
    clear: function(){
-      inputEx.MultiSelectFieldCustom.superclass.clear.call(this);
+      inputEx.MultiSelectCustomField.superclass.clear.call(this);
       this.ddlist.enable();
       this.setValue([]);
    }
    
 });
-inputEx.registerType("multiselectcustom", inputEx.MultiSelectFieldCustom);
+inputEx.registerType("multiselectcustom", inputEx.MultiSelectCustomField);
 
-})();
+}, '0.1.1',{
+  requires: ["inputex-pie-listcustom", "inputex-multiselect"]
+})

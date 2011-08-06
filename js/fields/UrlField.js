@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-url",function(Y){
 
-   var lang = YAHOO.lang;
+   var lang = Y.Lang;
+   var inputEx = Y.inputEx;
 
 /**
  * Adds an url regexp, and display the favicon at this url
@@ -16,7 +17,7 @@ inputEx.UrlField = function(options) {
    inputEx.UrlField.superclass.constructor.call(this,options);
 };
 
-lang.extend(inputEx.UrlField, inputEx.StringField, {
+Y.extend(inputEx.UrlField, inputEx.StringField, {
 
    /**
     * Adds the invalid Url message
@@ -42,7 +43,7 @@ lang.extend(inputEx.UrlField, inputEx.StringField, {
       this.el.size = this.options.size;
 
       if(!this.options.favicon) {
-         YAHOO.util.Dom.addClass(this.el, 'nofavicon');
+         Y.one(this.el).addClass( 'nofavicon');
       }
 
       // Create the favicon image tag
@@ -51,7 +52,7 @@ lang.extend(inputEx.UrlField, inputEx.StringField, {
          this.fieldContainer.insertBefore(this.favicon,this.fieldContainer.childNodes[0]);
 
          // focus field when clicking on favicon
-         YAHOO.util.Event.addListener(this.favicon,"click",function(){this.focus();},this,true);
+         Y.on("click",function(){this.focus();},this.favicon,this)
       }
    },
 
@@ -100,4 +101,6 @@ inputEx.registerType("url", inputEx.UrlField, [
    { type: 'boolean', label: 'Display favicon', name:'favicon', value: true}
 ]);
 
-})();
+},'0.1.1',{
+  requires: ["inputex-string"]
+});

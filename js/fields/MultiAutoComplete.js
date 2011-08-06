@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-multiautocomplete",function(Y){
 
-   var lang = YAHOO.lang;
+   var lang = Y.Lang;
+   var inputEx = Y.inputEx;
 
 /**
  * Create a multi autocomplete field
@@ -14,20 +15,20 @@
 inputEx.MultiAutoComplete = function(options) {
 	inputEx.MultiAutoComplete.superclass.constructor.call(this,options);
  };
-lang.extend(inputEx.MultiAutoComplete, inputEx.AutoComplete, {
+Y.extend(inputEx.MultiAutoComplete, inputEx.AutoComplete, {
    
    /**
     * Build the DDList
     */
    renderComponent: function() {
       inputEx.MultiAutoComplete.superclass.renderComponent.call(this);
-      
+
       this.ddlist = new inputEx.widget.DDList({parentEl: this.fieldContainer});
-      this.ddlist.itemRemovedEvt.subscribe(function() {
+      this.ddlist.on("itemRemoved",function() {
          this.setClassFromState();
          this.fireUpdatedEvt();
-      }, this, true);
-      this.ddlist.listReorderedEvt.subscribe(this.fireUpdatedEvt, this, true);
+      }, this);
+      this.ddlist.on("listReordered",this.fireUpdatedEvt, this);
    },  
    
    /**
@@ -39,19 +40,22 @@ lang.extend(inputEx.MultiAutoComplete, inputEx.AutoComplete, {
       // Method to format the ddlist item labels
       this.options.returnLabel = options.returnLabel;
    },
-   
+
    /**
     * Handle item selection in the autocompleter to add it to the list
     */
-   itemSelectHandler: function(sType, aArgs) {
-   	var aData = aArgs[2];
-   	var value = lang.isFunction(this.options.returnValue) ? this.options.returnValue(aData) : aData[0];
+   itemSelectHandler: function(v) {
+    v.halt();
+
+   	var aData = v.result;
+   	var value = lang.isFunction(this.options.returnValue) ? this.options.returnValue(aData) : aData.raw;
    	var label = lang.isFunction(this.options.returnLabel) ? this.options.returnLabel(aData) : value;   	
    	this.ddlist.addItem({label: label, value: value});
    	this.el.value = "";
    	this.hiddenEl.value = this.stringifyValue();
    	this.fireUpdatedEvt();
    	this.onChange();
+   	this.yEl.ac.hide();
    },
    
    /**
@@ -118,7 +122,7 @@ lang.extend(inputEx.MultiAutoComplete, inputEx.AutoComplete, {
      }
   },
    stringifyValue: function(){
-		return lang.JSON.stringify(this.getValue());
+		return Y.JSON.stringify(this.getValue());
 	}
    
    
@@ -127,4 +131,6 @@ lang.extend(inputEx.MultiAutoComplete, inputEx.AutoComplete, {
 // Register this class as "multiautocomplete" type
 inputEx.registerType("multiautocomplete", inputEx.MultiAutoComplete);
 
-})();
+},'0.1.1',{
+  requires:["inputex-autocomplete","json","inputex-ddlist"]
+});
