@@ -18,6 +18,7 @@ next version :
     * DateSplitField: day and month are displayed on two chars (with "0" prefix if necessary)
     * DatePickerField : fix bug in 'readonly: false' mode that displayed a broken calendar
                         if invalid user input in field
+    * Textarea : fix rows attribute on firefox (circumvent gecko bug which result in one extra row added)
 
 version 0.7.1 :
 ---------------
