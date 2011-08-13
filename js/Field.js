@@ -193,9 +193,10 @@ YUI.add("inputex-field",function(Y) {
 	  },
 
      /**
-      * Set the styles for valid/invalide state
+      * Set the styles for valid/invalid state.  If a state is not provided, getState will be called.
+      * @param {String} One of the following states: 'empty', 'required', 'valid' or 'invalid'
       */
-	  setClassFromState: function() {
+	  setClassFromState: function(state) {
 		  var className;
 	     // remove previous class
 	     if( this.previousState ) {
@@ -205,7 +206,7 @@ YUI.add("inputex-field",function(Y) {
 	     }
 	     
 	     // add new class
-	     var state = this.getState();
+	     state = state || this.getState();
 	     if( !(state == inputEx.stateEmpty && Y.one(this.divEl).hasClass( 'inputEx-focused') ) ) {
 	        // add invalid className for both required and invalid fields
 	        className = 'inputEx-'+((state == inputEx.stateRequired) ? inputEx.stateInvalid : state);
