@@ -1,6 +1,10 @@
-(function() {
-   
-   var Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
+YUI.add("inputex-dialog",function(Y){
+
+   var inputEx = Y.inputEx,
+       YAHOO = Y.YUI2,
+       lang = Y.Lang,
+       Dom = YAHOO.util.Dom,
+       Event = YAHOO.util.Event;
    
 /**
  * Create a Dialog from an inputEx field definition
@@ -8,7 +12,7 @@
  * @constructor
  * @param {Object} options Config object, options are :
  * <ul>
- *   <li>inputExDef: an inputEx type definition (ex: {type: 'form', inputParams: {fields: [...]}})</li>
+ *   <li>inputExDef: an inputEx type definition (ex: {type: 'form', fields: [...] })</li>
  *   <li>id: an optional id for the dialog</li>
  *   <li>parentEl: optional parentEl (default document.body)</li>
  *   <li>title: the dialog title</li>
@@ -49,25 +53,17 @@ inputEx.widget.Dialog = function(options) {
 	
 };
 
-YAHOO.lang.extend(inputEx.widget.Dialog, YAHOO.widget.Panel, {
+Y.extend(inputEx.widget.Dialog, YAHOO.widget.Panel, {
    
 	/**
 	 * Render the form
 	 */
    renderForm: function() {
       
-      // Retro-compatibility with deprecated inputParams Object
-      if (YAHOO.lang.isObject(this._inputExOptions.inputExDef.inputParams)) {
-		   this._inputExOptions.inputExDef.inputParams.parentEl = this._inputExBodyId;
-		   
-		// New prefered syntax for field options
-	   } else {
-		   this._inputExOptions.inputExDef.parentEl = this._inputExBodyId;
-	   }
-		
+      this._inputExOptions.inputExDef.parentEl = this._inputExBodyId;
+	   
       this._inputExFieldInstance = inputEx(this._inputExOptions.inputExDef);
       this._inputExFieldInstance._inputExDialog = this;
-
 	},
 
    /**
@@ -129,4 +125,6 @@ YAHOO.lang.extend(inputEx.widget.Dialog, YAHOO.widget.Panel, {
    
 });
    
-})();
+}, '3.0.0a',{
+  requires: ['inputex-form', 'yui2-dragdrop', 'yui2-container']
+});

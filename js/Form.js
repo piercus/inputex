@@ -1,7 +1,7 @@
 YUI.add("inputex-form", function(Y){
-  // var util = YAHOO.util, 
-  var lang = Y.Lang;//, Event = util.Event, Dom = util.Dom;
-  var inputEx = Y.inputEx;
+
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
 
 /**
  * Create a group of fields within a FORM tag and adds buttons
@@ -398,6 +398,6 @@ inputEx.registerType("form", inputEx.Form, [
 ]);
 
 
-},'0.1.1',{
+},'3.0.0a',{
   requires: ["io-base","inputex-group","json","inputex-button"]
 });

@@ -1,7 +1,8 @@
-(function() {
+YUI.add("inputex-serialize", function(Y){
 
-   var Event = YAHOO.util.Event, Dom = YAHOO.util.Dom, lang = YAHOO.lang;
-
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
+      
 /**
  * SerializeField allows to serialize/deserialize a complex sub-group to a string
  * @class inputEx.SerializeField
@@ -14,7 +15,7 @@ inputEx.SerializeField = function(options) {
    
 };
 
-lang.extend(inputEx.SerializeField, inputEx.Field, {
+Y.extend(inputEx.SerializeField, inputEx.Field, {
 	
 	/**
     * Adds some options: subfield & serializer
@@ -37,7 +38,7 @@ lang.extend(inputEx.SerializeField, inputEx.Field, {
       this.fieldContainer.appendChild( this.subfieldWrapper );
       
 		var config = {parentEl: this.subfieldWrapper};
-		lang.augmentObject(config, this.options.subfield);
+		Y.mix(config, this.options.subfield);
       this.subField = inputEx( config, this);
    },
 
@@ -46,7 +47,7 @@ lang.extend(inputEx.SerializeField, inputEx.Field, {
 	 */
 	initEvents: function() {
       inputEx.SerializeField.superclass.initEvents.call(this); 
-      this.subField.updatedEvt.subscribe(this.fireUpdatedEvt, this, true);
+      this.subField.on('updated', this.fireUpdatedEvt, this, true);
    },
 
 	/**
@@ -106,7 +107,7 @@ inputEx.SerializeField.serializers = {
 		 * @static
 		 */
 		serialize: function(o) {
-			return YAHOO.lang.JSON.stringify(o);
+			return Y.JSON.stringify(o);
 		},
 
 		/**
@@ -114,7 +115,7 @@ inputEx.SerializeField.serializers = {
 		 * @static
 		 */
 		deserialize: function(sValue) {
-			return YAHOO.lang.JSON.parse(sValue);
+			return Y.JSON.parse(sValue);
 		}
 	},
 	
@@ -129,7 +130,7 @@ inputEx.SerializeField.serializers = {
 		 * @static
 		 */
 		serialize: function(o) {
-			if(!XML || !YAHOO.lang.isFunction(XML.ObjTree) ) {
+			if(!XML || !Y.Lang.isFunction(XML.ObjTree) ) {
 				alert("ObjTree.js not loaded.");
 				return null;
 			}
@@ -142,7 +143,7 @@ inputEx.SerializeField.serializers = {
 		 * @static
 		 */
 		deserialize: function(sValue) {
-			if(!XML || !YAHOO.lang.isFunction(XML.ObjTree) ) {
+			if(!XML || !Y.Lang.isFunction(XML.ObjTree) ) {
 				alert("ObjTree.js not loaded.");
 				return null;
 			}
@@ -171,4 +172,6 @@ inputEx.registerType("serialize", inputEx.SerializeField, [
 	{ type:'select', name: 'serializer', label: 'Serializer', choices: [{ value: 'json' }, { value: 'xml' }/*, { value: 'flatten' }*/], value: 'json'}
 ]);
 
-})();
+},'3.0.0a',{
+  requires: ["inputex-string",'json']
+});

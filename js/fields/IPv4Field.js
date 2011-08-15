@@ -1,4 +1,7 @@
-(function() {
+YUI.add("inputex-ipv4",function(Y){
+	
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 /**
  * Adds an IPv4 address regexp
@@ -10,7 +13,7 @@
 inputEx.IPv4Field = function(options) {
 	inputEx.IPv4Field.superclass.constructor.call(this,options);
 };
-YAHOO.lang.extend(inputEx.IPv4Field, inputEx.StringField, {
+Y.extend(inputEx.IPv4Field, inputEx.StringField, {
    
    /**
     * set IPv4 regexp and invalid string
@@ -30,4 +33,6 @@ inputEx.messages.invalidIPv4 = "Invalid IPv4 address, ex: 192.168.0.1";
 // Register this class as "IPv4" type
 inputEx.registerType("IPv4", inputEx.IPv4Field, []);
 
-})();
+},'3.0.0a',{
+  requires: ["inputex-string"]
+});

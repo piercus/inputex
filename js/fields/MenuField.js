@@ -1,6 +1,9 @@
-(function() {
-
-   var Event = YAHOO.util.Event, lang = YAHOO.lang;
+YUI.add("inputex-menu",function(Y){
+	
+   var inputEx = Y.inputEx,
+       lang = Y.Lang;
+	
+	var YAHOO = Y.YUI2, Event = YAHOO.util.Event;
 
 /**
  * Create a menu field
@@ -20,7 +23,7 @@ inputEx.MenuField = function(options) {
 	inputEx.MenuField.superclass.constructor.call(this,options);
 };
 
-lang.extend(inputEx.MenuField, inputEx.Field, {
+Y.extend(inputEx.MenuField, inputEx.Field, {
    /**
     * Set the default values of the options
     * @param {Object} options Options object as passed to the constructor
@@ -83,19 +86,19 @@ lang.extend(inputEx.MenuField, inputEx.Field, {
 	      var item;
 	      for (var i=0, length = conf.length; i < length; i++) {
 	         item = conf[i];
-             if (YAHOO.lang.isUndefined(item.text) && !YAHOO.lang.isUndefined(item.value)) {
+             if (lang.isUndefined(item.text) && !lang.isUndefined(item.value)) {
 	            item.text = item.value;
 	         }
-	         if (YAHOO.lang.isUndefined(item.value) && !YAHOO.lang.isUndefined(item.text)) {
+	         if (lang.isUndefined(item.value) && !lang.isUndefined(item.text)) {
 	            item.value = item.text;
 	         }
 	        
             // item with submenu
             //   -> explore deeper
-	         if (!YAHOO.lang.isUndefined(item.submenu)) {
+	         if (!lang.isUndefined(item.submenu)) {
 	            
 	            // ensure there is an id on submenu (else submenu is not created)
-	            if (YAHOO.lang.isUndefined(item.submenu.id)) {
+	            if (lang.isUndefined(item.submenu.id)) {
 	               item.submenu.id = YAHOO.util.Dom.generateId();
 	            }
 	            
@@ -173,4 +176,7 @@ inputEx.messages.menuTypeInvite = "Click here to select";
 // Register this class as "menu" type
 inputEx.registerType("menu", inputEx.MenuField);
 
-})();
+}, '3.0.0a',{
+requires: ['inputex-field', 'yui2-menu']
+});
+

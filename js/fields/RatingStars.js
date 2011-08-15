@@ -1,5 +1,7 @@
-(function () {
-   var util = YAHOO.util, lang = YAHOO.lang, Event = util.Event, Dom = util.Dom;
+YUI.add("inputex-ratingstars",function(Y){
+
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 /**
  * Create a star rating Field
@@ -24,7 +26,7 @@ inputEx.RatingStars = function(options) {
    this.resetStars();
 };
 
-lang.extend(inputEx.RatingStars, inputEx.Field,{
+Y.extend(inputEx.RatingStars, inputEx.Field,{
   setOptions: function(options){
     inputEx.RatingStars.superclass.setOptions.call(this,options);
     
@@ -90,10 +92,10 @@ lang.extend(inputEx.RatingStars, inputEx.Field,{
       this.el.appendChild(star);
 
       // add needed listeners to every star
-      Event.addListener(star, 'mouseover', star.onHover, star, true);
-      Event.addListener(star, 'click', star.onClick, star, true);
+      Y.one(star).on('mouseover', star.onHover, star, true);
+      Y.one(star).on('click', star.onClick, star, true);
     } 
-    Event.addListener(this.el, 'mouseout', this.resetStars, this, true);
+    Y.one(this.el).on('mouseout', this.resetStars, this, true);
     this.fieldContainer.appendChild(this.el);
     this.divMess = this.fieldContainer.appendChild(inputEx.cn('div', {id: this.divEl.id+'-mess', className: 'inputEx-message'}, null, this.options.message ));
 
@@ -110,11 +112,11 @@ lang.extend(inputEx.RatingStars, inputEx.Field,{
             var star = this.starsEls[i],
                 a = star.firstChild;
             if(i < whichStar+1 ){
-              Dom.addClass(star, 'hover');
-              Dom.setStyle(a, 'width', '100%');            
+              Y.one(star).addClass('hover');
+              Y.one(a).setStyle('width', '100%');            
             } else {
-              Dom.removeClass(star, 'on');
-              Dom.removeClass(star, 'hover');
+              Y.one(star).removeClass('on');
+              Y.one(star).removeClass('hover');
             }
 
  
@@ -135,7 +137,7 @@ lang.extend(inputEx.RatingStars, inputEx.Field,{
    * @method initEvents
    */
     initEvents: function(e, whichStar) {
-      this.rateEvt = new util.CustomEvent("rateEvt");
+      this.publish("rateEvt");
     },  
   /**
    * reset Stars and note
@@ -161,16 +163,16 @@ lang.extend(inputEx.RatingStars, inputEx.Field,{
         for (var i=0; i < this.options.nStars ; i++) {
             var star = this.starsEls[i],
                 a = star.firstChild;
-            Dom.removeClass(star, 'hover');
+            Y.one(star).removeClass('hover');
             if(i < starsOn){
-              Dom.addClass(star, 'on');
+              Y.one(star).addClass('on');
             }  else {
-              Dom.removeClass(star, 'on');
+              Y.one(star).removeClass('on');
             }
           
             // and for the last one, set width if needed
             if (i == starsOn - 1 && lastStarWidth){
-              Dom.setStyle(a, 'width', lastStarWidth);
+              Y.one(a).setStyle('width', lastStarWidth);
             }
         }
         this.showMessage();
@@ -207,7 +209,7 @@ lang.extend(inputEx.RatingStars, inputEx.Field,{
       this.setValue(value);
       this.dontReset = true;
       this.disable();
-      this.rateEvt.fire(value);  
+      this.fire("rate",value);  
       
     },
     afterRating: function(){
@@ -236,6 +238,9 @@ inputEx.messages.sendingRate = "Sending your rate ...";
  
  // Register this class as "url" type
  inputEx.registerType("ratingstars", inputEx.RatingStars);
-})();
+
+},'3.0.0a',{
+  requires: ['inputex-field']
+});
 
 

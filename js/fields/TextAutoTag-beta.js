@@ -14,10 +14,10 @@
  * </ul>
  */
  inputEx.TextAutoTag = function(options) {
-	inputEx.TextAutoTag.superclass.constructor.call(this,options);
-  this.updatedEvt.subscribe(this.handleUpdate,this,true);
+  inputEx.TextAutoTag.superclass.constructor.call(this,options);
+  this.on('updated', this.handleUpdate,this,true);
 };
-  YAHOO.lang.extend(inputEx.TextAutoTag, inputEx.Textarea, {
+  Y.extend(inputEx.TextAutoTag, inputEx.Textarea, {
                     
       /**
       * Set the specific options (autotagservice)

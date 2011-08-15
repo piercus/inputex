@@ -1,7 +1,8 @@
-(function() {
-	
-   var lang = YAHOO.lang;
-	
+YUI.add("inputex-tinymce", function(Y) {
+
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
+		
 /**
  * Wrapper for the TinyMCE Editor
  * @class inputEx.TinyMCEField
@@ -18,7 +19,7 @@ inputEx.TinyMCEField = function(options) {
 	}
    inputEx.TinyMCEField.superclass.constructor.call(this,options);
 };
-lang.extend(inputEx.TinyMCEField, inputEx.Field, {   
+Y.extend(inputEx.TinyMCEField, inputEx.Field, {   
 	
 	defaultOpts: {
 		mode : "textareas",
@@ -120,4 +121,6 @@ lang.extend(inputEx.TinyMCEField, inputEx.Field, {
 // Register this class as "tinymce" type
 inputEx.registerType("tinymce", inputEx.TinyMCEField, []);
 	
-})();
+},'3.0.0a',{
+  requires: ["inputex-field"]
+});

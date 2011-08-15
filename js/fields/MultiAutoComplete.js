@@ -131,6 +131,6 @@ Y.extend(inputEx.MultiAutoComplete, inputEx.AutoComplete, {
 // Register this class as "multiautocomplete" type
 inputEx.registerType("multiautocomplete", inputEx.MultiAutoComplete);
 
-},'0.1.1',{
-  requires:["inputex-autocomplete","json","inputex-ddlist"]
+},'3.0.0a',{
+  requires:['inputex-autocomplete','json','inputex-ddlist']
 });

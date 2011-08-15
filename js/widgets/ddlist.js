@@ -1,8 +1,8 @@
 YUI.add("inputex-ddlist", function(Y){
 
-   //var DD = YAHOO.util.DragDropMgr, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event, lang = YAHOO.lang;
-   var lang = Y.Lang;
-   var inputEx = Y.inputEx;
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
+       
 /**
  * DDProxy for DDList items (used by DDList)
  * @class inputEx.widget.DDListItem
@@ -147,14 +147,14 @@ inputEx.widget.DDList = function(options) {
    this.setOptions(options);
 
    /**
-	 * @event YAHOO custom event fired when an item is removed
+	 * @event YUI custom event fired when an item is removed
 	 * @param {Any} itemValue value of the removed item
 	 */
 	this.publish("itemRemoved");
 	/**
-	 * @event YAHOO custom event fired when the list is reordered
+	 * @event YUI custom event fired when the list is reordered
 	 */
-	this.publish("listReordered")
+	this.publish("listReordered");
    
 
    // append it immediatly to the parent DOM element
@@ -311,6 +311,6 @@ inputEx.widget.DDList.prototype = {
 };
 Y.augment(inputEx.widget.DDList, Y.EventTarget, null, null, {});
 
-}, '0.1.1',{
+}, '3.0.0a',{
   requires: ["inputex","dd","event-custom"]
 });

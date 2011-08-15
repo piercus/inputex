@@ -1,7 +1,7 @@
-
 YUI.add("inputex-string", function(Y){
-   var lang = Y.Lang;//, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
-   var inputEx = Y.inputEx;
+   
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 /**
  * Basic string field (equivalent to the input type "text")
@@ -99,8 +99,8 @@ Y.extend(inputEx.StringField, inputEx.Field, {
      Y.on("blur", this.onBlur,this.el, this);
      // bug to scope event handlers in this context
      var that = this;
-     Y.on("key", function(e,scope){ that.onKeyPress.call(that,e)},this.el, "press",this);
-     Y.on("key", function(e,scope){ that.onKeyUp.call(that,e)},this.el, 'up',this);
+     Y.on("key", function(e,scope){ that.onKeyPress.call(that,e); },this.el, "press",this);
+     Y.on("key", function(e,scope){ that.onKeyUp.call(that,e); },this.el, 'up',this);
    },
 
    /**
@@ -277,6 +277,6 @@ inputEx.registerType("string", inputEx.StringField, [
     { type: 'integer', label: 'Min. length', name: 'minLength', value: 0}
 ]);
 
-}, '0.1.1',{
+}, '3.0.0a',{
   requires: ["inputex-field","event-key"]
 });

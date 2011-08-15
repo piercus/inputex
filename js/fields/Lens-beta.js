@@ -1,6 +1,7 @@
-(function() {
-   
-   var lang = YAHOO.lang;
+YUI.add("inputex-lens",function(Y){
+	
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 /**
  * Display a group with inplace edit and custom template
@@ -17,7 +18,7 @@ inputEx.Lens = function(options) {
    inputEx.Lens.superclass.constructor.call(this, options);
 };
 
-lang.extend(inputEx.Lens, inputEx.Group, {
+Y.extend(inputEx.Lens, inputEx.Group, {
    
    /**
     * Set additional options
@@ -44,9 +45,11 @@ lang.extend(inputEx.Lens, inputEx.Group, {
 			parentEl.innerHTML = this.options.lens;
 			
 			for(var i = 0 ; i < this.options.fields.length ; i++) {
-				var els = YAHOO.util.Dom.getElementsByClassName( "field-"+this.options.fields[i].name, "div", parentEl);
-				var el = els[0];
-				var params = { parentEl: el, editorField: this.options.fields[i], name: this.options.fields[i].name };
+
+				var els = Y.one(parentEl).all("."+"field-"+this.options.fields[i].name+" , div .field-"+this.options.fields[i].name);
+				var el = els.item(0);
+
+				var params = { parentEl: el._node, editorField: this.options.fields[i], name: this.options.fields[i].name };
 				if(this.options.visus) {
 					params.visu = this.options.visus[i];
 				}
@@ -57,7 +60,7 @@ lang.extend(inputEx.Lens, inputEx.Group, {
 		    	this.inputsNames[field.options.name] = field;
 		    }
 			  // Subscribe to the field "updated" event to send the group "updated" event
-			  field.updatedEvt.subscribe(this.onChange, this, true);
+			  field.on('updated', this.onChange, this, true);
 		
 			}
   	
@@ -65,6 +68,11 @@ lang.extend(inputEx.Lens, inputEx.Group, {
 	
 });
 
+// Register this class as "list" type
+inputEx.registerType("lens", inputEx.Lens, [
+]);
 
 
-})();
+},'3.0.0a',{
+  requires: ['inputex-group','inputex-inplaceedit']
+});

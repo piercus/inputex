@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-file", function(Y){
 
-   var Event = YAHOO.util.Event;
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 /**
  * Create a file input
@@ -14,7 +15,8 @@
 inputEx.FileField = function(options) {
 	inputEx.FileField.superclass.constructor.call(this,options);
 };
-YAHOO.lang.extend(inputEx.FileField, inputEx.Field, {
+inputEx.FileField._id_count = 0;
+Y.extend(inputEx.FileField, inputEx.Field, {
 	
    /**
     * Adds size and accept options
@@ -33,7 +35,7 @@ YAHOO.lang.extend(inputEx.FileField, inputEx.Field, {
       
       // Attributes of the input field
       var attributes = {};
-      attributes.id = this.divEl.id?this.divEl.id+'-field':YAHOO.util.Dom.generateId();
+      attributes.id = this.divEl.id?this.divEl.id+'-field': ("_inputex_fileid"+(inputEx.FileField._id_count++));
       attributes.type = "file";
       if(this.options.name) attributes.name = this.options.name;
    	if(this.options.size) attributes.size = this.options.size;
@@ -51,4 +53,7 @@ YAHOO.lang.extend(inputEx.FileField, inputEx.Field, {
 // Register this class as "file" type
 inputEx.registerType("file", inputEx.FileField);
 
-})();
+
+}, '3.0.0a',{
+requires: ['inputex-field']
+});

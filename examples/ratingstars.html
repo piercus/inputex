@@ -1,22 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html>
  <head>
   <title>inputEx - RatingStars Usage</title>
-
-<!-- YUI CSS -->
-<link rel="stylesheet" type="text/css" href="../lib/yui/reset-fonts/reset-fonts.css">
-<link rel="stylesheet" type="text/css" href="../lib/yui/container/assets/container.css"> 
-<link rel="stylesheet" type="text/css" href="../lib/yui/assets/skins/sam/skin.css">
-
-<!-- InputEx CSS -->
-<link type='text/css' rel='stylesheet' href='../css/inputEx.css' />
-<link type='text/css' rel='stylesheet' href='../css/stars.css' />
-
-<!-- Demo CSS -->
-<link rel="stylesheet" type="text/css" href="css/demo.css"/>
-<link rel="stylesheet" type="text/css" href="css/dpSyntaxHighlighter.css">
-
  </head>
 
  <body>
@@ -31,7 +16,7 @@
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			new inputEx.RatingStars({
+			new Y.inputEx.RatingStars({
 				name: 'star1',
         averageValue: 4.5,
 				parentEl: 'container1'
@@ -47,7 +32,7 @@
 	<div class='demoContainer' id='container1bis'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			new inputEx.RatingStars({
+			new Y.inputEx.RatingStars({
 				label: 'Rate this one !',
 				name: 'star1bis',
         averageValue: 2.3, 
@@ -66,7 +51,7 @@
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			new inputEx.RatingStars({
+			new Y.inputEx.RatingStars({
 				name: 'star2',
         averageValue: 2.3, 
         nRates: 30,
@@ -84,7 +69,7 @@
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			new inputEx.RatingStars({
+			new Y.inputEx.RatingStars({
 				name: 'star2',
         averageValue: 2.3, 
         nStars: ["Not Cool","Half-Cool","Cool","Super Cool","Coolest Ever"],
@@ -103,7 +88,7 @@
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			new inputEx.RatingStarsForm({
+			new Y.inputEx.RatingStarsForm({
           ratingStarsOptions: {
 				    name: 'star',
             averageValue: 2.3, 
@@ -127,7 +112,7 @@
 	<div class='demoContainer' id='container5'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			new inputEx.RatingStars({
+			new Y.inputEx.RatingStars({
 				name: 'star3',
         averageValue: 2.3, 
         disabled: true,
@@ -138,22 +123,14 @@
 		</textarea>
 	</div>
 </div>
-<!-- YUI Library -->
-<script type="text/javascript" src="../lib/yui/utilities/utilities.js"></script> 
-<script type="text/javascript" src="../lib/yui/json/json-min.js"></script> 
 
-<!-- InputEx -->
-<script src="../js/inputex.js"  type='text/javascript'></script>
-<script src="../js/Field.js"  type='text/javascript'></script>
-<script src="../js/fields/RatingStars.js"  type='text/javascript'></script>
 
-<script src="../js/Group.js"  type='text/javascript'></script>
-<script src="../js/Form.js"  type='text/javascript'></script>
-<script src="../js/fields/RatingStarsForm.js"  type='text/javascript'></script>
-
-<!-- inputEx examples -->
-<script src="js/dpSyntaxHighlighter.js"></script>
-<script src="inputex-examples.js"></script>
+<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+<script src="../js/loader.js"  type='text/javascript'></script>
+<script>
+YUI_config.groups.inputex.base = '../';
+YUI().use('inputex-ratingstars', 'inputex-ratingstarsform', 'inputex-examples');
+</script>
 
  </body>
 </html>

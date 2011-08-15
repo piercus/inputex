@@ -1,6 +1,7 @@
-(function() {
-	
-   var Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
+YUI.add("inputex-tree", function(Y){
+
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
 	
 /**
  * Meta field to create trees
@@ -12,7 +13,7 @@
 inputEx.TreeField = function(options) {
    inputEx.TreeField.superclass.constructor.call(this, options);
 };
-YAHOO.lang.extend(inputEx.TreeField, inputEx.ListField, {
+Y.extend(inputEx.TreeField, inputEx.ListField, {
 	/**
 	 * Adds a new line to the List Field
 	 * @param {Any} value Value of the subelement
@@ -25,17 +26,17 @@ YAHOO.lang.extend(inputEx.TreeField, inputEx.ListField, {
 	      
 	   // Delete button
 	   var delButton = inputEx.cn('img', {src: inputEx.spacerUrl, className: 'inputEx-ListField-delButton'});
-	   Event.addListener( delButton, 'click', this.onDelete, this, true);
+	   Y.one(delButton).on('click', this.onDelete, this, true);
 	   newDiv.appendChild( delButton );
 	      
 	   var el = new inputEx.TreeField({parentNode: this, elementType: this.options.elementType, value: value });
 	   var subFieldEl = el.getEl();
-	   Dom.setStyle(subFieldEl, 'margin-left', '4px');
-	   Dom.setStyle(subFieldEl, 'float', 'left');
+	   Y.one(subFieldEl).setStyle('margin-left', '4px');
+	   Y.one(subFieldEl).setStyle('float', 'left');
 	   newDiv.appendChild( subFieldEl );
 	      
 	   // Subscribe the onChange event to resend it 
-	   el.updatedEvt.subscribe(this.onChange, this, true);
+	   el.on('updated', this.onChange, this, true);
 	
 	   // Line breaker
 	   newDiv.appendChild( inputEx.cn('div', null, {clear: "both"}) );
@@ -54,15 +55,15 @@ YAHOO.lang.extend(inputEx.TreeField, inputEx.ListField, {
 	      
 	   // Add element button
 	   this.addButton = inputEx.cn('img', {src: inputEx.spacerUrl, className: 'inputEx-ListField-addButton'});
-	   Dom.setStyle(this.addButton, 'float', 'left');
+	   Y.one(this.addButton).setStyle('float', 'left');
 	   this.fieldContainer.appendChild(this.addButton);      
 	      
 	   // Instanciate the new subField
 	   this.subField = inputEx(this.options.elementType,this);
 	   
 	   var subFieldEl = this.subField.getEl();
-	   Dom.setStyle(subFieldEl, 'margin-left', '4px');
-	   Dom.setStyle(subFieldEl, 'float', 'left');
+	   Y.one(subFieldEl).setStyle('margin-left', '4px');
+	   Y.one(subFieldEl).setStyle('float', 'left');
 	   this.fieldContainer.appendChild( subFieldEl );
 	      
 	   // Line breaker
@@ -101,4 +102,6 @@ YAHOO.lang.extend(inputEx.TreeField, inputEx.ListField, {
 // Register this class as "tree" type
 inputEx.registerType("tree", inputEx.TreeField);
 	
-})();
+},'3.0.0a',{
+  requires: ['inputex-string','inputex-list','inputex-inplaceedit']
+});

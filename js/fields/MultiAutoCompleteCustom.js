@@ -1,4 +1,4 @@
-YUI.add("inputex-pie-multiautocompletecustom",function(Y){
+YUI.add("inputex-multiautocompletecustom",function(Y){
 
   var inputEx = Y.inputEx;
   
@@ -119,6 +119,6 @@ YUI.add("inputex-pie-multiautocompletecustom",function(Y){
     }
   });
   inputEx.registerType("multiautocompletecustom", inputEx.MultiAutoCompleteCustom);
-},'0.1.1', {
+},'3.0.0a', {
   requires: ["inputex-multiautocomplete","inputex-pie-listcustom"]
 });

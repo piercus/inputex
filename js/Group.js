@@ -445,7 +445,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
 	
 	/**
 	 * Write error messages for fields as specified in the hash
-	 * @param {Object || Array} errors Hash object containing error messages as Strings referenced by the field name, or array [ ["fieldName", "Message"], ...]
+	 * @param {Object || Array} errors Hash object containing error messages as Strings referenced by the field name, or array [ ["fieldName", "Message"], ...]
 	 */
 	setErrors: function(errors) {	
 		var i,k;
@@ -456,7 +456,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
 				if(this.inputsNames[k]) {
 					if(this.inputsNames[k].options.showMsg) {
 						this.inputsNames[k].displayMessage(value);
-						Y.one(this.inputsNames[k]).replaceClass("inputEx-valid", "inputEx-invalid" );
+						Y.one(this.inputsNames[k].divEl).replaceClass("inputEx-valid", "inputEx-invalid" );
 					}
 				}
 			}
@@ -516,6 +516,6 @@ inputEx.registerType("group", inputEx.Group, [
 ], true);
 
 
-}, '0.1.1',{
+}, '3.0.0a',{
   requires: ["inputex-field"]
 });

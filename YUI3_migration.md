@@ -1,94 +1,78 @@
-# YUI3 migration
-
-## Goals
-
- * Remove as many YUI2 dependencies as possible
- * Change the API as little as possible
-
-## Project
 
 @piercus started to rewrite InputEx fields for YUI3.
 
 The repository for this project still is on inputEx's git repository neyric/inputEx, but the branch will be named "yui3"
 
+## Goals
+
+Guidelines to give inputEx 3 a fresh start :
+
+* Remove as many YUI2 dependencies as possible
+* Change the API as little as possible
+* Use the YUI loader (now unique in js/loader.js)
+* remove deprecated/unused/broken code
+
+# TODO:
+
+* remove inputParams
+* merge examples scripts with a unit-test engine ? 
+* repair ddlist
+
+
+# Changelog
+
+* Adding: RatingStars
+* removed: YQL utilities, dependency-configurator, task manager demo, inputExHTML, YUI2 loader
+
+
+
 ## Contribute to the YUI3 branch
 
- * clone inputEx repository
- * Add "neyric"'s repository to your remote branches :
+* clone inputEx repository
+* Add "neyric"'s repository to your remote branches :
 
-    % git remote add neyric git://github.com/neyric/inputex.git
+  % git remote add neyric git://github.com/neyric/inputex.git
 
- * Fetch remote branches
+* Fetch remote branches
 
-    % git fetch neyric
+  % git fetch neyric
 
- * Create a new yui3 local branch
+* Create a new yui3 local branch
 
-    % git checkout -b yui3 neyric/yui3
+  % git checkout -b yui3 neyric/yui3
 
- * Make some modifications
- * Push to a new branch on your repository
+* Make some modifications
+* Push to a new branch on your repository
 
-    % git push origin yui3
+  % git push origin yui3
 
-## Method
+## Developer guide
 
-### YAHOO.lang
 
-   * YAHOO.lang replaced by Y.Lang
+### Updated Event
 
-   * YAHOO.lang.extend replaced by Y.extend
-   
-   * YAHOO.augmentObject replaced by
-     *  Y.mix // is used instead of YAHOO.augmentObject
-     *  Y.augment  // is used when augment an Object which have a prototype
+  field.updatedEvt.subscribe(function(e,params){
+    var val = params[0];
+  })
 
-### Dom && Event
+now becomes
 
-I removed 
+  field.on('updated', function(value, field){
+    ...
+  })
 
-    var Dom = YAHOO.util.Dom
-    var Event = YAHOO.util.Event
+### old YAHOO references
 
-Then i choose to replace
+* YAHOO.env.ua => Y.UA
 
-    DOM.addClass(el,className)
- 
-by
+* YAHOO.lang => Y.Lang
 
-    Y.one(el).addClass(className)
+* YAHOO.on('updated', function(value) { => Y.extend
 
-### inputEx
-For less rewriting, i start my files with
+* YAHOO.augmentObject replaced by
+ *  Y.mix // is used instead of YAHOO.augmentObject
+ *  Y.augment  // is used when augment an Object which have a prototype
 
-    var inputEx = Y.inputEx
+* DOM.addClass(el,className) => Y.one(el).addClass(className)
 
-## dependencies and wording
-
-I followed the wording/dependencies in js/yui3-loader.js.
-
-## Unit testing
-
-I use inputex examples as unit-tests to be sure that it works fine.
-
-However, i had to change the first line of examples/inputex-example.js at each new test. 
-Maybe we could merge examples scripts with a unit-test engine ? 
-Maybe we could also manage dependencies of examples with YUI3 ?
-
-## What works today
-
-What works on my computer (chrome).
-
-inputex-field
-inputex-string
-inputex-url
-inputex-email
-inputex-select
-inputex-multiselect
-inputex-pie-multiselectcustom
-inputex-autocomplete
-inputex-multiautocomplete
-inputex-multiautocompletecustom
-inputex-group
-inputex-button
-inputex-form
+* YAHOO.util.Event.addListener(node, "click", function(){}) => Y.one(node).on("click", function(){})

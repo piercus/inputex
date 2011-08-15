@@ -1,6 +1,8 @@
 YUI.add("inputex-inplaceedit", function(Y){
 
-   var lang = Y.Lang;//, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom, CSS_PREFIX = 'inputEx-InPlaceEdit-';
+   var lang = Y.Lang,
+       inputEx = Y.inputEx,
+       CSS_PREFIX = "inputEx-";
 
 /**
  * Meta field providing in place editing (the editor appears when you click on the formatted value). 
@@ -20,7 +22,7 @@ inputEx.InPlaceEdit = function(options) {
    this.publish('closeEditor');
 };
 
-lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
+Y.extend(inputEx.InPlaceEdit, inputEx.Field, {
    /**
     * Set the default values of the options
     * @param {Object} options Options object as passed to the constructor
@@ -112,7 +114,7 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       if(!this.options.animColors) return;
 
       optionsAnim =  {
-        node: Y.one(this.formattedContainer), 
+        node: this.formattedContainer, 
       }
       if(this.options.animColors.from){
         optionsAnim.from = {
@@ -125,8 +127,9 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
         }
       }
       this.colorAnim = new Y.Anim(optionsAnim);
+      var that = this;
       this.colorAnim.on("end",function() { 
-        Y.one(this.formattedContainer).setStyle('background-color', ''); 
+        Y.one(that.formattedContainer).setStyle('backgroundColor', ''); 
       });
       this.colorAnim.run();
       
@@ -167,8 +170,8 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       if(this.editorField.el) {
          var that = this;
          // Register some listeners
-         Y.on("key", function(){ that.onKeyUp },"#"+Y.one(this.editorField.el).get("id"),"up:");
-         Y.on("key", function(){ that.onKeyDown },"#"+Y.one(this.editorField.el).get("id"),"down:" );
+         Y.on("keyup", function(e){ that.onKeyUp(e); },"#"+Y.one(this.editorField.el).get("id"));
+         Y.on("keydown", function(e){ that.onKeyDown(e); },"#"+Y.one(this.editorField.el).get("id"));
       }
    },
    
@@ -202,7 +205,9 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     * Validate the editor (ok button, enter key or tabulation key)
     */
    onOkEditor: function(e) {
-      e.halt();
+
+      if(e)
+         e.halt();
       
       var newValue = this.editorField.getValue();
       this.setValue(newValue);
@@ -218,7 +223,8 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     * @param {Event} e The original event (click, blur or keydown)
     */
    onCancelEditor: function(e) {
-      e.halt();
+      if(e)
+         e.halt();
       this.closeEditor();
    },
    /**
@@ -320,6 +326,6 @@ inputEx.registerType("inplaceedit", inputEx.InPlaceEdit, [
    { type:'type', label: 'Editor', name: 'editorField'}
 ]);
 
-}, '0.1.1', {
-  requires:["anim","inputex-field","inputex-button"]
+}, '3.0.0a', {
+  requires:['inputex-field', 'inputex-button', 'anim','inputex-visus']
 })

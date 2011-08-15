@@ -1,4 +1,7 @@
-(function() {
+YUI.add("inputex-uneditable", function(Y){
+
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
 
 /**
  * Create a uneditable field where you can stick the html you want
@@ -14,7 +17,7 @@
 inputEx.UneditableField = function(options) {
 	inputEx.UneditableField.superclass.constructor.call(this,options);
 };
-YAHOO.lang.extend(inputEx.UneditableField, inputEx.Field, {
+Y.extend(inputEx.UneditableField, inputEx.Field, {
    
    /**
     * Set the default values of the options
@@ -51,4 +54,6 @@ YAHOO.lang.extend(inputEx.UneditableField, inputEx.Field, {
 // Register this class as "url" type
 inputEx.registerType("uneditable", inputEx.UneditableField);
 
-})();
+}, '3.0.0a',{
+requires: ['inputex-field']
+});

@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-datetime", function(Y) {
 
-   var Event = YAHOO.util.Event, lang = YAHOO.lang;
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
 
 /**
  * A field limited to number inputs (floating)
@@ -23,7 +24,7 @@ inputEx.DateTimeField = function(options) {
    options.separators = options.separators || [false, "&nbsp;&nbsp;", false];
    inputEx.DateTimeField.superclass.constructor.call(this,options);
 };
-lang.extend(inputEx.DateTimeField, inputEx.CombineField, {   
+Y.extend(inputEx.DateTimeField, inputEx.CombineField, {   
    /**
     * Concat the values to return a date
     * @return {Date} The javascript Date object
@@ -61,4 +62,6 @@ lang.extend(inputEx.DateTimeField, inputEx.CombineField, {
 // Register this class as "time" type
 inputEx.registerType("datetime", inputEx.DateTimeField);
 
-})();
+}, '3.0.0a',{
+requires: ['inputex-combine']
+});

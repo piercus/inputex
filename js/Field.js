@@ -29,7 +29,7 @@ YUI.add("inputex-field",function(Y) {
 	   * Event fired after the user changed the value of the field.
 	   * @event updatedEvt
 	   * @param {Any} value The new value of the field
-	   * @desc YAHOO custom event fired when the field is "updated"<br /> subscribe with: this.updatedEvt.subscribe(function(e, params) { var value = params[0]; console.log("updated",value, this.updatedEvt); }, this, true);
+	   * @desc YUI custom event fired when the field is "updated"<br /> subscribe with: this.on('updated', function(value) { console.log("updated",value); }, this, true);
 	   */
 	  this.publish("updated");
           
@@ -409,6 +409,6 @@ YUI.add("inputex-field",function(Y) {
      { type: "boolean", label: "Show messages",name: "showMsg", value: false }
   ];
 
-}, '0.1.1',{
+}, '3.0.0a',{
   requires: ["inputex","event-custom"]
 });

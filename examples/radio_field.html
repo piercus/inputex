@@ -1,21 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html>
  <head>
   <title>inputEx - RadioField Usage</title>
-
-<!-- YUI CSS -->
-<link rel="stylesheet" type="text/css" href="../lib/yui/reset-fonts/reset-fonts.css">
-<link rel="stylesheet" type="text/css" href="../lib/yui/container/assets/container.css"> 
-<link rel="stylesheet" type="text/css" href="../lib/yui/assets/skins/sam/skin.css">
-
-<!-- InputEx CSS -->
-<link type='text/css' rel='stylesheet' href='../css/inputEx.css' />
-
-<!-- Demo CSS -->
-<link rel="stylesheet" type="text/css" href="css/demo.css"/>
-<link rel="stylesheet" type="text/css" href="css/dpSyntaxHighlighter.css">
-
  </head>
 
  <body>
@@ -30,7 +16,7 @@
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			new inputEx.RadioField({
+			new Y.inputEx.RadioField({
 				label: 'Where did you learn about inputEx ?',
 				name: 'example1',
 				choices: [                    // choices: [       <- alternative syntax (shorter)
@@ -52,7 +38,7 @@
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			new inputEx.RadioField({
+			new Y.inputEx.RadioField({
 				label: 'Where are you from ?',
 				name: 'example2',
 				choices: [                                                // no alternative syntax
@@ -75,15 +61,15 @@
 		<textarea name="code" class="JScript">
 		var el, field, button, val, logDiv;
 		
-		el = YAHOO.util.Dom.get('container3');
-		field = new inputEx.RadioField({ name: 'example3', label: 'Where are you from ?', choices: [{ value: 'us', label: 'United States of America' }, { value: 'fr', label: 'France' }], parentEl: el });
+		el = Y.one('#container3');
+		field = new Y.inputEx.RadioField({ name: 'example3', label: 'Where are you from ?', choices: [{ value: 'us', label: 'United States of America' }, { value: 'fr', label: 'France' }], parentEl: el });
 		
 		button = inputEx.cn('button', null, null, "SetValue with 'us'");
 		el.appendChild(button);
 		
 		val = 'us';
 		
-		YAHOO.util.Event.addListener(button, "click" ,function() {
+		Y.one(button).on("click" ,function() {
 		   field.setValue(val);
 		   val = (val == 'fr') ? 'us' : 'fr';
 		   button.innerHTML = "SetValue with '"+val+"'";
@@ -92,8 +78,7 @@
 		logDiv = inputEx.cn('div', null, null, "Log :");
 		el.appendChild(logDiv);
 		
-		field.updatedEvt.subscribe(function(e,params) {
-			var value = params[0];
+		field.on('updated', function(value) {
 			logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 			logDiv.appendChild(inputEx.cn('br'));
 		});
@@ -116,7 +101,7 @@
 	
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			new inputEx.RadioField({
+			new Y.inputEx.RadioField({
 				label: 'Where did you learn about inputEx ?',
 				display:'vertically',  // instead of default implicit "display:'inline'"
 				name: 'example4',
@@ -141,9 +126,9 @@
 	<div class='demoContainer' id='container5'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			var field2 = new inputEx.RadioField({label: 'Where did you learn about inputEx ?', name: 'example5', choices: ['Ajaxian','YUI blog'], parentEl: 'container5', allowAny: true});
-			field2.updatedEvt.subscribe(function(e, params) {
-					YAHOO.util.Dom.get('container5').appendChild( inputEx.cn('div',null,null, "Updated with value: "+params[0]) );
+			var field2 = new Y.inputEx.RadioField({label: 'Where did you learn about inputEx ?', name: 'example5', choices: ['Ajaxian','YUI blog'], parentEl: 'container5', allowAny: true});
+			field2.on('updated', function(value) {
+					Y.one('#container5').appendChild( inputEx.cn('div',null,null, "Updated with value: "+value) );
 			});
 		</textarea>
 	</div>
@@ -166,9 +151,9 @@
 		<textarea name="code" class="JScript">
 			var field, el, button1, button2, button3;
 			
-			el = YAHOO.util.Dom.get('container6');
+			el = Y.one('#container6');
 			
-			field = new inputEx.RadioField({
+			field = new Y.inputEx.RadioField({
 				label: 'Would you like to receive an email reminder ?',
 				name: 'example6',
 				display: 'vertically',
@@ -188,21 +173,21 @@
 				required:true
 			});
 			
-			field.updatedEvt.subscribe(function(e, params) {
-					el.appendChild( inputEx.cn('div',null,null, "Updated with value: "+params[0]) );
+			field.on('updated', function(value) {
+					el.appendChild( inputEx.cn('div',null,null, "Updated with value: "+value) );
 			});
 			
 			button1 = inputEx.cn('button', null, null, 'setValue("6")');
 			el.appendChild(button1); 
-			YAHOO.util.Event.addListener(button1, 'click', function() { field.setValue("6"); });
+			Y.one(button1).on('click', function() { field.setValue("6"); });
 			
 			button2 = inputEx.cn('button', null, null, 'getValue()');
 			el.appendChild(button2); 
-			YAHOO.util.Event.addListener(button2, 'click', function() { alert(field.getValue()); });
+			Y.one(button2).on('click', function() { alert(field.getValue()); });
 			
 			button3 = inputEx.cn('button', null, null, 'clear()');
 			el.appendChild(button3); 
-			YAHOO.util.Event.addListener(button3, 'click', function() { field.clear(); });
+			Y.one(button3).on('click', function() { field.clear(); });
 			
 			/* Style
 			#container6 div.inputEx-StringField-wrapper input {width: 25px;}
@@ -212,7 +197,7 @@
 
 </div>
 
-<!-- Example 6 bis -->
+<!-- Example 7 -->
 <div class='exampleDiv'>
 
 	<h2>Advanced allowAny option 2</h2>
@@ -223,15 +208,15 @@
 	#container6bis div.inputEx-StringField-wrapper input {width: 25px;}
 	</style>
 	
-	<div class='demoContainer' id='container6bis'></div>
+	<div class='demoContainer' id='container7'></div>
 
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
 			var field, el, button1, button2, button3;
 			
-			el = YAHOO.util.Dom.get('container6bis');
+			el = Y.one('#container7');
 			
-			field = new inputEx.RadioField({
+			field = new Y.inputEx.RadioField({
 				label: 'Would you like to receive an email reminder ?',
 				name: 'example6bis',
 				display: 'vertically',
@@ -265,8 +250,8 @@
 				showMsg:true
 			});
 			
-			field.updatedEvt.subscribe(function(e, params) {
-					el.appendChild( inputEx.cn('div',null,null, "Updated with value: "+params[0]+" (minutes)") );
+			field.on('updated', function(value) {
+					el.appendChild( inputEx.cn('div',null,null, "Updated with value: "+value+" (minutes)") );
 			});
 			
 		</textarea>
@@ -276,56 +261,56 @@
 
 
 
-<!-- Example 7 -->
+<!-- Example 8 -->
 <div class='exampleDiv'>
 	<h2>Disable RadioField</h2>
 	<p>Disable the field (to disable radio inputs individually, see another example below)</p>
-	<div class='demoContainer' id='container7'></div>
+	<div class='demoContainer' id='container8'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
 			var el, field, button1, button2;
 			
-			el = YAHOO.util.Dom.get('container7');
-			field = new inputEx.RadioField({label: 'Where did you learn about inputEx ?', name: 'example7', choices: ['Ajaxian','YUI blog','Other'], value:'Ajaxian', parentEl: el});
+			el = Y.one('#container8');
+			field = new Y.inputEx.RadioField({label: 'Where did you learn about inputEx ?', name: 'example8', choices: ['Ajaxian','YUI blog','Other'], value:'Ajaxian', parentEl: el});
 			
 			button1 = inputEx.cn('button', null, null, 'disable()');
 			el.appendChild(button1); 
-			YAHOO.util.Event.addListener(button1, 'click', function() { field.disable(); });
+			Y.one(button1).on('click', function() { field.disable(); });
 
 			button2 = inputEx.cn('button', null, null, 'enable()');
 			el.appendChild(button2); 
-			YAHOO.util.Event.addListener(button2, 'click', function() { field.enable(); });
+			Y.one(button2).on('click', function() { field.enable(); });
 			
 		</textarea>
 	</div>
 </div>
 
-<!-- Example 8 -->
+<!-- Example 9 -->
 <div class='exampleDiv'>
 	<h2>addChoice</h2>
 	<p>Add choices dynamically</p>
-	<div class='demoContainer' id='container8'></div>
+	<div class='demoContainer' id='container9'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
 			var el, field, button1, button2, button3, logDiv;
 			
-			el = YAHOO.util.Dom.get('container8');
-			field = new inputEx.RadioField({name: 'example8', choices: [{ value: 'United States of America' }, { value: 'France' }], parentEl: el});
+			el = Y.one('#container9');
+			field = new Y.inputEx.RadioField({name: 'example9', choices: [{ value: 'United States of America' }, { value: 'France' }], parentEl: el});
 			
 			button1 = inputEx.cn('button', null, null, "Add 'Spain' choice (and select 'Spain')");
-			YAHOO.util.Event.addListener(button1, "click" ,function() {
+			Y.one(button1).on('click' ,function() {
 				field.addChoice({value:"Spain",selected:true});
 				button1.disabled = true;
 			});
 			
 			button2 = inputEx.cn('button', null, null, "Add 'United Kingdom' choice (value : 'uk'), in position 1");
-			YAHOO.util.Event.addListener(button2, "click" ,function() {
+			Y.one(button2).on('click' ,function() {
 				field.addChoice({value:"uk",label:"United Kingdom",position:1});
 				button2.disabled = true;
 			});
 			
 			button3 = inputEx.cn('button', null, null, "Add 'Sweden' choice after 'France' choice");
-			YAHOO.util.Event.addListener(button3, "click" ,function() {
+			Y.one(button3).on('click' ,function() {
 				field.addChoice({value:"Sweden",after:"France"});
 				button3.disabled = true;
 			});
@@ -337,8 +322,7 @@
 			logDiv = inputEx.cn('div', null, null, "Log : ");
 			el.appendChild(logDiv);
 			
-			field.updatedEvt.subscribe(function(e,params) {
-				var value = params[0];
+			field.on('updated', function(value) {
 				logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 				logDiv.appendChild(inputEx.cn('br'));
 			});
@@ -346,17 +330,17 @@
 	</div>
 </div>
 
-<!-- Example 9 -->
+<!-- Example 10 -->
 <div class='exampleDiv'>
 	<h2>removeChoice</h2>
 	<p>Remove choices dynamically</p>
-	<div class='demoContainer' id='container9'></div>
+	<div class='demoContainer' id='container10'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
 			var el, field, button1, button2, button3, logDiv;
 			
-			el = YAHOO.util.Dom.get('container9');
-			field = new inputEx.RadioField({
+			el = Y.one('#container10');
+			field = new Y.inputEx.RadioField({
 				name: 'example9',
 				choices: [
 					{ value: 'usa', label: 'United States of America' },
@@ -370,19 +354,19 @@
 			});
 			
 			button1 = inputEx.cn('button', null, null, "Remove 'Spain' choice (by label)");
-			YAHOO.util.Event.addListener(button1, "click", function() {
+			Y.one(button1).on('click', function() {
 			   field.removeChoice({label:"Spain"});
 			   button1.disabled = true;
 			});
 			
 			button2 = inputEx.cn('button', null, null, "Remove 'United Kingdom' choice (by value)");
-			YAHOO.util.Event.addListener(button2, "click", function() {
+			Y.one(button2).on('click', function() {
 			   field.removeChoice({value:"uk"});
 			   button2.disabled = true;
 			});
 			
 			button3 = inputEx.cn('button', null, null, "Remove 'Germany' choice (by position)");
-			YAHOO.util.Event.addListener(button3, "click", function() {
+			Y.one(button3).on('click', function() {
 			   field.removeChoice({position:1});
 			   button3.disabled = true;
 			});
@@ -394,8 +378,7 @@
 			logDiv = inputEx.cn('div', null, null, "Log : ");
 			el.appendChild(logDiv);
 			
-			field.updatedEvt.subscribe(function(e,params) {
-				var value = params[0];
+			field.on('updated', function(value) {
 				logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 				logDiv.appendChild(inputEx.cn('br'));
 			});
@@ -403,18 +386,18 @@
 	</div>
 </div>
 
-<!-- Example 10 -->
+<!-- Example 11 -->
 <div class='exampleDiv'>
 	<h2>Hide / Show / Disable / Enable choice</h2>
 	<p>Hide, show, disable or enable an choice in the selector, without removing it totally, and keeping the original choice's order</p>
 	<p style="font-size:90%;padding-top:3px;">Note : disableChoice and enableChoice methods have no effect with IE &lt; 8 because it did not support disabled="disabled" attribute.</p>
-	<div class='demoContainer' id='container10'></div>
+	<div class='demoContainer' id='container11'></div>
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
 		var el, field, button1, button2, button3, button4, logDiv;
 		
-		el = YAHOO.util.Dom.get('container10');
-		field = new inputEx.RadioField({name: 'example10', choices: [ { value: 'usa', label: 'United States of America' }, { value: 'fr', label: 'France' }, { value: 'es', label: 'Spain' }], parentEl: el});
+		el = Y.one('#container11');
+		field = new Y.inputEx.RadioField({name: 'example11', choices: [ { value: 'usa', label: 'United States of America' }, { value: 'fr', label: 'France' }, { value: 'es', label: 'Spain' }], parentEl: el});
 		
 		button1 = inputEx.cn('button', null, null, "Hide choice 'France'"); el.appendChild(button1);
 		button2 = inputEx.cn('button', null, null, "Show choice 'France'"); el.appendChild(button2);
@@ -424,14 +407,13 @@
 		logDiv = inputEx.cn('div', null, null, "Log :");
 		el.appendChild(logDiv);
 		
-		field.updatedEvt.subscribe(function(e,params) {
-			var value = params[0];
+		field.on('updated', function(value) {
 			logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 			logDiv.appendChild(inputEx.cn('br'));
 		});
 		
 		
-		YAHOO.util.Event.addListener(button1, "click" ,function() {
+		Y.one(button1).on('click' ,function() {
 			
 			field.hideChoice({value:'fr'});
 			
@@ -439,7 +421,7 @@
 			logDiv.appendChild(inputEx.cn('br'));
 		});
 		
-		YAHOO.util.Event.addListener(button2, "click" ,function() {
+		Y.one(button2).on('click' ,function() {
 			
 			field.showChoice({value:'fr'});
 			
@@ -447,7 +429,7 @@
 			logDiv.appendChild(inputEx.cn('br'));
 		});
 		
-		YAHOO.util.Event.addListener(button3, "click" ,function() {
+		Y.one(button3).on('click' ,function() {
 			
 			field.disableChoice({label:'Spain'});
 			
@@ -455,7 +437,7 @@
 			logDiv.appendChild(inputEx.cn('br'));
 		});
 		
-		YAHOO.util.Event.addListener(button4, "click" ,function() {
+		Y.one(button4).on('click' ,function() {
 			
 			field.enableChoice({label:'Spain'});
 			
@@ -467,28 +449,13 @@
 	</div>
 </div>
 
-<!-- YUI Library -->
-<script type="text/javascript" src="../lib/yui/utilities/utilities.js"></script>
-<script type="text/javascript" src="../lib/yui/selector/selector-min.js"></script>
-<script type="text/javascript" src="../lib/yui/event-delegate/event-delegate-min.js"></script>
 
-<!-- InputEx -->
-<script src="../js/inputex.js"  type='text/javascript'></script>
-<script src="../js/Field.js"  type='text/javascript'></script>
-<script src="../js/fields/StringField.js"  type='text/javascript'></script>
-<script src="../js/mixins/choice.js"  type='text/javascript'></script>
-<script src="../js/fields/RadioField.js"  type='text/javascript'></script>
-
-<!-- For TimeIntervalField use only -->
-<script src="../js/Group.js"  type='text/javascript'></script>
-<script src="../js/fields/IntegerField.js"  type='text/javascript'></script>
-<script src="../js/fields/SelectField.js"  type='text/javascript'></script>
-<script src="../js/fields/CombineField.js"  type='text/javascript'></script>
-<script src="../js/fields/TimeIntervalField.js"  type='text/javascript'></script>
-
-<!-- inputEx examples -->
-<script src="js/dpSyntaxHighlighter.js"></script>
-<script src="inputex-examples.js"></script>
+<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+<script src="../js/loader.js"  type='text/javascript'></script>
+<script>
+YUI_config.groups.inputex.base = '../';
+YUI().use('inputex-radio', 'inputex-time', 'inputex-integer', 'inputex-examples', 'inputex-timeinterval');
+</script>
 
  </body>
 </html>

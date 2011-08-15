@@ -1,5 +1,7 @@
-(function () {
-   var util = YAHOO.util, lang = YAHOO.lang, Event = util.Event, Dom = util.Dom;
+YUI.add("inputex-ratingstarsform",function(Y){
+
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 /**
  * Create a custom Form that use RatingStars and send it automatically
@@ -16,15 +18,16 @@ inputEx.RatingStarsForm = function(options) {
    inputEx.RatingStarsForm.superclass.constructor.call(this,options);
 };
 
-lang.extend(inputEx.RatingStarsForm, inputEx.Form,{
+Y.extend(inputEx.RatingStarsForm, inputEx.Form,{
    initEvents: function(){
      inputEx.RatingStarsForm.superclass.initEvents.call(this);
-     this.asyncEvt = new util.CustomEvent("asyncEvtForm");
-     this.endAsyncEvt = new util.CustomEvent("endAsyncEvtForm");
+
+     this.publish("asyncForm");
+     this.publish("endAsyncForm");
      
-     this.rateInstance.rateEvt.subscribe(this.onRate, this, true);
-     this.asyncEvt.subscribe(this.rateInstance.onAsync,this.rateInstance,true);
-     this.endAsyncEvt.subscribe(this.rateInstance.onEndAsync,this.rateInstance,true);
+     this.rateInstance.on('rate', this.onRate, this, true);
+     this.on('asyncForm', this.rateInstance.onAsync,this.rateInstance,true);
+     this.on('endAsyncForm',this.rateInstance.onEndAsync,this.rateInstance,true);
    },
     /**
    * Set Options change default className and set fields options
@@ -73,6 +76,8 @@ lang.extend(inputEx.RatingStarsForm, inputEx.Form,{
 
 });
 
-})();
+},'3.0.0a',{
+  requires: ['inputex-ratingstars','inputex-form']
+});
 
 

@@ -1,3 +1,9 @@
+YUI.add("inputex-keyopvalue",function(Y){
+
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
+
+
 /**
  * Add an SQL operator select field in the middle of a KeyValueField
  * @class inputEx.KeyOpValueField
@@ -6,10 +12,10 @@
  * @param {Object} options InputEx definition object with the "availableFields"
  */
 inputEx.KeyOpValueField = function (options) {
-	inputEx.KeyValueField.superclass.constructor.call(this, options);
+   inputEx.KeyOpValueField.superclass.constructor.call(this, options);
 };
 
-YAHOO.lang.extend(inputEx.KeyOpValueField, inputEx.KeyValueField, {
+Y.extend(inputEx.KeyOpValueField, inputEx.KeyValueField, {
 	
 	/**
 	 * Setup the options.fields from the availableFields option
@@ -37,7 +43,7 @@ YAHOO.lang.extend(inputEx.KeyOpValueField, inputEx.KeyValueField, {
 			]
 		};
 		
-		YAHOO.lang.augmentObject(newOptions, options);
+		Y.mix(newOptions, options);
 		
 		inputEx.KeyValueField.superclass.setOptions.call(this, newOptions);
 	}
@@ -45,3 +51,7 @@ YAHOO.lang.extend(inputEx.KeyOpValueField, inputEx.KeyValueField, {
 });
 
 inputEx.registerType("keyopvalue", inputEx.KeyOpValueField, {});
+
+},'3.0.0a',{
+  requires: ['inputex-keyvalue']
+});

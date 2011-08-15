@@ -1,7 +1,8 @@
 YUI.add("inputex-checkbox",function(Y){
-	
-	var lang = Y.Lang;//, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
-	var inputEx = Y.inputEx;
+
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
+
 /**
  * Create a checkbox.
  * @class inputEx.CheckBox

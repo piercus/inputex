@@ -1,6 +1,8 @@
-(function() {
+YUI.add("inputex-rte",function(Y){
 	
-   var lang = YAHOO.lang;
+   var inputEx = Y.inputEx,
+       YAHOO = Y.YUI2,
+       lang = Y.Lang;
 	
 /**
  * Wrapper for the Rich Text Editor from YUI
@@ -16,7 +18,7 @@
 inputEx.RTEField = function(options) {
    inputEx.RTEField.superclass.constructor.call(this,options);
 };
-lang.extend(inputEx.RTEField, inputEx.Field, {   
+Y.extend(inputEx.RTEField, inputEx.Field, {   
    /**
     * Set the default values of the options
     * @param {Object} options Options object as passed to the constructor
@@ -89,7 +91,7 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
          html = html.replace( /<\/?meta[^>]*>/gi, ''); // strip meta tags
          html = html.replace( /<\/?link[^>]*>/gi, ''); // strip link tags
          html = html.replace( / class=('|")?MsoNormal('|")?/gi, ''); // strip MS office class
-         html = YAHOO.lang.trim(html); // trim spaces
+         html = Y.Lang.trim(html); // trim spaces
          
          return html;
    	};
@@ -144,4 +146,6 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 // Register this class as "html" type
 inputEx.registerType("html", inputEx.RTEField, []);
 	
-})();
+},'3.0.0a',{
+  requires: ['inputex-field', 'yui2-editor']
+});

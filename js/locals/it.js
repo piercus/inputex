@@ -1,5 +1,6 @@
 // InputEx Italian localization (Big Thanks to alexodus !)
-(function() {
+YUI.add("inputex-lang-it",function(Y){
+  var inputEx = Y.inputEx;
 
    var msgs = inputEx.messages;
 
@@ -47,4 +48,6 @@
 	// for YUI loader 
    inputEx.lang_it = true;
 
-})();
+}, '3.0.0a',{
+  requires: ['inputex']
+});

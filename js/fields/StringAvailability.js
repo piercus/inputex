@@ -1,6 +1,6 @@
 (function() {
 	
-   var Event=YAHOO.util.Event,DOM=YAHOO.util.Dom,lang=YAHOO.lang;
+   var Event=YAHOO.util.Event,DOM=YAHOO.util.Dom,lang=Y.Lang;
 
 /**
  * String field that sends an Ajax request to check if it is available
@@ -13,7 +13,7 @@ inputEx.StringAvailability = function(options) {
 	inputEx.StringAvailability.superclass.constructor.call(this,options);
 };
 
-lang.extend(inputEx.StringAvailability, inputEx.StringField, {
+Y.extend(inputEx.StringAvailability, inputEx.StringField, {
    
 	/**
 	 * @param {Object} options Options object as passed to the constructor

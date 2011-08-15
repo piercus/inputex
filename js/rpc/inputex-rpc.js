@@ -1,3 +1,12 @@
+YUI.add("inputex-rpc", function(Y){
+
+   window.inputEx = Y.inputEx;
+
+  var lang = Y.Lang,
+      inputEx = Y.inputEx,
+      YAHOO = Y.YUI2,
+      util = YAHOO.util;
+
 /**
  * inputEx RPC utility functions
  * Implements SMD and create forms directly from services
@@ -14,14 +23,14 @@ inputEx.RPC = {
    generateServiceForm: function(method, formOpts, callback) {
    
       var options = null;
-      if(YAHOO.lang.isObject(formOpts) && YAHOO.lang.isArray(formOpts.fields) ) {
+      if(lang.isObject(formOpts) && lang.isArray(formOpts.fields) ) {
          options = formOpts;
       }
       // create the form directly from the method params
       else {
          options = inputEx.RPC.formForMethod(method);
       	// Add user options from formOpts
-         YAHOO.lang.augmentObject(options, formOpts, true);
+         Y.mix(options, formOpts, true);
       }
    
       // Add buttons to launch the service
@@ -30,12 +39,15 @@ inputEx.RPC = {
       if(!options.buttons) {
          options.buttons = [
             {type: 'submit', value: methodName, onClick: function(e) {
-               YAHOO.util.Event.stopEvent(e);
+               
+               // TODO
+               //YAHOO.util.Event.stopEvent(e);
+               
                form.showMask();
                method(form.getValue(), {
                   success: function(results) {
                      form.hideMask();
-                     if(YAHOO.lang.isObject(callback) && YAHOO.lang.isFunction(callback.success)) {
+                     if(lang.isObject(callback) && lang.isFunction(callback.success)) {
                		   callback.success.call(callback.scope || this, results);
                		}
                   },
@@ -86,11 +98,7 @@ inputEx.RPC = {
    
 };
 
-
-
-(function() {
-   
-   var rpc = inputEx.RPC, lang = YAHOO.lang, util = YAHOO.util;
+   var rpc = inputEx.RPC;
 
 /**
  * Provide SMD support 
@@ -159,7 +167,7 @@ inputEx.RPC.Service.prototype = {
    	         params[p.name] = p["default"];
    	      }
    	   }
-   	   lang.augmentObject(params, data, true);
+   	   Y.mix(params, data, true);
    	   
    	   var url = method.target || self._smd.target;
    	   var urlRegexp = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/i;
@@ -185,7 +193,7 @@ inputEx.RPC.Service.prototype = {
             transport: method.transport || self._smd.transport
          };
    	   var serialized = envelope.serialize(self._smd, method, params);
-         lang.augmentObject(r, serialized, true);
+         Y.mix(r, serialized, true);
          
    	   rpc.Transport[r.transport].call(self, r ); 
 		};
@@ -240,7 +248,7 @@ inputEx.RPC.Service.prototype = {
       util.Connect.asyncRequest('GET', url, { 
          success: function(o) {
             try {
-               this._smd = lang.JSON.parse(o.responseText);
+               this._smd = Y.JSON.parse(o.responseText);
                this.process(callback);
             }
             catch(ex) {
@@ -318,7 +326,14 @@ inputEx.RPC.Transport = {
       	}
 		};
    	inputEx.RPC.Transport.jsonp_id+=1;
-      return util.Get.script( r.target + ((r.target.indexOf("?") == -1) ? '?' : '&') + r.data + "&"+r.callbackParamName+"="+fctName);
+   	
+   	var url =  r.target + ((r.target.indexOf("?") == -1) ? '?' : '&') + r.data + "&"+r.callbackParamName+"="+fctName;
+   	
+   	return Y.Get.script(url, {
+                  onSuccess: function() {
+                      //alert("file loaded");
+                  }
+      });
    },
    
 	/**
@@ -422,7 +437,7 @@ inputEx.RPC.Envelope = {
 		  */
        serialize: function(smd, method, data) {
           return {
-             data: lang.JSON.stringify(data)
+             data: Y.JSON.stringify(data)
           };   
        },
  		 /**
@@ -445,7 +460,7 @@ inputEx.RPC.Envelope = {
        serialize: function(smd, method, data) {
     	  var methodName = method.name || method._methodName;
           return {
-             data: lang.JSON.stringify({
+             data: Y.JSON.stringify({
        	      "id": rpc.Service._requestId++,
        	      "method": methodName,
        	      "params": data
@@ -456,7 +471,7 @@ inputEx.RPC.Envelope = {
 		  * deserialize
 		  */
        deserialize: function(results) {
-          return lang.JSON.parse(results.responseText);
+          return Y.JSON.parse(results.responseText);
        }
     },
 
@@ -472,7 +487,7 @@ inputEx.RPC.Envelope = {
       serialize: function(smd, method, data) {
     	 var methodName = method.name || method._methodName;
          return {
-            data: lang.JSON.stringify({
+            data: Y.JSON.stringify({
       	      "id": rpc.Service._requestId++,
       	      "method": methodName,
       	      "version": "json-rpc-2.0",
@@ -484,10 +499,12 @@ inputEx.RPC.Envelope = {
  	 	 * serialize
 		 */
       deserialize: function(results) {
-         return lang.JSON.parse(results.responseText);
+         return Y.JSON.parse(results.responseText);
       }
    }
    
 };
 
-})();
+}, '3.0.0a',{
+  requires: ['json','inputex','yui2-connection','inputex-jsonschema']
+});

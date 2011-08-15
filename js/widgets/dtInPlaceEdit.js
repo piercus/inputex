@@ -1,6 +1,12 @@
-(function() {
+YUI.add("inputex-dtinplaceedit",function(Y){
 
-   var lang = YAHOO.lang, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
+   var inputEx = Y.inputEx,
+       YAHOO = Y.YUI2,
+       lang = Y.Lang,
+       Dom = YAHOO.util.Dom,
+       Event = YAHOO.util.Event;
+
+   var util = YAHOO.util, msgs = inputEx.messages;
 
 
 /**
@@ -14,7 +20,7 @@ inputEx.widget.dtInPlaceEdit = function(options) {
    inputEx.widget.dtInPlaceEdit.superclass.constructor.call(this, options);
 };
 
-lang.extend(inputEx.widget.dtInPlaceEdit, inputEx.widget.DataTable , {
+Y.extend(inputEx.widget.dtInPlaceEdit, inputEx.widget.DataTable , {
 	
 	renderDatatable: function() {
 		inputEx.widget.dtInPlaceEdit.superclass.renderDatatable.call(this);
@@ -70,19 +76,11 @@ lang.extend(inputEx.widget.dtInPlaceEdit, inputEx.widget.DataTable , {
 		// index fields declaration by keys
 		var fieldsByKey = {};
 		for(var k = 0 ; k < this.options.fields.length ; k++) {
-		   
-		   // Retro-compatibility with inputParms
-         if (lang.isObject(this.options.fields[k].inputParams)) {
-            fieldsByKey[this.options.fields[k].inputParams.name] = this.options.fields[k];
-         // New prefered way to use options of a field
-         } else {
-            fieldsByKey[this.options.fields[k].name] = this.options.fields[k];
-         }
-		   
+		   fieldsByKey[this.options.fields[k].name] = this.options.fields[k];
 		}
 		for(var i = 0 ; i < columndefs.length ; i++) {
 			var columnDef = columndefs[i];
-			if( YAHOO.lang.isUndefined(columnDef.editor) && !!fieldsByKey[columnDef.key] ) {
+			if( Y.Lang.isUndefined(columnDef.editor) && !!fieldsByKey[columnDef.key] ) {
 	          columnDef.editor = new inputEx.widget.CellEditor(fieldsByKey[columnDef.key]);
 	      }
 		}
@@ -251,25 +249,11 @@ lang.extend(inputEx.widget.dtInPlaceEdit, inputEx.widget.DataTable , {
 		for(var i=0, fieldsLength = this.options.fields.length; i<fieldsLength; i++){
 			field = this.options.fields[i];
 			
-			// Retro-compatibility with inputParms
-         if (lang.isObject(field.inputParams)) {
-            
-            if( !lang.isUndefined(field.inputParams.required) ){
-   				if( lang.isUndefined(record.getData(field.inputParams.name)) ){
-   					requiredFields.push(field.inputParams.label);
-   				}
-   			}
-
-         // New prefered way to set options of a field
-         } else {
-            
-            if( !lang.isUndefined(field.required) ){
-   				if( lang.isUndefined(record.getData(field.name)) ){
-   					requiredFields.push(field.label);
-   				}
-   			}
-         }
-         
+         if( !lang.isUndefined(field.required) ){
+				if( lang.isUndefined(record.getData(field.name)) ){
+					requiredFields.push(field.label);
+				}
+			}
 			
 		}
 		
@@ -386,7 +370,7 @@ inputEx.widget.CellEditor = function(inputExFieldDef) {
 };
 
 // CellEditor extends BaseCellEditor
-lang.extend(inputEx.widget.CellEditor, YAHOO.widget.BaseCellEditor,{
+Y.extend(inputEx.widget.CellEditor, YAHOO.widget.BaseCellEditor,{
 	
 	
    /**
@@ -442,6 +426,8 @@ lang.extend(inputEx.widget.CellEditor, YAHOO.widget.BaseCellEditor,{
 });
 
 // Copy static members to CellEditor class
-lang.augmentObject(inputEx.widget.CellEditor, YAHOO.widget.BaseCellEditor);
+Y.augment(inputEx.widget.CellEditor, YAHOO.widget.BaseCellEditor);
 
-})();
+}, '3.0.0a',{
+  requires: ['yui2-datatable', 'inputex', 'inputex-dialog']
+});

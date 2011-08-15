@@ -1,6 +1,6 @@
 // InputEx Catalan localization
-(function() {
-
+YUI.add("inputex-lang-ca",function(Y){
+  var inputEx = Y.inputEx;
   var msgs = inputEx.messages;
 
   msgs.required = "Aquest camp és obligatori";
@@ -68,4 +68,7 @@
 
   // for YUI loader
   inputEx.lang_ca = true;
-})();
+
+}, '3.0.0a',{
+  requires: ['inputex']
+});

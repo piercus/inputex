@@ -1,6 +1,5 @@
 YUI.add("inputex-pie-listcustom", function(Y) {
 
-   //var lang = YAHOO.lang, Evt = YAHOO.util.Event;
    var inputEx = Y.inputEx;
    
 inputEx.widget.ListCustom = function(options) {
@@ -181,6 +180,6 @@ Y.extend(inputEx.widget.ListCustom,inputEx.widget.DDList,{
   }
 }); 
 
-}, '0.1.1',{
+}, '3.0.0a',{
   requires: ["inputex-ddlist","anim"]
 });

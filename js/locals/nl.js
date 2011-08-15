@@ -1,5 +1,6 @@
 // Dutch translations for inputEx 0.2.2. Courtesy of Oqapi (http://www.oqapi.nl).
-(function () {
+YUI.add("inputex-lang-nl",function(Y){
+  var inputEx = Y.inputEx;
 
    var msgs = inputEx.messages;
 
@@ -53,4 +54,6 @@
 	// for YUI loader 
    inputEx.lang_nl = true;
 
-})();
+}, '3.0.0a',{
+  requires: ['inputex']
+});

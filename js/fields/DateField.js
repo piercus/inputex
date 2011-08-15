@@ -1,5 +1,8 @@
-(function() {	
-   var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
+YUI.add("inputex-date", function(Y){
+
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
+
 /**
  * A Date Field. 
  * @class inputEx.DateField
@@ -15,7 +18,7 @@ inputEx.DateField = function(options) {
 	inputEx.DateField.superclass.constructor.call(this,options);
 };
 	
-lang.extend(inputEx.DateField, inputEx.StringField, {
+Y.extend(inputEx.DateField, inputEx.StringField, {
 	/**
 	 * Adds the 'inputEx-DateField' default className
 	 * @param {Object} options Options object as passed to the constructor
@@ -139,4 +142,6 @@ inputEx.registerType("date", inputEx.DateField, [
    {type: 'select', label: 'Date format', name: 'dateFormat', choices: [{ value: "m/d/Y" }, { value:"d/m/Y" }] }
 ]);
 	
-})();
+}, '3.0.0a',{
+requires: ['inputex-string']
+});

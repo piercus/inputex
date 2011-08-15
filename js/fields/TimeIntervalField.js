@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-timeinterval", function(Y){
 
-   var Event = YAHOO.util.Event, lang = YAHOO.lang;
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 /**
  * A field limited to number inputs (floating)
@@ -15,7 +16,7 @@
 inputEx.TimeIntervalField = function(options) {
    inputEx.TimeIntervalField.superclass.constructor.call(this,options);
 };
-lang.extend(inputEx.TimeIntervalField, inputEx.CombineField, {   
+Y.extend(inputEx.TimeIntervalField, inputEx.CombineField, {   
    
    /**
     * Additional options
@@ -108,4 +109,6 @@ inputEx.TimeIntervalField.units = {
 // Register this class as "timeinterval" type
 inputEx.registerType("timeinterval", inputEx.TimeIntervalField);
 
-})();
+}, '3.0.0a',{
+requires: ['inputex-combine', 'inputex-select']
+});

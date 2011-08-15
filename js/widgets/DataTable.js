@@ -1,6 +1,12 @@
-(function() {
+YUI.add("inputex-datatable",function(Y){
 
-   var util = YAHOO.util, lang = YAHOO.lang, Dom = util.Dom, Event = util.Event, msgs = inputEx.messages;
+   var inputEx = Y.inputEx,
+       YAHOO = Y.YUI2,
+       lang = Y.Lang,
+       Dom = YAHOO.util.Dom,
+       Event = YAHOO.util.Event;
+
+   var util = YAHOO.util, msgs = inputEx.messages;
 
 /**
  * Create an editable datatable
@@ -434,16 +440,8 @@ inputEx.widget.DataTable.prototype = {
       
       var key, label, colmunDef;
       
-      // Retro-compatibility with inputParms
-      if (lang.isObject(field.inputParams)) {
-         key = field.inputParams.name;
-         label = field.inputParams.label;
-      
-      // New prefered way to set options of a field
-      } else {
-         key = field.name;
-         label = field.label;
-      }
+      key = field.name;
+      label = field.label;
       
       columnDef = {
          key: key,
@@ -583,4 +581,7 @@ msgs.hideColumnButton = "Hide";
 msgs.columnDialogTitle = "Choose which columns you would like to see";
 msgs.columnDialogCloseButton = "Close";
 
-})();
+
+}, '3.0.0a',{
+  requires: ['yui2-datatable', 'yui2-button','inputex', 'inputex-dialog']
+});

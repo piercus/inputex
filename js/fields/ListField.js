@@ -1,7 +1,7 @@
 YUI.add("inputex-list",function(Y){
 	
-   var lang = Y.Lang;//, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
-   var inputEx = Y.inputEx;
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 	
 /**
  * Meta field to create a list of other fields
@@ -249,12 +249,8 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	   // Instantiate the new subField
 	   var opts = Y.merge({}, this.options.elementType);
 	   
-	   // Retro-compatibility with deprecated inputParams Object : TODO -> remove
-      if(lang.isObject(opts.inputParams) && !lang.isUndefined(value)) {
-         opts.inputParams.value = value;
-         
       // New prefered way to set options of a field
-      } else if (!lang.isUndefined(value)) {
+      if (!lang.isUndefined(value)) {
          opts.value = value;
       }
 	   
@@ -272,7 +268,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	      var arrowUp = inputEx.cn('div', {className: 'inputEx-ListField-Arrow inputEx-ListField-ArrowUp'});
 	      Y.one(arrowUp).on('click', this.onArrowUp, this);
 	      var arrowDown = inputEx.cn('div', {className: 'inputEx-ListField-Arrow inputEx-ListField-ArrowDown'});
-	      Y.one(arrowDow).on('click', this.onArrowDown, this, true);
+	      Y.one(arrowDown).on('click', this.onArrowDown, this, true);
 	      newDiv.appendChild( arrowUp );
 	      newDiv.appendChild( arrowDown );
 	   }
@@ -330,8 +326,9 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	      if(this.arrowAnim) {
 	         this.arrowAnim.stop(true);
 	      }
-	      this.arrowAnim = new Y.Anim({node:Y.one(insertedEl), to : {backgroundColor: this.arrowAnimColors },duration: 0.4});
-	      this.arrowAnim.on("end",function() { Y.one(insertedEl).setStyle('background-color', ''); });
+	      
+	      this.arrowAnim = new Y.Anim({node:insertedEl, from: {backgroundColor: this.arrowAnimColors.from}, to : {backgroundColor: this.arrowAnimColors.to },duration: 0.4});
+	      this.arrowAnim.on("end",function() { Y.one(insertedEl).setStyle('backgroundColor', ''); });
 	      this.arrowAnim.run();
 	      
 	      // Fire updated !
@@ -361,8 +358,9 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	   if(nextChildNode) {
 	      // Remove the line
 	      var removedEl = this.childContainer.removeChild(childElement);
+	      
 	      // Adds it after the nextChildNode
-	      var insertedEl = Y.one(removedEl).insert(nextChildNode,"after");
+	      var insertedEl = Y.one(nextChildNode).insert(removedEl, "after");
 	      
 	      // Swap this.subFields elements (i,i+1)
 	      var temp = this.subFields[nodeIndex];
@@ -376,8 +374,8 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	      if(this.arrowAnim) {
 	         this.arrowAnim.stop(true);
 	      }
-	      this.arrowAnim = new Y.Anim({node:Y.one(insertedEl), to : {backgroundColor: this.arrowAnimColors }, duration: 1});
-	      this.arrowAnim.on("end",function() { Y.one(insertedEl).setStyle( 'background-color', ''); });
+	      this.arrowAnim = new Y.Anim({node: insertedEl, from: {backgroundColor: this.arrowAnimColors.from}, to : {backgroundColor: this.arrowAnimColors.to }, duration: 1});
+	      this.arrowAnim.on("end",function() { Y.one(insertedEl).setStyle( 'backgroundColor', ''); });
 	      this.arrowAnim.run();
 	      
 	      // Fire updated !
@@ -436,7 +434,15 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	      
 	   // Remove the element
 	   elementDiv.parentNode.removeChild(elementDiv);
-	}
+	},
+	
+	/**
+    * Clear the field by setting the field value to this.options.value
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this clear should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    */
+    clear: function(sendUpdatedEvt) {
+        this.setValue(lang.isUndefined(this.options.value) ? [] : this.options.value, sendUpdatedEvt);
+    }
 	
 });
 	
@@ -450,6 +456,6 @@ inputEx.registerType("list", inputEx.ListField, [
 inputEx.messages.listAddLink = "Add";
 inputEx.messages.listRemoveLink = "remove";
 	
-},'0.1.1',{
+},'3.0.0a',{
   requires: ["inputex-field","anim"]
 });

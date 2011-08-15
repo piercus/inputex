@@ -88,8 +88,9 @@ Y.extend(inputEx.PasswordField, inputEx.StringField, {
 		   this.strengthEl = inputEx.cn('div', {className: 'inputEx-Password-StrengthIndicator'}, null, inputEx.messages.passwordStrength);
 		   this.strengthBlocks = [];
 		   for(var i = 0 ; i < 4 ; i++) {
-		      this.strengthBlocks[i] = inputEx.cn('div', {className: 'inputEx-Password-StrengthIndicatorBlock'});
-		      this.strengthEl.appendChild( this.strengthBlocks[i] );
+		      var lamp = inputEx.cn('div', {className: 'inputEx-Password-StrengthIndicatorBlock'});
+		      this.strengthEl.appendChild( lamp );
+		      this.strengthBlocks[i] = Y.one(lamp);
 		   }
 		   this.wrapEl.appendChild(this.strengthEl);
 		}
@@ -192,10 +193,12 @@ Y.extend(inputEx.PasswordField, inputEx.StringField, {
       * Update the strength indicator (called by onKeyPress)
       */
      updateStrengthIndicator: function() {
-  	     var strength = inputEx.PasswordField.getPasswordStrength(this.getValue());
-        for(var i = 0 ; i < 4 ; i++) {
-           var on = (strength >= i*25) && (strength>0);
-           Y.one(this.strengthBlocks[i]).setStyle("background-color", on ? "#4AE817" : "#FFFFFF");
+  	     var strength = inputEx.PasswordField.getPasswordStrength(this.getValue()),
+  	         i, on, bgColor;
+        for(i = 0 ; i < 4 ; i++) {
+           on = (strength >= i*25) && (strength>0);
+           bgColor = on ? "#4AE817" : "#FFFFFF";
+           this.strengthBlocks[i].setStyle("backgroundColor", bgColor);
 		  }
      }
    
@@ -261,6 +264,6 @@ inputEx.registerType("password", inputEx.PasswordField, [
    {type: 'boolean', label: 'CapsLock warning', name: 'capsLockWarning', value: false }
 ]);
 	
-},'0.1.1',{
+},'3.0.0a',{
   requires: ["inputex-string"]
 });

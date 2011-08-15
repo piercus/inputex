@@ -1,5 +1,7 @@
-(function() {
-   var lang = YAHOO.lang;
+YUI.add("inputex-jsonschema", function(Y){
+
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
  
 /**
  * Namespace containing utility functions for conversion between inputEx JSON format and JSON Schema
@@ -30,9 +32,7 @@ inputEx.JsonSchema = {
    inputExToSchema: function(inputExJson) {
       
       var t = inputExJson.type || "string",
-          // inputParams is here for retro-compatibility : TODO -> remove
-          // -> ip = inputExJson || {};
-          ip = (lang.isObject(inputExJson.inputParams) ? inputExJson.inputParams : inputExJson) || {};
+          ip = inputExJson || {};
       
       if(t == "group") {
          var ret = {
@@ -44,9 +44,8 @@ inputEx.JsonSchema = {
          
          for(var i = 0 ; i < ip.fields.length ; i++) {
             var field = ip.fields[i];
-            // inputParams is here for retro-compatibility : TODO -> remove
-            // -> var fieldName = field.name;
-            var fieldName = lang.isObject(field.inputParams) ? field.inputParams.name : field.name;
+            
+            var fieldName = field.name;
             ret.properties[fieldName] = inputEx.JsonSchema.inputExToSchema(field);
          }
          
@@ -237,7 +236,7 @@ inputEx.JsonSchema.Builder.prototype = {
 	    	}
 	    	// copy options into new schema, for example we can overide presentation
 	    	// of a defined schema depending on where it is used
-	    	new_schema = lang.merge(new_schema);	// copy new_schema
+	    	new_schema = Y.mix({},new_schema);	// copy new_schema
 	    	
 	    	for(var pk in p) {
 	    		if(p.hasOwnProperty(pk) && lang.isUndefined(new_schema[pk]) && pk != '$ref') {
@@ -343,7 +342,7 @@ inputEx.JsonSchema.Builder.prototype = {
 	             fieldDef.choices = [];
 	             for(var i = 0 ; i < p["enum"].length ; i++) {
 	                var o = p["enum"][i];
-						 if(YAHOO.lang.isObject(o)) {
+						 if(lang.isObject(o)) {
 	                	fieldDef.choices[i] = { label: o.label, value: o.value };
 						 }
 						 else {
@@ -431,7 +430,6 @@ inputEx.JsonSchema.Builder.prototype = {
    
 };
 
-
-
-
-})();
+}, '3.0.0a',{
+  requires: ["inputex"]
+});

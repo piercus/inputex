@@ -1,8 +1,8 @@
-YUI.add("inputex-autocomplete",function(Y){
+YUI.add("inputex-autocomplete", function(Y) {
 
-  // var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
-  var lang = Y.Lang;
-  var inputEx = Y.inputEx;
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
+
 /**
  * An autocomplete field that wraps the YUI autocompleter
  * @class inputEx.AutoComplete
@@ -169,6 +169,6 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
 // Register this class as "autocomplete" type
 inputEx.registerType("autocomplete", inputEx.AutoComplete);
 
-}, '0.1.1',{
+}, '3.0.0a',{
   requires: ["inputex-string","autocomplete", "autocomplete-filters", "autocomplete-highlighters"]
 })

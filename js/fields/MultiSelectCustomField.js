@@ -1,4 +1,4 @@
-YUI.add("inputex-pie-multiselectcustom", function(Y) {
+YUI.add("inputex-multiselectcustom", function(Y) {
   
   var inputEx = Y.inputEx, lang = Y.Lang;
 
@@ -118,6 +118,6 @@ Y.extend(inputEx.MultiSelectCustomField, inputEx.MultiSelectField,{
 });
 inputEx.registerType("multiselectcustom", inputEx.MultiSelectCustomField);
 
-}, '0.1.1',{
+}, '3.0.0a',{
   requires: ["inputex-pie-listcustom", "inputex-multiselect"]
 })

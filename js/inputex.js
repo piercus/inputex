@@ -25,26 +25,20 @@ YUI.add("inputex", function(Y){
   Y.inputEx = function(fieldOptions, parentField) {
      var fieldClass = null,
          inputInstance;
-     
+         
     if(fieldOptions.type) {
        fieldClass = inputEx.getFieldClass(fieldOptions.type);
-       if(fieldClass === null) fieldClass = inputEx.StringField;
+       
+        if( !Y.Lang.isFunction(fieldClass) ){
+           throw new Error("Missing inputEx module for type: '"+fieldOptions.type+"' ?");
+        }
     }
     else {
        fieldClass = fieldOptions.fieldClass ? fieldOptions.fieldClass : inputEx.StringField;
     }
-    
 
      // Instanciate the field
-     
-     // Retro-compatibility with deprecated inputParams Object
-     if (lang.isObject(fieldOptions.inputParams)) {
-        inputInstance = new fieldClass(fieldOptions.inputParams);
-        
-     // New prefered way to instanciate a field
-     } else {
-        inputInstance = new fieldClass(fieldOptions);
-     }
+     inputInstance = new fieldClass(fieldOptions);
 
 	  // If the parentField argument is provided
 	  if(parentField) {
@@ -63,13 +57,13 @@ YUI.add("inputex", function(Y){
   
   Y.mix(Y.inputEx, {
      
-     VERSION: "0.7.1",
+     VERSION: "3.0.0a",
      
      /**
       * Url to the spacer image. This url schould be changed according to your project directories
       * @type String
       */
-     spacerUrl: "images/space.gif", // 1x1 px
+     spacerUrl: YUI_config.groups.inputex.base+"images/space.gif", // 1x1 px
      
      /**
       * Field empty state constant
@@ -347,10 +341,16 @@ YUI.add("inputex", function(Y){
 	   */
 	  htmlEntities: function (str) {
 	     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+	  },
+	  
+	  _id_counter: 0,
+	  generateId: function() {
+	     this._id_counter++;
+	     return "_inputex_"+this._id_counter;
 	  }
 	  
      
   });
-}, '0.1.1',{
+}, '3.0.0a',{
   requires: ["node"]
 });

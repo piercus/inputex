@@ -31,11 +31,11 @@ inputEx.visus = {
   },
   
   /**
-   * Use YAHOO.lang.dump
+   * Use Y.Lang.dump
    * options = {visuType: 'dump'}
    */
   dump: function(options, data) {
-     return lang.dump(data);
+     return Y.dump(data);
   }
    
 };
@@ -74,7 +74,7 @@ inputEx.renderVisu = function(visuOptions,data, parentEl) {
    var node = null;
    if(parentEl) {
       if(lang.isString(parentEl)) {
-         node = YAHOO.util.Dom.get(parentEl);
+         node = Y.one(parentEl);
       }
       else {
          node = parentEl;
@@ -83,7 +83,7 @@ inputEx.renderVisu = function(visuOptions,data, parentEl) {
    
    // Insert it
    if(node) {
-      if(YAHOO.lang.isObject(v) && v.tagName ) {
+      if(Y.Lang.isObject(v) && v.tagName ) {
          node.innerHTML = "";
          node.appendChild(v);
       }
@@ -95,6 +95,6 @@ inputEx.renderVisu = function(visuOptions,data, parentEl) {
    return v;
 };
 
-},'0.1.1',{
+},'3.0.0a',{
   requires: ["inputex","dump"]
 });

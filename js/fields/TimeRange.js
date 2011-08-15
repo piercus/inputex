@@ -28,13 +28,13 @@ inputEx.TimeRange = function(options) {
 	// Hook toogleEndMinutes to the updatedEvt of the 3d select
 	// Like that when the user selects/unselects 24h the minutes will toogle accordingly
 	var that = this;
-	this.inputs[2].updatedEvt.subscribe(function(){
+	this.inputs[2].on('updated',function(){
 		that.toogleEndMinutes();
 	});
 	
 };
 
-YAHOO.lang.extend(inputEx.TimeRange, inputEx.CombineField, {   
+Y.extend(inputEx.TimeRange, inputEx.CombineField, {   
    /**
     * Returns an array like ["HH:MM","HH:MM"]
     */

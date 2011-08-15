@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-datesplit", function(Y) {
 
-   var lang = YAHOO.lang, Event = YAHOO.util.Event;
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
 
 /**
  * inputEx.DateSplitField
@@ -36,7 +37,7 @@ inputEx.DateSplitField = function(options) {
    this.initAutoTab();
 };
 
-lang.extend(inputEx.DateSplitField, inputEx.CombineField, {
+Y.extend(inputEx.DateSplitField, inputEx.CombineField, {
    
    /**
 	 * Set the value. Format the date according to options.dateFormat
@@ -141,13 +142,13 @@ lang.extend(inputEx.DateSplitField, inputEx.CombineField, {
 	   };
 	   
 	   // add listeners on inputs
-	   Event.addListener(this.inputs[0].el, "keypress", function(e) {
-	      if (checkNumKey(Event.getCharCode(e))) {
+	   Y.one(this.inputs[0].el).on("keypress", function(e) {
+	      if (checkNumKey(e.charCode)) {
             autoTab(0);
          }
    	}, this, true);
-	   Event.addListener(this.inputs[1].el, "keypress", function(e) {
-	      if (checkNumKey(Event.getCharCode(e))) {
+	   Y.one(this.inputs[1].el).on("keypress", function(e) {
+	      if (checkNumKey(e.charCode)) {
             autoTab(1);
          }
    	}, this, true);
@@ -162,4 +163,6 @@ inputEx.messages.yearTypeInvite = "Year";
 // Register this class as "datesplit" type
 inputEx.registerType("datesplit", inputEx.DateSplitField);
 
-})();
+}, '3.0.0a',{
+requires: ['inputex-combine']
+});

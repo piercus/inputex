@@ -146,6 +146,6 @@ inputEx.messages.didYouMeant = "Did you mean : ";
 // Register this class as "email" type
 inputEx.registerType("email", inputEx.EmailField, []);
 
-}, '0.1.1',{
+}, '3.0.0a',{
   requires: ["inputex-string"]
 });

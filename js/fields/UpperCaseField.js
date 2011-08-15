@@ -1,4 +1,7 @@
-(function() {
+YUI.add("inputex-uppercase",function(Y){
+	
+   var inputEx = Y.inputEx,
+       lang = Y.Lang;
 
 /**
  * A field where the value is always uppercase
@@ -10,7 +13,8 @@
 inputEx.UpperCaseField = function(options) {
    inputEx.UpperCaseField.superclass.constructor.call(this,options);
 };
-YAHOO.lang.extend(inputEx.UpperCaseField, inputEx.StringField, {
+
+Y.extend(inputEx.UpperCaseField, inputEx.StringField, {
 
    /**
     * Set the value and call toUpperCase
@@ -33,7 +37,7 @@ YAHOO.lang.extend(inputEx.UpperCaseField, inputEx.StringField, {
    	inputEx.UpperCaseField.superclass.onKeyPress.call(this,e);
    	
    	// Re-Apply a toUpperCase method
-   	YAHOO.lang.later(0,this,function() {this.setValue( (this.getValue()) );});
+   	Y.Lang.later(0,this,function() {this.setValue( (this.getValue()) );});
    }
 
 });
@@ -41,4 +45,6 @@ YAHOO.lang.extend(inputEx.UpperCaseField, inputEx.StringField, {
 // Register this class as "uppercase" type
 inputEx.registerType("uppercase", inputEx.UpperCaseField);
 
-})();
+},'3.0.0a',{
+  requires: ['inputex-string']
+});

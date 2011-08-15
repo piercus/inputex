@@ -1,4 +1,7 @@
-(function () {
+YUI.add("inputex-dsselect", function(Y) {
+
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
 	
 	/**
 	 * Create a select field from a datasource
@@ -17,7 +20,7 @@
 		inputEx.DSSelectField.superclass.constructor.call(this, options);
 	};
 	
-	YAHOO.lang.extend(inputEx.DSSelectField, inputEx.SelectField, {
+	Y.extend(inputEx.DSSelectField, inputEx.SelectField, {
 		/**
 		 * Setup the additional options for selectfield
 		 * @param {Object} options Options object as passed to the constructor
@@ -91,4 +94,6 @@
 	// Register this class as "dsselect" type
 	inputEx.registerType("dsselect", inputEx.DSSelectField);
 
-}());
+}, '3.0.0a',{
+   requires: ['inputex-select']
+});

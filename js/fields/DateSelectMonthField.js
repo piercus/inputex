@@ -1,6 +1,7 @@
-(function () {
-	
-	var lang = YAHOO.lang;
+YUI.add("inputex-dateselectmonth", function(Y) {
+
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
 	
 	/**
 	 * A field to enter a date with 2 strings and a select
@@ -49,7 +50,7 @@
 		inputEx.DateSelectMonthField.superclass.constructor.call(this, options);
 	};
 	
-	lang.extend(inputEx.DateSelectMonthField, inputEx.CombineField, {
+	Y.extend(inputEx.DateSelectMonthField, inputEx.CombineField, {
 		
 		setValue: function (value, sendUpdatedEvt) {
 			
@@ -122,4 +123,8 @@
 	// Register this class as "dateselectmonth" type
 	inputEx.registerType("dateselectmonth", inputEx.DateSelectMonthField);
 	
-}());
+}, '3.0.0a',{
+requires: ['inputex-combine']
+});
+
+

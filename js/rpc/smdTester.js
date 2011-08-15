@@ -1,10 +1,15 @@
+YUI.add("inputex-smdtester", function(Y){
+
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
+
 /**
  * Creates a form to test various SMD files
  * @class inputEx.RPC.SMDTester
  */
 inputEx.RPC.SMDTester = function(parentEl, smdList) {
 	
-	this.el = YAHOO.util.Dom.get(parentEl);
+	this.el = document.getElementById(parentEl);
 	
 	var selectStr = 'select smd';
 	inputEx({
@@ -19,8 +24,8 @@ inputEx.RPC.SMDTester = function(parentEl, smdList) {
 			return arr;
 		}())),
 		description: "Select the Service Mapping Description file"
-	}).updatedEvt.subscribe(function(e, params) {
-			var smdFile = params[0];
+	}).on('updated', function(value) {
+			var smdFile = value;
 			if(smdFile != selectStr) {
 				this.loadSMD(smdFile);
 			}
@@ -66,13 +71,13 @@ inputEx.RPC.SMDTester.prototype = {
 	onServiceLoaded: function() {
 		
 		// Set SMD Description :
-		this.smdDescriptionEl.innerHTML = (YAHOO.lang.isString(this.service._smd.description)) ? this.service._smd.description : "";
+		this.smdDescriptionEl.innerHTML = (Y.Lang.isString(this.service._smd.description)) ? this.service._smd.description : "";
 		
 		// Method Select
 		var selectStr = 'select a method';
 		var genMethods = [selectStr];
 		for(var key in this.service) {
-			if(this.service.hasOwnProperty(key) && YAHOO.lang.isFunction(this.service[key])) {
+			if(this.service.hasOwnProperty(key) && Y.Lang.isFunction(this.service[key])) {
 				genMethods.push({ value: key });
 			}
 		}	
@@ -84,8 +89,8 @@ inputEx.RPC.SMDTester.prototype = {
 				description: "Select the method"
 		});
 		
-		select.updatedEvt.subscribe(function(e, params) {
-			var methodName = params[0];
+		select.on('updated', function(value) {
+			var methodName = value;
 			if(methodName != selectStr) this.onServiceMethod(methodName);
 		}, this, true);
 		
@@ -101,7 +106,7 @@ inputEx.RPC.SMDTester.prototype = {
 	onServiceMethod: function(methodName) {
 		
 		// Set Method Description :
-		this.methodDescriptionEl.innerHTML = (YAHOO.lang.isString(this.service[methodName].description)) ? this.service[methodName].description : "";
+		this.methodDescriptionEl.innerHTML = (Y.Lang.isString(this.service[methodName].description)) ? this.service[methodName].description : "";
 		
 		// generate the form for the given method
 		this.formContainerEl.innerHTML = "";
@@ -115,3 +120,7 @@ inputEx.RPC.SMDTester.prototype = {
 	}
 	
 };
+
+}, '3.0.0a',{
+  requires: ["inputex"]
+});

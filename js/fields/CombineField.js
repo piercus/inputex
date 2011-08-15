@@ -1,6 +1,7 @@
-(function() {
-	
-   var lang = YAHOO.lang, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
+YUI.add("inputex-combine", function(Y){
+
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 	
 /**
  * A meta field to put N fields on the same line, separated by separators
@@ -16,7 +17,7 @@ inputEx.CombineField = function(options) {
    inputEx.CombineField.superclass.constructor.call(this, options);
 };
 
-lang.extend( inputEx.CombineField, inputEx.Group, {
+Y.extend( inputEx.CombineField, inputEx.Group, {
    /**
     * Set the default values of the options
     * @param {Object} options Options object as passed to the constructor
@@ -41,7 +42,7 @@ lang.extend( inputEx.CombineField, inputEx.Group, {
    	}
 
 	   // Label element
-	   if (YAHOO.lang.isString(this.options.label)) {
+	   if (lang.isString(this.options.label)) {
 	      this.labelDiv = inputEx.cn('div', {id: this.divEl.id+'-label', className: 'inputEx-label', 'for': this.divEl.id+'-field'});
 	      this.labelEl = inputEx.cn('label', null, null, this.options.label === "" ? "&nbsp;" : this.options.label);
 	      this.labelDiv.appendChild(this.labelEl);
@@ -80,7 +81,7 @@ lang.extend( inputEx.CombineField, inputEx.Group, {
 	         field.divEl.removeChild(fieldEl.childNodes[fieldEl.childNodes.length-1]);
          }
       	// make the field float left
-      	Dom.setStyle(fieldEl, 'float', 'left');
+      	Y.one(fieldEl).setStyle('float', 'left');
    	
       	this.divEl.appendChild(fieldEl);
       	
@@ -138,7 +139,10 @@ lang.extend( inputEx.CombineField, inputEx.Group, {
 
       inputEx.CombineField.superclass.initEvents.apply(this, arguments);
 
-      Event.addListener(this.divEl, "focusout", function( e ) {
+      var divNode = Y.one(this.divEl);
+
+      // TODO: does it work ?
+      divNode.on("focusout", function( e ) {
          // store local copy of the event to use in setTimeout
          e = lang.merge(e);
          blurTimeout = window.setTimeout(function() {
@@ -147,7 +151,8 @@ lang.extend( inputEx.CombineField, inputEx.Group, {
          }, 25);
       });
 
-      Event.addListener(this.divEl, "focusin", function( e ) {
+      // TODO: does it work ?
+      divNode.on("focusin", function( e ) {
          if (blurTimeout !== null) {
             window.clearTimeout(blurTimeout);
             blurTimeout = null;
@@ -202,4 +207,8 @@ inputEx.registerType("combine", inputEx.CombineField, [
    { type: 'list', name: 'separators', label: 'Separators', required: true }
 ]);
 	
-})();
+	
+}, '3.0.0a',{
+  requires: ['inputex-group']
+});
+   

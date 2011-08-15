@@ -1,5 +1,7 @@
-(function() {
+YUI.add("inputex-vector",function(Y){
 
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 /**
  * A field limited to number inputs (floating)
  * @class inputEx.VectorField
@@ -10,7 +12,7 @@
 inputEx.VectorField = function(options) {
    inputEx.VectorField.superclass.constructor.call(this,options);
 };
-YAHOO.lang.extend(inputEx.VectorField, inputEx.CombineField, {  
+Y.extend(inputEx.VectorField, inputEx.CombineField, {  
    /**
     * Additional options for VectorField (dimension, size)
     */ 
@@ -34,4 +36,6 @@ inputEx.registerType("vector", inputEx.VectorField, [
    { type: 'list', name: 'separators', label: 'Separators', required: true }
 ]);
 
-})();
+},'3.0.0a',{
+  requires: ["inputex-combine"]
+});

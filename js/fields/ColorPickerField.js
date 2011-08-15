@@ -1,6 +1,9 @@
-(function() {
+YUI.add("inputex-colorpicker",function(Y){
 	
-   var Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
+   var inputEx = Y.inputEx,
+       lang = Y.Lang;
+	
+	var YAHOO = Y.YUI2, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
 	
 /**
  * Create a Color picker input field
@@ -15,7 +18,7 @@
 inputEx.ColorPickerField = function(options) {
 	inputEx.ColorPickerField.superclass.constructor.call(this,options);
 };
-YAHOO.lang.extend(inputEx.ColorPickerField, inputEx.Field, {
+Y.extend(inputEx.ColorPickerField, inputEx.Field, {
    
 	/**
 	 * Adds the 'inputEx-ColorPickerField' default className
@@ -28,13 +31,13 @@ YAHOO.lang.extend(inputEx.ColorPickerField, inputEx.Field, {
    	this.options.className = options.className ? options.className : 'inputEx-Field inputEx-ColorPickerField';
 
 		// Color Picker options object
-		this.options.colorPickerOptions = YAHOO.lang.isUndefined(options.colorPickerOptions) ? {} : options.colorPickerOptions;
+		this.options.colorPickerOptions = lang.isUndefined(options.colorPickerOptions) ? {} : options.colorPickerOptions;
 		
 		// showcontrols
-		this.options.colorPickerOptions.showcontrols = YAHOO.lang.isUndefined(this.options.colorPickerOptions.showcontrols) ? true : this.options.colorPickerOptions.showcontrols;
+		this.options.colorPickerOptions.showcontrols = lang.isUndefined(this.options.colorPickerOptions.showcontrols) ? true : this.options.colorPickerOptions.showcontrols;
 		
 		// default images (color selection images)
-		this.options.colorPickerOptions.images = YAHOO.lang.isUndefined(this.options.colorPickerOptions.images) ? { PICKER_THUMB: "../lib/yui/colorpicker/assets/picker_thumb.png", HUE_THUMB: "../lib/yui/colorpicker/assets/hue_thumb.png" } : this.options.colorPickerOptions.images;
+		this.options.colorPickerOptions.images = lang.isUndefined(this.options.colorPickerOptions.images) ? { PICKER_THUMB: "../lib/yui/colorpicker/assets/picker_thumb.png", HUE_THUMB: "../lib/yui/colorpicker/assets/hue_thumb.png" } : this.options.colorPickerOptions.images;
 		
    },
    
@@ -176,4 +179,6 @@ YAHOO.lang.extend(inputEx.ColorPickerField, inputEx.Field, {
 // Register this class as "color" type
 inputEx.registerType("colorpicker", inputEx.ColorPickerField, []);
 	
-})();
+},'3.0.0a',{
+  requires: ['inputex-field','yui2-colorpicker','yui2-container','yui2-menu','yui2-button']
+});

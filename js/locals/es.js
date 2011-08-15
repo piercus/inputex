@@ -1,5 +1,6 @@
 // InputEx Spanish localization
-(function() {
+YUI.add("inputex-lang-es",function(Y){
+  var inputEx = Y.inputEx;
 
   var msgs = inputEx.messages;
 
@@ -68,4 +69,7 @@
 
   // for YUI loader
   inputEx.lang_es = true;
-})();
+
+}, '3.0.0a',{
+  requires: ['inputex']
+});

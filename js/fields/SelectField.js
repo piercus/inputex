@@ -254,6 +254,6 @@ YUI.add("inputex-select",function(Y){
 		}
 	]);
 
-}, '0.1.1',{
+}, '3.0.0a',{
   requires: ['inputex-field','inputex-choice']
 });

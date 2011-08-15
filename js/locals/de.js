@@ -1,5 +1,6 @@
 // InputEx German localization 
-(function() {
+YUI.add("inputex-lang-de",function(Y){
+  var inputEx = Y.inputEx;
 
    var msgs = inputEx.messages;
 
@@ -70,4 +71,7 @@
    
    // for YUI loader 
    inputEx.lang_de = true;
-})();
+
+}, '3.0.0a',{
+  requires: ['inputex']
+});

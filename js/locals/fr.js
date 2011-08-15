@@ -1,5 +1,6 @@
 // InputEx French localization
-(function() {
+YUI.add("inputex-lang-fr",function(Y){
+  var inputEx = Y.inputEx;
    
    var msgs = inputEx.messages;
 
@@ -78,4 +79,6 @@
    // for YUI loader 
    inputEx.lang_fr = true;
    
-})();
+}, '3.0.0a',{
+  requires: ['inputex']
+});

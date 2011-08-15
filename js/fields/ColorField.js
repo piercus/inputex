@@ -1,6 +1,8 @@
-(function() {
+YUI.add("inputex-color",function(Y){
 	
-   var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
+   var inputEx = Y.inputEx;
+   var lang = Y.Lang;
+   var YAHOO = Y.YUI2, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
 	
 /**
  * Create a Color picker input field
@@ -18,7 +20,7 @@
 inputEx.ColorField = function(options) {
 	inputEx.ColorField.superclass.constructor.call(this,options);
 };
-lang.extend(inputEx.ColorField, inputEx.Field, {
+Y.extend(inputEx.ColorField, inputEx.Field, {
    
 	/**
 	 * Adds the 'inputEx-ColorField' default className
@@ -358,4 +360,6 @@ inputEx.ColorField.ensureHexa = function (color) {
 // Register this class as "color" type
 inputEx.registerType("color", inputEx.ColorField, []);
 	
-})();
+},'3.0.0a',{
+  requires: ['inputex-field','yui2-container','yui2-button']
+});

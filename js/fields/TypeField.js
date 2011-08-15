@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-type", function(Y){
 
-   var Event = YAHOO.util.Event, Dom = YAHOO.util.Dom, lang = YAHOO.lang;
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 /**
  * TypeField is a field to create fields. The user can create any value he wants by switching fields.
@@ -13,7 +14,7 @@ inputEx.TypeField = function(options) {
    inputEx.TypeField.superclass.constructor.call(this, options);
 };
 
-lang.extend(inputEx.TypeField, inputEx.Field, {
+Y.extend(inputEx.TypeField, inputEx.Field, {
    
    /**
     * Render the TypeField: create a button with a property panel that contains the field options
@@ -56,14 +57,14 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
       inputEx.TypeField.superclass.initEvents.call(this); 
       
       // "Toggle the properties panel" button :
-      Event.addListener(this.button, 'click', this.onTogglePropertiesPanel, this, true);
+      Y.one(this.button).on('click', this.onTogglePropertiesPanel, this, true);
       
       // Prevent the button to receive a "click" event if the propertyPanel doesn't catch it
-      Event.addListener(this.propertyPanel, 'click', function(e) { Event.stopPropagation(e);}, this, true);
+      Y.one(this.propertyPanel).on('click', function(e) { e.stopPropagation();}, this, true);
       
       // Listen the "type" selector to update the groupOptions
       // Hack the type selector to rebuild the group option
-      this.typeSelect.updatedEvt.subscribe(this.rebuildGroupOptions, this, true);
+      this.typeSelect.on('updated', this.rebuildGroupOptions, this, true);
    },
    
    /**
@@ -99,13 +100,13 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
          }
          
          // Register the updated event
-         this.group.updatedEvt.subscribe(this.onChangeGroupOptions, this, true);
+         this.group.on('updated', this.onChangeGroupOptions, this, true);
             
          // Create the value field
          this.updateFieldValue();
          
       } catch(ex) {
-         if(YAHOO.lang.isObject(window["console"]) && YAHOO.lang.isFunction(window["console"]["log"]) ) {
+         if(Y.Lang.isObject(window["console"]) && Y.Lang.isFunction(window["console"]["log"]) ) {
             console.log("inputEx.TypeField.rebuildGroupOptions: ", ex);
          }
       }
@@ -118,10 +119,10 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
    onTogglePropertiesPanel: function() {
       if (this.propertyPanel.style.display == 'none') {
          this.propertyPanel.style.display = '';
-         Dom.addClass(this.button, "opened");
+         Y.one(this.button).addClass(this.button, "opened");
       } else {
          this.propertyPanel.style.display = 'none';
-         Dom.removeClass(this.button, "opened");
+         Y.one(this.button).removeClass("opened");
       }
    },
    
@@ -159,10 +160,10 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
          this.fieldValue = inputEx(fieldOptions,this);
       
          // Refire the event when the fieldValue is updated
-         this.fieldValue.updatedEvt.subscribe(this.fireUpdatedEvt, this, true);
+         this.fieldValue.on('updated', this.fireUpdatedEvt, this, true);
       }
       catch(ex) {	
-         if(YAHOO.lang.isObject(window["console"]) && YAHOO.lang.isFunction(window["console"]["log"]) ) {
+         if(Y.Lang.isObject(window["console"]) && Y.Lang.isFunction(window["console"]["log"]) ) {
          	console.log("Error while updateFieldValue", ex.message);
 			}
       }
@@ -183,15 +184,7 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
       this.rebuildGroupOptions();
       
       // Set the parameters value
-      
-      // Retro-compatibility with deprecated inputParams Object
-      if (lang.isObject(value.inputParams)) {
-         this.group.setValue(value.inputParams, false);
-
-      // New prefered way to describe a field
-      } else {
-         this.group.setValue(value, false);
-      }
+      this.group.setValue(value, false);
       
       // Rebuild the fieldValue
       this.updateFieldValue();
@@ -200,13 +193,8 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
 		// fix it for default value (because updateFieldValue is called after first setValue)
  		var that = this;      
 
-      // Retro-compatibility with deprecated inputParams Object
-      if(lang.isObject(value.inputParams) && !lang.isUndefined(value.inputParams.value)) {	
-			setTimeout(function(){
-         	that.fieldValue.setValue(value.inputParams.value, false);
-			}, 50);
       // New prefered way to describe a field
-      } else if (!lang.isUndefined(value.value)) {
+      if (!lang.isUndefined(value.value)) {
 			setTimeout(function(){
 				that.fieldValue.setValue(value.value, false);
 			}, 50);
@@ -230,12 +218,8 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
          for(i = 0 ; i < length ; i++) {
             f = classObj.groupOptions[i];
             
-            // Retro-compatibility with deprecated inputParams Object
-            if(lang.isObject(f.inputParams) && f.inputParams.name == paramName) {
-               return f.inputParams.value;
-               
             // New prefered way to use field options
-            } else if (f.name == paramName) {
+            if (f.name == paramName) {
                return f.value;
             }
          }
@@ -273,4 +257,6 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
 // Register this class as "type" type
 inputEx.registerType("type", inputEx.TypeField, []);
 
-})();
+}, '3.0.0a',{
+requires: ['inputex-field','inputex-group','inputex-select', 'inputex-list','inputex-string','inputex-checkbox','inputex-integer']
+});

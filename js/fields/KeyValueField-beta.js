@@ -1,3 +1,8 @@
+YUI.add("inputex-keyvalue",function(Y){
+
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
+
 /**
  * Display a selectors for keys and auto-update the value field
  * @class inputEx.KeyValueField
@@ -9,7 +14,7 @@ inputEx.KeyValueField = function(options) {
    inputEx.KeyValueField.superclass.constructor.call(this, options);
 };
 
-YAHOO.lang.extend( inputEx.KeyValueField, inputEx.CombineField, {
+Y.extend( inputEx.KeyValueField, inputEx.CombineField, {
    
    /**
     * Subscribe the updatedEvt on the key selector
@@ -17,7 +22,7 @@ YAHOO.lang.extend( inputEx.KeyValueField, inputEx.CombineField, {
    initEvents: function() {
       inputEx.KeyValueField.superclass.initEvents.call(this);
 
-      this.inputs[0].updatedEvt.subscribe(this.onSelectFieldChange, this, true); 
+      this.inputs[0].on('updated',this.onSelectFieldChange, this, true); 
    },
 
 
@@ -63,7 +68,7 @@ YAHOO.lang.extend( inputEx.KeyValueField, inputEx.CombineField, {
 			]
 		};
 		
-		YAHOO.lang.augmentObject(newOptions, options);
+		Y.mix(newOptions, options);
 		
 		inputEx.KeyValueField.superclass.setOptions.call(this, newOptions);
 	},
@@ -71,8 +76,7 @@ YAHOO.lang.extend( inputEx.KeyValueField, inputEx.CombineField, {
    /**
     * Rebuild the value field
     */
-   onSelectFieldChange: function(e, params) {
-      var value = params[0];
+   onSelectFieldChange: function(value) {
       var f = this.nameIndex[value];
       var lastInput = this.inputs[this.inputs.length-1];
       var next = this.divEl.childNodes[inputEx.indexOf(lastInput.getEl(), this.divEl.childNodes)+1];
@@ -80,7 +84,7 @@ YAHOO.lang.extend( inputEx.KeyValueField, inputEx.CombineField, {
       this.inputs.pop();
       var field = this.renderField(f);
       var fieldEl = field.getEl();
-   	YAHOO.util.Dom.setStyle(fieldEl, 'float', 'left');
+      Y.one(fieldEl).setStyle('float', 'left');
 	   
    	this.divEl.insertBefore(fieldEl, next);
    }
@@ -88,4 +92,8 @@ YAHOO.lang.extend( inputEx.KeyValueField, inputEx.CombineField, {
 });
 
 inputEx.registerType("keyvalue", inputEx.KeyValueField, {});
+
+},'3.0.0a',{
+  requires: ['inputex-combine']
+});
 

@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-number", function(Y) {
 
-   var Event = YAHOO.util.Event, lang = YAHOO.lang;
+  var lang = Y.Lang,
+      inputEx = Y.inputEx;
 
 /**
  * A field limited to number inputs (floating)
@@ -12,7 +13,8 @@
 inputEx.NumberField = function(options) {
    inputEx.NumberField.superclass.constructor.call(this,options);
 };
-YAHOO.lang.extend(inputEx.NumberField, inputEx.StringField, {
+
+Y.extend(inputEx.NumberField, inputEx.StringField, {
    /**
     * Adds the min, and max options
     * @param {Object} options
@@ -69,4 +71,6 @@ YAHOO.lang.extend(inputEx.NumberField, inputEx.StringField, {
 // Register this class as "number" type
 inputEx.registerType("number", inputEx.NumberField, []);
 
-})();
+}, '3.0.0a',{
+requires: ['inputex-string']
+});

@@ -1,7 +1,7 @@
 YUI.add("inputex-url",function(Y){
 
-   var lang = Y.Lang;
-   var inputEx = Y.inputEx;
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 /**
  * Adds an url regexp, and display the favicon at this url
@@ -101,6 +101,6 @@ inputEx.registerType("url", inputEx.UrlField, [
    { type: 'boolean', label: 'Display favicon', name:'favicon', value: true}
 ]);
 
-},'0.1.1',{
+},'3.0.0a',{
   requires: ["inputex-string"]
 });

@@ -1,6 +1,6 @@
 (function () {
 
-	var Event = YAHOO.util.Event, lang = YAHOO.lang;
+	var Event = YAHOO.util.Event, lang = Y.Lang;
 
 	/**
 	 * Create a select field
@@ -22,7 +22,7 @@
 		}
 	};
 	
-	lang.extend(inputEx.SelectTwiceField, inputEx.Field, {
+	on('updated', function(value) {(inputEx.SelectTwiceField, inputEx.Field, {
 		
 		
 		/**
@@ -112,7 +112,7 @@
 			
 			
 			// when first select is modified
-			this.selects[0].updatedEvt.subscribe(function (e, args) {
+			this.selects[0].on('updated', function (value) {
 				
 				this.updateSecondSelectChoices(); // refresh list of choices in second select
 				this.selects[1].fireUpdatedEvt(); // trigger global field update (see below)
@@ -121,7 +121,7 @@
 			
 			
 			// when second select is modified
-			this.selects[1].updatedEvt.subscribe(function (e, args) {
+			this.selects[1].on('updated', function (value) {
 				
 				// set field style
 				this.setClassFromState();

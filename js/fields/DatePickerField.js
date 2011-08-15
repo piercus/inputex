@@ -1,7 +1,10 @@
-(function() {
+YUI.add("inputex-datepicker",function(Y){
 
-   var lang = YAHOO.lang, Event = YAHOO.util.Event, Dom = YAHOO.util.Dom;
-
+   var inputEx = Y.inputEx,
+       lang = Y.Lang,
+       YAHOO = Y.YUI2,
+       Dom = YAHOO.util.Dom,
+       Event = YAHOO.util.Event;
 /**
  * A DatePicker Field.
  * @class inputEx.DatePickerField
@@ -16,7 +19,7 @@ inputEx.DatePickerField = function(options) {
    inputEx.DatePickerField.superclass.constructor.call(this,options);
 };
 
-lang.extend(inputEx.DatePickerField, inputEx.DateField, {
+Y.extend(inputEx.DatePickerField, inputEx.DateField, {
    /**
     * Set the default date picker CSS classes
     * @param {Object} options Options object as passed to the constructor
@@ -27,7 +30,7 @@ lang.extend(inputEx.DatePickerField, inputEx.DateField, {
       // Overwrite default options
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-DateField inputEx-PickerField inputEx-DatePickerField';
 
-      this.options.readonly = YAHOO.lang.isUndefined(options.readonly) ? true : options.readonly;
+      this.options.readonly = lang.isUndefined(options.readonly) ? true : options.readonly;
       
       // Added options
       this.options.calendar = options.calendar || inputEx.messages.defautCalendarOpts;
@@ -69,7 +72,7 @@ lang.extend(inputEx.DatePickerField, inputEx.DateField, {
 
       this.oOverlay.hideEvent.subscribe(function() {
          this.oOverlay.justHidden = true;
-         YAHOO.lang.later(250,this,function(){this.oOverlay.justHidden=false;});
+         lang.later(250,this,function(){this.oOverlay.justHidden=false;});
       },this,true);
       
       
@@ -223,4 +226,7 @@ inputEx.messages.defautCalendarOpts = { navigator: true };
 // Register this class as "datepicker" type
 inputEx.registerType("datepicker", inputEx.DatePickerField);
 
-})();
+}, '3.0.0a',{
+requires: ['yui2-calendar', 'yui2-button', 'inputex-date', 'yui2-container']
+});
+

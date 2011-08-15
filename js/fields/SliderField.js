@@ -1,6 +1,8 @@
-(function () {
-     var lang=YAHOO.lang;
-     
+YUI.add("inputex-slider", function(Y) {
+
+   var inputEx = Y.inputEx,
+       YAHOO = Y.YUI2,
+       lang = Y.Lang;     
 /**
  * Create a slider using YUI widgets
  * @class inputEx.SliderField
@@ -12,7 +14,7 @@ inputEx.SliderField = function(options) {
    inputEx.SliderField.superclass.constructor.call(this,options);
 };
 
-YAHOO.lang.extend(inputEx.SliderField, inputEx.Field, {
+Y.extend(inputEx.SliderField, inputEx.Field, {
    /**
     * Set the classname to 'inputEx-SliderField'
     * @param {Object} options Options object as passed to the constructor
@@ -56,8 +58,7 @@ YAHOO.lang.extend(inputEx.SliderField, inputEx.Field, {
       
       // Update the displayed value
       if(this.options.displayValue) {
-         this.updatedEvt.subscribe( function(e,params) {
-            var val = params[0];
+         this.on('updated', function(val) {
             this.valueDisplay.innerHTML = val;
          }, this, true);
       }
@@ -102,4 +103,6 @@ inputEx.registerType("slider", inputEx.SliderField, [
    { type: 'integer', label: 'Max. value', name: 'maxValue', value: 100 }
 ]);
 
-})();
+},'3.0.0a',{
+  requires: ['inputex-field', 'yui2-slider']
+});

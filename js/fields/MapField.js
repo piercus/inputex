@@ -1,5 +1,7 @@
-(function() {
-	var lang = YAHOO.lang;
+YUI.add("inputex-map",function(Y){
+	
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 	inputEx.MapFieldGlobals = {
 		yahoo_preloader_error : 1,
@@ -69,7 +71,8 @@
 inputEx.MapField = function(options) {
 	inputEx.MapField.superclass.constructor.call(this,options);
 };
-lang.extend(inputEx.MapField, inputEx.Field, {
+
+Y.extend(inputEx.MapField, inputEx.Field, {
 	/**
 	 * Adds the 'inputEx-MapField' default className
 	 */
@@ -316,29 +319,20 @@ lang.extend(inputEx.MapField, inputEx.Field, {
 				return;
 			}
 
-			var api_key = superwrapper.options.api_key[window.location.hostname];
-			if (!api_key) {
-				var api_key = superwrapper.options.api_key;
-			}
-			if (!api_key) {
-				alert("No map key is defined for Google Maps");
-				return	true;
-			}
-
 			var preloader = 'MapGooglePreloader_' + inputEx.MapFieldsNumber;
 			inputEx[preloader] = function() {
-				google.load("maps", "2", {
+				/*google.load("maps", "2", {
 					"callback" : function() {
 						superwrapper.wait_create();
 					}
-				});
+				});*/
 			};
 
 			if (window.google) {
 				inputEx[preloader]();
 			} else {
 				var script = document.createElement("script");
-				script.src = "http://www.google.com/jsapi?key=" + api_key + "&callback=inputEx." + preloader;
+				script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=Y.inputEx." + preloader;
 				script.type = "text/javascript";
 
 				document.getElementsByTagName("head")[0].appendChild(script);
@@ -471,4 +465,11 @@ lang.extend(inputEx.MapField, inputEx.Field, {
 // Register this class as "map" type
 inputEx.registerType("map", inputEx.MapField);
 
-})();
+// how to set up Yahoo Maps as the default API
+inputEx.MapFieldGlobals['api'] = 'yahoo';
+inputEx.MapFieldGlobals['Nk0DZDzV34FM2CIAsdRAtUgQJRSsJO7x2l5tuDBduamC_gZWkzyTEqcUJxAWjtqxs9Wnxb0-'] = 'yahoo';
+
+
+},'3.0.0a',{
+  requires: ['inputex-field']
+});

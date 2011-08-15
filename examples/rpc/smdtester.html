@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+<head>
+<title>SMD Tester</title>
+
+<style>
+body { text-align: left; }
+#mainBox { margin:20px auto; width: 80%; background-color: #ccccff; padding: 20px; }
+p { margin: 10px; font-weight: bold; }
+#formContainer { width: 60%; }
+</style>
+</head>
+
+<body class="yui-skin-sam">
+	
+	<div id='mainBox'>
+		<h1>inputEx - SMD tester</h1>
+		
+		<p>Build forms from <a href="http://groups.google.com/group/json-schema/web/service-mapping-description-proposal">Service Mapping Description</a> (SMD)</p><br /><br />
+		
+	</div>
+
+<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+<script src="../../js/loader.js"  type='text/javascript'></script>
+<script>
+YUI_config.groups.inputex.base = '../../';
+
+YUI().use("inputex-form","inputex-string","inputex-select","inputex-integer","inputex-number","inputex-textarea","inputex-url","inputex-jsonschema","inputex-rpc","inputex-jsontreeinspector","inputex-smdtester", function(Y) {
+
+  var smdList = ['smd/json-time.smd', 'smd/json-head.smd', 'smd/langdetect.smd', 'smd/html-whitelist.smd',
+				   'smd/yql.smd', 'smd/jsonptunnel.smd', 'smd/flickr.smd',
+				   'smd/yahoopipes.smd', 'smd/delicious.smd', 'smd/wikipedia.smd', 'smd/google.smd',
+ 				   'smd/twitter.smd', 'smd/geonames.smd', 'smd/yahoo.smd', 'smd/freebase.smd', 'smd/tinyurl.smd'];
+	new Y.inputEx.RPC.SMDTester('mainBox', smdList);
+  
+});
+
+</script>
+
+</body>
+</html>
