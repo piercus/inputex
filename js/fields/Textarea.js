@@ -43,7 +43,7 @@ Y.extend(inputEx.Textarea, inputEx.StringField, {
       attributes.id = this.divEl.id?this.divEl.id+'-field':YAHOO.util.Dom.generateId();
       // firefox bug (reported since year 2000 !): one extra row is always added by browser
 		//                                           (see : https://bugzilla.mozilla.org/show_bug.cgi?id=33654)
-      attributes.rows = !!YAHOO.env.ua.gecko ? this.options.rows - 1 : this.options.rows;
+      attributes.rows = !!Y.UA.gecko ? this.options.rows - 1 : this.options.rows;
       attributes.cols = this.options.cols;
       if(this.options.name) { attributes.name = this.options.name; }
       if(this.options.readonly) { attributes.readonly = 'readonly'; }
