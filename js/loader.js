@@ -123,6 +123,10 @@ YUI().use(function(Y) {
 					   path: 'js/fields/SerializeField-beta.js',
 					   requires: ['inputex-string','json']
 					},
+					'inputex-object': {
+					   path: 'js/fields/ObjectField.js',
+   					requires: ['inputex-list','inputex-combine','inputex-string']
+					},
 					// Fields
 					'inputex-string': {
 						path: 'js/fields/StringField.js',
@@ -134,7 +138,7 @@ YUI().use(function(Y) {
 					},
 					'inputex-autocomplete': {
 						path: 'js/fields/AutoComplete.js',
-						requires: ['inputex-string','autocomplete', 'autocomplete-filters', 'autocomplete-highlighters']
+						requires: ['inputex-string','autocomplete', 'autocomplete-filters', 'autocomplete-highlighters','datasource']
 					},
 					'inputex-checkbox': {
 						path: 'js/fields/CheckBox.js',

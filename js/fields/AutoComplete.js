@@ -1,4 +1,4 @@
-YUI.add("inputex-autocomplete", function(Y) {
+YUI.add('inputex-autocomplete', function(Y) {
 
   var lang = Y.Lang,
       inputEx = Y.inputEx;
@@ -10,14 +10,13 @@ YUI.add("inputex-autocomplete", function(Y) {
  * @extends inputEx.StringField
  * @param {Object} options Added options for Autocompleter
  * <ul>
- *  <li>datasource: the datasource</li>
+ *  <li>source: the datasource</li>
  *  <li>autoComp: autocompleter options</li>
  *   <li>returnValue: function to format the returned value (optional)</li>
  * </ul>
  */
 inputEx.AutoComplete = function(options) {
    inputEx.AutoComplete.superclass.constructor.call(this, options);
-
 };
 
 Y.extend(inputEx.AutoComplete, inputEx.StringField, {
@@ -48,6 +47,7 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
       inputEx.AutoComplete.superclass.initEvents.call(this);
 
       // remove standard blur listener
+      // TODO: ?
    },
 
    /**
@@ -101,14 +101,6 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
       if(!this._nElementsReady) { this._nElementsReady = 0; }
       this._nElementsReady++;
       if(this._nElementsReady != 2) return;
-
-      if(!lang.isUndefined(this.options.datasourceParameters))
-      {
-         for (param in this.options.datasourceParameters)
-         {
-            this.options.datasource[param] = this.options.datasourceParameters[param];
-         }
-      }
     
       this.yEl = Y.one(this.el)
       this.yEl.plug(Y.Plugin.AutoComplete, this.options.autoComp);
@@ -125,7 +117,7 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
     */
    itemSelectHandler: function(o) {
       var aData = o.result.raw;
-      this.setValue( this.options.returnValue ? this.options.returnValue(aData) : aData[0] );
+      this.setValue( this.options.returnValue ? this.options.returnValue(aData) : aData.label );
    },
 
    onBlur: function(e){
@@ -139,7 +131,7 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
    /**
     * Set the value
     * @param {Any} value Value to set
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updated event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(value, sendUpdatedEvt) {
       this.hiddenEl.value = value || "";
@@ -147,11 +139,11 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
       // "inherited" from inputex.Field :
       //    (can't inherit of inputex.StringField because would set this.el.value...)
       //
-   // set corresponding style
-   this.setClassFromState();
+      // set corresponding style
+      this.setClassFromState();
 
-   if(sendUpdatedEvt !== false) {
-      // fire update event
+      if(sendUpdatedEvt !== false) {
+         // fire update event
          this.fireUpdatedEvt();
       }
    },
@@ -170,5 +162,5 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
 inputEx.registerType("autocomplete", inputEx.AutoComplete);
 
 }, '3.0.0a',{
-  requires: ["inputex-string","autocomplete", "autocomplete-filters", "autocomplete-highlighters"]
+  requires: ['inputex-string','autocomplete', 'autocomplete-filters', 'autocomplete-highlighters','datasource']
 })

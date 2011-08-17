@@ -1,5 +1,8 @@
-(function() {
+YUI.add("inputex-object", function(Y){
 
+   var inputEx = Y.inputEx,
+       lang = Y.Lang;
+   
 /**
  * @class list of PairField where where the returned value is converted to an object
  * @extends inputEx.ListField
@@ -17,7 +20,7 @@ inputEx.ObjectField = function(options) {
 	inputEx.ObjectField.superclass.constructor.call(this, options);
 };
 
-YAHOO.extend(inputEx.ObjectField, inputEx.ListField, {
+Y.extend(inputEx.ObjectField, inputEx.ListField, {
 
    /**
     * Convert the array of 2d elements to an javascript object 
@@ -50,4 +53,6 @@ YAHOO.extend(inputEx.ObjectField, inputEx.ListField, {
  */
 inputEx.registerType('object', inputEx.ObjectField);
 
-})();
+},'3.0.0a',{
+  requires: ['inputex-list','inputex-combine','inputex-string']
+});

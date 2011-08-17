@@ -17,6 +17,8 @@ Guidelines to give inputEx 3 a fresh start :
 * remove inputParams
 * merge examples scripts with a unit-test engine ? 
 * repair ddlist
+* repair autocomplete
+* finish ObjectField
 
 
 # Changelog
@@ -67,7 +69,7 @@ now becomes
 
 * YAHOO.lang => Y.Lang
 
-* YAHOO.on('updated', function(value) { => Y.extend
+* Y.lang.extend => Y.extend
 
 * YAHOO.augmentObject replaced by
  *  Y.mix // is used instead of YAHOO.augmentObject

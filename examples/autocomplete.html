@@ -4,7 +4,7 @@
   <title>inputEx - Autocomplete Usage</title>
  </head>
 
- <body class="yui-skin-sam">
+ <body class="yui3-skin-sam">
 
 <h1>inputEx - Autocomplete Usage</h1>
 
@@ -19,7 +19,7 @@
 
 	<div class='codeContainer'>
 		<textarea name="code" class="JScript">
-			// Autocompleter
+		  
 			var field = inputEx({
 				type: "autocomplete",
 				parentEl: 'container1', 
@@ -27,31 +27,26 @@
 
 				// Format the hidden value (value returned by the form)
 				returnValue: function(oResultItem) {
-					return oResultItem[1];
+					return oResultItem.value;
 				},
 				autoComp: {// options of the YUI3 autocompleter (see http://developer.yahoo.com/yui/3/autocomplete/#config)
 					minQueryLength: 2,
 					maxResults: 50,
 					resultTextLocator: 'label',
 					source:
-				    [{label: "state1", value:1},
+				    [{label: "Massachusets", value: "MA"},
 				    {label: "state2", value: 2},
 				    {label: "state3", value:3}]
 					
 				}
 			});
 
-			var button = inputEx.cn('button', null, null, 'GetValue');
-			Y.one('#container1').appendChild(button);
-			Y.on( 'click', function() {
+      Y.Node.create("<button>Get Value</button>").appendTo('#container1').on( 'click', function() {
 				alert( field.getValue() );
-			},button);
+			});
 
-			var logDiv = inputEx.cn('div', null, null, "");
-			Y.one('#container1').appendChild(logDiv);
-			field.on("updated", function(v) {
-				var value = v;
-				logDiv.appendChild( inputEx.cn('div',null, null, "Updated at "+(new Date())+" with value '"+value+"'") );
+			field.on("updated", function(value) {
+			  Y.one('#container1').append("<div>Updated at "+(new Date())+" with value '"+value+"'</div>");
 			});
 		</textarea>
 	</div>
@@ -70,36 +65,20 @@
 	<div class='demoContainer' id='container2'></div>
 
 	<div class='codeContainer'>
-		<textarea name="code">
+		<textarea name="code" class="JScript">
 			
 			// Example 2: Delicious autocompleter
 
 			// Delicious DataSource using a JSFunction
 			// Delicious.posts is set by the http://feeds.delicious.com/feeds/json/neyric?count=100 script included in the page
 			
-			var deliciousAC = inputEx({
-				type: "autocomplete",
+			var deliciousAC = new Y.inputEx.AutoComplete({
+			  
 				label: 'Search my delicious bookmarks',
 				description: 'Try "javascript" or "rails"',
 				parentEl: 'container2', 
 				name: 'chosen_url',
-				datasource: new YAHOO.widget.DS_JSFunction( function (sQuery) {
-			    	if (!sQuery || sQuery.length == 0) {
-						return false;
-					}
-					var query = sQuery.toLowerCase();
-				  	var aResults = [];
-					for(var i = 0 ; i != Delicious.posts.length-1 ; i++) {
-						var desc = Delicious.posts[i].d.toLowerCase();
-						if( desc.indexOf(query) != -1) {
-							aResults.push([Delicious.posts[i].d, Delicious.posts[i]]);
-						}
-					}
-					return aResults;
-			 	}),
-				datasourceParameters: {
-					maxCacheEntries: 100
-				},
+			
 				// Format the hidden value (value returned by the form)
 				returnValue: function(oResultItem) {
 					var post = oResultItem[1];
@@ -107,19 +86,46 @@
 				},
 				// Autocompleter options
 				autoComp: {
+			  	source: new Y.DataSource.Function({
+			  	  source: function(sQuery) {
+			  	    if (!sQuery || sQuery.length == 0) {
+  						  return false;
+  					  }
+  					  var query = sQuery.toLowerCase();
+  				    var aResults = [];
+  					  for(var i = 0 ; i != Delicious.posts.length-1 ; i++) {
+  					    var post = Delicious.posts[i];
+  						  var desc = post.d.toLowerCase();
+  						  if( desc.indexOf(query) != -1) {
+  							  aResults.push(post);
+  						  }
+  					  }
+  					  return aResults;
+			  	  }
+		  	  }),
+			  	
 					forceSelection: true,
 					minQueryLength: 2,
 					maxResultsDisplayed: 50,
-					formatResult: function(oResultItem, sQuery) {
-						var post = oResultItem[1];
-						// NOTE: we use String.fromCharCode(60) and String.fromCharCode(62) for tags because otherwise our example is broken
-		       			return String.fromCharCode(60)+'a href="'+post.u+'"'+String.fromCharCode(62)+'visit'+String.fromCharCode(60)+'/a'+String.fromCharCode(62)+' '+String.fromCharCode(60)+'span target="_new"'+String.fromCharCode(62)+post.d+String.fromCharCode(60)+'/span'+String.fromCharCode(62);
-               }
+					
+					resultFormatter: function(sQuery, results) {
+					  return Y.Array.map(results, function (result) {
+					    console.log("format", result);
+  						var post = result.raw;
+
+  						// NOTE: we use String.fromCharCode(60) and String.fromCharCode(62) for tags
+         			return String.fromCharCode(60)+'a href="'+post.u+'" target="_new"'+
+         			          String.fromCharCode(62)+'visit'+String.fromCharCode(60)+'/a'+String.fromCharCode(62)+
+         			          ' '+String.fromCharCode(60)+'span target="_new"'+String.fromCharCode(62)+post.d+
+         			          String.fromCharCode(60)+'/span'+String.fromCharCode(62);
+         			
+       			});
+          }
+          
 				}
 			});
-			var button = inputEx.cn('button', null, null, 'GetValue');
-			Y.one('#container2').appendChild(button);
-			YAHOO.util.Event.addListener(button , 'click', function() {
+			
+			Y.Node.create("<button>GetValue</button>").appendTo('#container2').on('click', function() {
 				alert( deliciousAC.getValue() );
 			});
 			
@@ -130,7 +136,7 @@
 
 
 <!-- Example 3 -->
-<div class='exampleDiv'>
+<!--div class='exampleDiv'>
 
 	<h2>YUI JSON autocomplete</h2>
 
@@ -139,7 +145,7 @@
 	<div class='demoContainer' id='container3'></div>
 
 	<div class='codeContainer'>
-		<textarea name="code">
+		<textarea name="code" class="JScript">
 
 			// Example 3: YUI autocompleter
 
@@ -152,27 +158,26 @@
 				description: 'Try "javascript" or "Tree"',
 				parentEl: 'container3',
 				name: 'chosen_url',
-				datasource: new YAHOO.util.ScriptNodeDataSource("http://search.yahooapis.com/WebSearchService/V1/webSearch"),
+			
 				// Format the hidden value (value returned by the form)
 				returnValue: function(oResultItem) {
 					var post = oResultItem[1];
 					return post;
 				},
-				datasourceParameters: {
-					scriptCallbackParam : "callback",
-					responseSchema : {
-						resultsList: "ResultSet.Result",
-						fields: ["Title","Url","ClickUrl"]
-				    }
-				},
+				
 				// Autocompleter options
 				autoComp: {
+				  source: new Y.DataSource.Get({
+              source: "http://search.yahooapis.com/WebSearchService/V1/webSearch?appid=YahooDemo&output=json&site=developer.yahoo.com&site=yuiblog.com&region=us&query="/*,
+              scriptCallbackParam : "callback",
+    					responseSchema : {
+    						resultsList: "ResultSet.Result",
+    						fields: ["Title","Url","ClickUrl"]
+    				  }*/
+          }),
 					forceSelection: true,
 					minQueryLength: 2,
 					maxResultsDisplayed: 50,
-					generateRequest: function(sQuery) {
-				        return "?appid=YahooDemo&output=json&site=developer.yahoo.com&site=yuiblog.com&region=us&query=" + sQuery ;
-				    },
 					formatResult: function(oResultItem, sQuery) {
 				        return oResultItem[0] + " (" + oResultItem[1] + ")";
 					}
@@ -180,17 +185,20 @@
 			});
 			var button = inputEx.cn('button', null, null, 'GetValue');
 			Y.one('#container3').appendChild(button);
-			YAHOO.util.Event.addListener(button , 'click', function() {
+			
+			Y.one(button).on('click', function() {
 				alert( yuiAC.getValue() );
 			});
 
 		</textarea>
 	</div>
 
-</div>
+</div-->
 
 <!-- For the state autocompleter -->
 <script src="http://developer.yahoo.com/yui/examples/autocomplete/assets/js/states_jsfunction.js" type='text/javascript'></script>
+
+<script src="http://feeds.delicious.com/feeds/json/neyric?count=100" type='text/javascript'></script>
 
 
 <script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
