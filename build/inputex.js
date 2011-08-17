@@ -1002,7 +1002,10 @@ inputEx.JsonSchema.Builder.prototype = {
 			this.choicesList.splice(position, 1); // remove 1 element at position
 			
 			// Remove node from DOM
-			this.removeChoiceNode(choice.node);
+			// test if visible first in case we try to remove a hiden choice (already detached from parentNode...)
+			if (choice.visible) {
+			   this.removeChoiceNode(choice.node);
+			}
 			
 		},
 		

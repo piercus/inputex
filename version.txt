@@ -19,6 +19,7 @@ next version :
     * DatePickerField : fix bug in 'readonly: false' mode that displayed a broken calendar
                         if invalid user input in field
     * Textarea : fix rows attribute on firefox (circumvent gecko bug which result in one extra row added)
+    * Choice Mixin : fix removeChoice when trying to remove a previously hidden choice
 
 version 0.7.1 :
 ---------------
