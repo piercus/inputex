@@ -12,7 +12,7 @@
 	<p></p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var builder = new Y.inputEx.JsonSchema.Builder({
 				'schemaIdentifierMap':base_schema_map,
 			  'defaultOptions':{
@@ -22,7 +22,7 @@
 			var m = builder.schemaToInputEx(base_schema_map.community);
 			m.parentEl = 'container1';
 			var f = inputEx(m);
-		</textarea>
+		</pre>
 	</div>
 </div>
 	

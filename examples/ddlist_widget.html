@@ -22,12 +22,12 @@
  <p>Use the following code to create a basic inputEx DDList Widget</p>
  <div class='demoContainer' id='container1'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 	new Y.inputEx.widget.DDList({
 		parentEl: 'container1', 
 		value: ["I was in first position !", "I'm second.", "Third element"]
 	});
-  </textarea>
+  </pre>
  </div>
 </div>
 
@@ -39,7 +39,7 @@
  <p>The returned value is an array</p>
  <div class='demoContainer' id='container2'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		var list = new Y.inputEx.widget.DDList({
 			parentEl: 'container2', 
 			value: ["I was in first position !", "I'm second.", "Third element"]
@@ -50,7 +50,7 @@
 		};
 		list.on('itemRemoved', onUpdate);
 		list.on('listReordered', onUpdate);
-  </textarea>
+  </pre>
  </div>
 </div>
 
@@ -62,7 +62,7 @@
  <p>By providing an object containing label and value attributes</p>
  <div class='demoContainer' id='container3'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		var items= [
 			{label: "I was in first position !", value: 1}, 
 			{label: "I'm second.", value: 2},
@@ -74,7 +74,7 @@
 		};
 		list.on('itemRemoved', onUpdate);
 		list.on('listReordered', onUpdate);
-  </textarea>
+  </pre>
  </div>
 </div>
 
@@ -86,13 +86,13 @@
  <p>Display the item # by changing CSS style only :</p>
  <div class='demoContainer' id='container4'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		new Y.inputEx.widget.DDList({
 			id:'numberedList', 
 			parentEl: 'container4', 
 			value: ['I was in first position !', 'I\'m second.', 'Third element']
 		});
-  </textarea>
+  </pre>
  </div>
 </div>
 
@@ -104,7 +104,7 @@
  <p>Use the following code to listen for the itemRemoved Event:</p>
  <div class='demoContainer' id='container5'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		var list = new Y.inputEx.widget.DDList({
 			parentEl: 'container5', 
 			value: ['I was in first position !', 'I\'m second.', 'Third element']
@@ -112,7 +112,7 @@
 		list.on('itemRemoved', function() {
 				alert("removed !");
 		});
-  </textarea>
+  </pre>
  </div>
 </div>
 
@@ -124,7 +124,7 @@
  <p>Use the following code to listen for the listReordered Event:</p>
  <div class='demoContainer' id='container6'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		var list = new Y.inputEx.widget.DDList({
 			parentEl: 'container6',
 			value: ['I was in first position !', 'I\'m second.', 'Third element']
@@ -132,7 +132,7 @@
 		list.on('listReordered', function() {
 				alert("reordered !");
 		});
-  </textarea>
+  </pre>
  </div>
 </div>
 
@@ -148,13 +148,13 @@
   <style>
 	#myList li {-moz-border-radius:7px; background-color:#EEEEEE; border:0 none; margin:5px; text-align: center;}
   </style>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		var list = new Y.inputEx.widget.DDList({
 			parentEl: 'container7',
 			id: 'myList',
 			value: ['I was in first position !', 'I\'m second.', 'Third element']
 		});
-  </textarea>
+  </pre>
  </div>
 </div>
 
@@ -167,14 +167,14 @@
   <style>
 	#myList li {-moz-border-radius:7px; background-color:#EEEEEE; border:0 none; margin:5px; text-align: center;}
   </style>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		var list = new Y.inputEx.widget.DDList({
 			parentEl: 'container8',
 			id: 'myList',
 			allowDelete: false,
 			value: ['I was in first position !', 'I\'m second.', 'Third element']
 		});
-  </textarea>
+  </pre>
  </div>
 </div>
 

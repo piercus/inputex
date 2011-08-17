@@ -15,7 +15,7 @@
 	<p>Instantiate a inputEx.JsonSchema.Builder object, configure the schemaIdentifierMap (Hash of json-schema definitions) and call the <i>schemaToInputEx</i> method to get the inputEx definition.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 // Create a schemaIdentifierMap 
 var schemaIdentifierMap = {
  // Person definition
@@ -54,7 +54,7 @@ inputExDefinition.parentEl = 'container1';
 
 // Create the form
 var f = inputEx(inputExDefinition);
-		</textarea>
+		</pre>
 	</div>
 </div>
 	
@@ -66,7 +66,7 @@ var f = inputEx(inputExDefinition);
 	<p>Use the <i>"_inputEx"</i> attribute on json-schema properties. This object will override inputEx' default properties in the field definition. You may also override the inputEx type through the <i>"_type"</i> attribute.</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 // Create a schemaIdentifierMap 
 var schemaIdentifierMap = {
  // Person definition
@@ -102,7 +102,7 @@ inputExDefinition.parentEl = 'container2';
 
 // Create the form
 var f = inputEx(inputExDefinition);
-		</textarea>
+		</pre>
 	</div>
 </div>	
 

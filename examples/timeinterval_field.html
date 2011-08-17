@@ -14,14 +14,14 @@
  <p>Use the following code to create a basic inputEx TimeIntervalField.</p>
  <div class='demoContainer' id='container1'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		var field = new Y.inputEx.TimeIntervalField({parentEl: 'container1', label: 'Length',value:82800});
 		var button = inputEx.cn('button', null, null, 'getValue');
 		Y.one(button).on('click',function() {
 			alert(field.getValue()+" (seconds)");
 		});
 		Y.one('#container1').appendChild(button);
-  </textarea>
+  </pre>
  </div>
 </div>
 
@@ -33,7 +33,7 @@
  <p>You can set the <i>fields</i> and <i>separators</i> options of the combine field to customize the field</p>
  <div class='demoContainer' id='container2'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 	  var units = inputEx.TimeIntervalField.units;
 	  var unitsStr = inputEx.messages.timeUnits;
 	  var n=[]; for(var i=1;i !=30;i++){ n.push(i); }
@@ -57,7 +57,7 @@
 			fields: fields,
 			separators: ["for&nbsp;", "&nbsp;&nbsp;", false]
 		});
-  </textarea>
+  </pre>
  </div>
 </div>
 

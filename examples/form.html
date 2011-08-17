@@ -19,7 +19,7 @@ div#container3 { width:400px }
    <p>Use the following code to create a basic inputEx Form.</p>
    <div class='demoContainer' id='container1'></div>
    <div class='codeContainer'>
-      <textarea name="code" class="JScript">
+      <pre class="brush:js">
          new Y.inputEx.Form( { 
             fields: [ 
                {type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }] },
@@ -31,7 +31,7 @@ div#container3 { width:400px }
             buttons: [{type: 'submit', value: 'Change'}],
             parentEl: 'container1'
          });
-      </textarea>
+      </pre>
    </div>
 </div>
 
@@ -41,7 +41,7 @@ div#container3 { width:400px }
    <p>Use the following code to create a Form with multiple Groups (fieldsets).</p>
    <div class='demoContainer' id='container2'></div>
    <div class='codeContainer'>
-    <textarea name="code" class="JScript">
+    <pre class="brush:js">
          new Y.inputEx.Form( {
               fields: [
                   { 
@@ -67,7 +67,7 @@ div#container3 { width:400px }
               buttons: [{type: 'submit', value: 'Change'}],
               parentEl: 'container2'
           });
-   </textarea>
+   </pre>
     </div>
 </div>
 
@@ -81,7 +81,7 @@ div#container3 { width:400px }
    <div class='demoContainer' id='container3'></div>
 
    <div class='codeContainer'>
-      <textarea name="code" class="JScript">
+      <pre class="brush:js">
          new Y.inputEx.Form( {
             fields: [ 
                { type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }] },
@@ -100,7 +100,7 @@ div#container3 { width:400px }
                showMask:true
             }
          });
-      </textarea>
+      </pre>
    </div>
 
 </div>
@@ -113,7 +113,7 @@ div#container3 { width:400px }
    <p>How to send the form data using Ajax</p>
    <div class='demoContainer' id='container4'></div>
    <div class='codeContainer'>
-      <textarea name="code" class="JScript">
+      <pre class="brush:js">
          new Y.inputEx.Form( {
             fields: [ 
                { type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }] },
@@ -133,7 +133,7 @@ div#container3 { width:400px }
                showMask:true
             }
          });
-      </textarea>
+      </pre>
    </div>
 </div>
 
@@ -145,7 +145,7 @@ div#container3 { width:400px }
    <p>Use wrapObject</p>
    <div class='demoContainer' id='container5'></div>
    <div class='codeContainer'>
-      <textarea name="code" class="JScript">
+      <pre class="brush:js">
          new Y.inputEx.Form( {
             fields: [ 
                { type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }] },
@@ -166,7 +166,7 @@ div#container3 { width:400px }
                showMask:true
             }
          });
-      </textarea>
+      </pre>
    </div>
 </div>
 
@@ -177,7 +177,7 @@ div#container3 { width:400px }
    <p>Use the following code to set or get the value from javascript</p>
    <div class='demoContainer' id='container6'></div>
    <div class='codeContainer'>
-      <textarea name="code" class="JScript">
+      <pre class="brush:js">
          var form6 = new Y.inputEx.Form( { 
             fields: [ 
                {type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }], value:'Mr' },
@@ -237,7 +237,7 @@ div#container3 { width:400px }
             ],
             parentEl: 'container6'
          });
-      </textarea>
+      </pre>
    </div>
 </div>
 
@@ -247,7 +247,7 @@ div#container3 { width:400px }
    <p>Use the following code to create submit buttons, or "link" buttons.</p>
    <div class='demoContainer' id='container7'></div>
    <div class='codeContainer'>
-      <textarea name="code" class="JScript">
+      <pre class="brush:js">
          
          var confirmation = {
             
@@ -286,7 +286,7 @@ div#container3 { width:400px }
             ],
             parentEl: 'container7'
          });
-      </textarea>
+      </pre>
    </div>
    <p>You can use 3 types of inputEx form buttons :
       <ul style="margin-left:40px;list-style-type:disc">
@@ -311,7 +311,7 @@ div#container3 { width:400px }
    <p>Remove DOM nodes, remove event listeners, free memory...</p>
    <div class='demoContainer' id='container8'></div>
    <div class='codeContainer'>
-      <textarea name="code" class="JScript">
+      <pre class="brush:js">
          var form8 = new Y.inputEx.Form( { 
             fields: [ 
                {type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }], value:'Mr' },
@@ -342,7 +342,7 @@ div#container3 { width:400px }
          container.appendChild(inputEx.cn('div',null,{clear:'both'}));
          
          
-      </textarea>
+      </pre>
    </div>
 </div>
 
@@ -353,7 +353,7 @@ div#container3 { width:400px }
    <p>Activate/deactivate browser autocompletion by field, by form, or for all inputEx fields in the page.</p>
    <div class='demoContainer' id='container9'></div>
    <div class='codeContainer'>
-      <textarea name="code" class="JScript">
+      <pre class="brush:js">
 
          // autocompletion is 'on'
          new Y.inputEx.Form( { 
@@ -385,7 +385,7 @@ div#container3 { width:400px }
          //
          //   inputEx.browserAutocomplete = false;
          //
-      </textarea>
+      </pre>
    </div>
 </div>
 

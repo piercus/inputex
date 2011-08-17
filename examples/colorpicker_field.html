@@ -17,9 +17,9 @@
 	<p>Use the following code to create a basic inputEx ColorPickerField.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.ColorPickerField({parentEl: 'container1', label: 'Choose a color', description: 'Click to view the available colors' });
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -31,7 +31,7 @@
 	<p>Use the following code to create a ColorPickerField without controls</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field = new Y.inputEx.ColorPickerField({parentEl: 'container2', label: 'Choose a color', value:'#2626AF', colorPickerOptions:{showcontrols:false} });
 			
 			// Register the 'updated' event and log the value to the page
@@ -41,7 +41,7 @@
 				logDiv.appendChild( inputEx.cn('div', null, null, "Updated at "+(new Date())+" with value: "+val) );
 			});
 			
-		</textarea>
+		</pre>
 	</div>
 </div>
 

@@ -15,9 +15,9 @@
 	<p>Use the following code to create a basic inputEx CheckBox.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.CheckBox({parentEl: 'container1'});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -28,9 +28,9 @@
 	<p>Add the label</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.CheckBox({label: 'Do you like inputEx ?', rightLabel: 'Check me !', parentEl: 'container2', value: false});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -41,13 +41,13 @@
 	<p>In its simplest form, the CheckBox returns <i>true</i> if checked, <i>false</i> otherwise.</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var exampleDiv = Y.one('#container3');
 			var field1 = new Y.inputEx.CheckBox({rightLabel: 'I return true/false', parentEl: exampleDiv});
 			var button = inputEx.cn('button', null, null, 'getValue()');
 			exampleDiv.appendChild(button); 
 			Y.one(button).on('click', function() { alert(field1.getValue()); });
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -58,7 +58,7 @@
 	<p>You can return different values if needed.</p>
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var exampleDiv = Y.one('#container4');
 			var field2 = new Y.inputEx.CheckBox({sentValues: ['Yes', 'No'], rightLabel: 'Do you agree ?', parentEl: exampleDiv, value: 'Yes'});
 			var button = inputEx.cn('button', null, null, 'getValue()');
@@ -70,7 +70,7 @@
 			Y.one(button).on('click', function() { alert(field2.getValue()); });
 			Y.one(button2).on('click', function() { field2.setValue('No'); });
 			Y.one(button3).on('click', function() { field2.setValue('Yes'); });
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -82,7 +82,7 @@
 	<p>How to listen to the updated event :</p>
 	<div class='demoContainer' id='container5'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript" cols="60" rows="1">
+		<pre class="brush:js">
 			var el = Y.one('#container5');
 			var field = new Y.inputEx.CheckBox({parentEl: el });
 			var logDiv = inputEx.cn('div', null, null, "Log :");
@@ -91,7 +91,7 @@
 				logDiv.innerHTML += "Updated at "+(new Date())+" with value : "+value;
 				logDiv.appendChild(inputEx.cn('br'));
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -103,10 +103,10 @@
 	<p>How to enable/disable a checkbox :</p>
 	<div class='demoContainer' id='container6'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript" cols="60" rows="1">
+		<pre class="brush:js">
 					var dc = new Y.inputEx.CheckBox({label: 'Disable', parentEl: 'container6'});
 					dc.disable();
-		</textarea>
+		</pre>
 	</div>
 </div>
 

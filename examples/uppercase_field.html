@@ -19,7 +19,7 @@
 	<div class='demoContainer' id='container1'></div>
 
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field = new Y.inputEx.UpperCaseField({parentEl: 'container1', value: 'i was lowercase'});
 
 			var el = Y.one('#container1');
@@ -39,7 +39,7 @@
 				logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 				logDiv.appendChild(inputEx.cn('br'));
 			});
-		</textarea>
+		</pre>
 	</div>
 
 </div>

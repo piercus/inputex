@@ -16,7 +16,7 @@ YUI.add('inputex-examples', function (Y) {
 		var examples = [], i, length, textarea, code;
 		
 		// i'm not proud of using n._node ... but the method getDOMNode (http://developer.yahoo.com/yui/3/api/Node.html#method_getDOMNode) is not implemented yet
-		Y.all('.JScript').each(function(n){ examples.push(n._node);},this);
+		Y.all('pre').each(function(n){ examples.push(n._node);},this);
 		
 		for(i = 0, length = examples.length ; i < length ; i += 1) {
 			
@@ -39,7 +39,7 @@ YUI.add('inputex-examples', function (Y) {
 			}
 		}
 		
-		dp.SyntaxHighlighter.HighlightAll('code');
+		SyntaxHighlighter.highlight();
 	});
 
    
@@ -165,5 +165,5 @@ YUI.add('inputex-examples', function (Y) {
 		return text;
 	};
 
-}, '@VERSION@', {requires: ["inputex","dpSyntaxHighlighter"]});
+}, '@VERSION@', {requires: ["inputex","SyntaxHighlighter"]});
 

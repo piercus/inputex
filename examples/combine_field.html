@@ -15,7 +15,7 @@
 	<p></p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field = new Y.inputEx.CombineField({
 				parentEl: 'container1', 
 				label: 'Your name',
@@ -45,7 +45,7 @@
 				logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 				logDiv.appendChild(inputEx.cn('br'));
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -56,7 +56,7 @@
 	<p></p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.CombineField({
 				parentEl: 'container2', 
 				label:'Select Datetime :',
@@ -66,7 +66,7 @@
 				],
 				separators: [false,"&nbsp;",false]
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -78,7 +78,7 @@
  <p>The names are automatically set on sub-fields, so that standard forms can work. Click the button and check the URL</p>
  <div class='demoContainer' id='container3'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">	
+  <pre class="brush:js">	
     new Y.inputEx.Form( {
 			fields: [
 			{
@@ -116,7 +116,7 @@
 			method: 'GET',
 			parentEl: 'container3'
 		});
-  </textarea>
+  </pre>
  </div>
 </div>
 

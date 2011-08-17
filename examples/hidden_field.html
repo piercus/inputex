@@ -19,7 +19,7 @@
 	<div class='demoContainer' id='container1'></div>
 
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 		var exampleDiv = Y.one('#container1');
 		var group = new Y.inputEx.Group({
 			 	fields: [ 
@@ -32,7 +32,7 @@
 		var button=inputEx.cn('button',null,null, 'Get Value'); 
 		exampleDiv.appendChild(button); 
 		Y.one(button).on('click', function(){ alert(Y.JSON.stringify(group.getValue()) ); });
-		</textarea>
+		</pre>
 	</div>
 	
 	<p>Note that <i>&lt;hiddenFieldInstance&gt;</i>.getValue() returns the value as stored, without type casting (we store an integer -> we get an integer).<br /><br />

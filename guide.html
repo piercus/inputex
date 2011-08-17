@@ -9,14 +9,15 @@
 
 <link rel="stylesheet" type="text/css" href="res/guide.css" />
 
-<link rel="stylesheet" type="text/css" href="res/SyntaxHighlighter/shCore.css" />	
-<link type="text/css" rel="stylesheet" href="res/SyntaxHighlighter/shThemeDefault.css" id="shTheme"/>
+<link rel="stylesheet" type="text/css" href="res/syntaxhighlighter/styles/shCore.css" />	
+<link type="text/css" rel="stylesheet" href="res/syntaxhighlighter/styles/shThemeDefault.css" id="shTheme"/>
 
-<script type="text/javascript" src="res/SyntaxHighlighter/shCore.js"></script>
-<script type="text/javascript" src="res/SyntaxHighlighter/shBrushJScript.js"></script>
-<script type="text/javascript" src="res/SyntaxHighlighter/shBrushXml.js"></script>
-<script type="text/javascript" src="res/SyntaxHighlighter/shBrushCss.js"></script>
-<script type="text/javascript">SyntaxHighlighter.config.clipboardSwf = 'res/SyntaxHighlighter/clipboard.swf';SyntaxHighlighter.all();</script>
+<script type="text/javascript" src="res/syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="res/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="res/syntaxhighlighter/scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="res/syntaxhighlighter/scripts/shBrushPowerShell.js"></script>
+<script type="text/javascript" src="res/syntaxhighlighter/scripts/shBrushCss.js"></script>
+<script type="text/javascript">SyntaxHighlighter.config.clipboardSwf = 'res/syntaxhighlighter/clipboard.swf';SyntaxHighlighter.all();</script>
 
  </head>
 
@@ -663,11 +664,49 @@
 	<p>The wrapper childNodes have the "float" css attribute set to "left" so you can decide where to break lines between them by using css: it gets much easier to put the label over the field, or the messages under etc...</p>
   
 
+	<a name="Production"><h1>5 Production</h1></a>
+	
+	<a name="Minimizing"><h2>5.1 Minimizing</h2></a>
+	
+	<p>When using inputEx in production, you might want to combine all the files into one (to reduce the number of HTTP requests) and minimize it. Here is a little script, which uses YUI compressor :</p>
+	
+  <pre class="brush:ps">
+    #!/bin/sh
+    #
+    #  - Concatenate all js files into build/inputex.js
+    #  - minify it using YUI compressor to build/inputex-min.js
+    #  - minify the CSS file to build/inputex-min.css
+
+    CURRENT_PATH="$(dirname "$(readlink ${BASH_SOURCE[0]})")"
+    BUILD_PATH=$CURRENT_PATH/../build
+    SRC_PATH=$CURRENT_PATH/../js
+    YUIcompressorJar=~/path/to/yuicompressor-2.4.6/build/yuicompressor-2.4.6.jar
+
+    # Remove previous files
+    rm -f $BUILD_PATH/*
+
+    # Concatenate all the js files
+    cat $SRC_PATH/inputex.js \
+        $SRC_PATH/Visus.js \
+        $SRC_PATH/json-schema.js \
+        $SRC_PATH/mixins/choice.js \
+        $SRC_PATH/Field.js \
+        ... \
+        > $BUILD_PATH/inputex.js
+
+    # Minify using yui compressor
+    java -jar $YUIcompressorJar $BUILD_PATH/inputex.js -o $BUILD_PATH/inputex-min.js --charset utf8
+
+    # Minify CSS using yui compressor
+    java -jar $YUIcompressorJar $CURRENT_PATH/../css/inputEx.css -o $BUILD_PATH/inputex-min.css --charset utf8
+
+  </pre>
 	
 	
-	<a name="Contribute"><h1>5 Contribute</h1></a>
 	
-	<a name="Internationalization"><h2>5.1 Internationalization</h2></a>
+	<a name="Contribute"><h1>6 Contribute</h1></a>
+	
+	<a name="Internationalization"><h2>6.1 Internationalization</h2></a>
 	
 	
 	<p><strong>Usage</strong></p>
@@ -755,14 +794,14 @@
 </pre>
 	
 	
-  <a name="ReportIssue"><h2>5.2 Reporting an Issue</h2></a>
+  <a name="ReportIssue"><h2>6.2 Reporting an Issue</h2></a>
 
   <p>The issues/bugs and feature requests are managed through the <a href="http://github.com/neyric/inputex/issues">GitHub issue tracker</a>. Feel free to add new ones, vote for your favorites, comment on existing one, ...</p>
 
   <p>Then don’t get your hopes up. Unless you have a "Code Red, Mission Critical, The World is Coming to an End" kind of bug, you’re creating this ticket in the hope that others with the same problem will be able to collaborate with you on solving it. Do not expect that the ticket automatically will see any activity or that others will jump to fix it. Creating a ticket like this is mostly to help yourself start on the path of fixing the problem and for others to confirm it with a "I’m having this problem too" comment. <i>(shamelessly copied from Rails guide)</i></p>
 
 
-  <a name="ContributeDoc"><h2>5.3 Contributing to the Documentation</h2></a>
+  <a name="ContributeDoc"><h2>6.3 Contributing to the Documentation</h2></a>
 
   <p>This guide represents the biggest documentation effort of the library. The <a href="api/index.html">API documentation</a> is also a huge part of inputEx's documentation. How can you help ?</p>
 
@@ -773,7 +812,7 @@
   	<li>write about uncovered topics</li>
   </ul>
 
-  <a name="ContributeCode"><h2>5.4 Contributing to the Code</h2></a>
+  <a name="ContributeCode"><h2>6.4 Contributing to the Code</h2></a>
 
   <p>The easiest way for us to integrate your work into inputEx, is to fork the project on GitHub, and commit your changes into your own branch.</p>
 
@@ -786,7 +825,7 @@
   </ul>
 
 
-  <a name="Contributors"><h2>5.5 Contributors</h2></a>
+  <a name="Contributors"><h2>6.5 Contributors</h2></a>
 
   <p>Special thanks to all contributors :</p>
 

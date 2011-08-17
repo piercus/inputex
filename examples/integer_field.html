@@ -15,12 +15,12 @@
 	<div class='demoContainer' id='container1'></div>
 	<div id='valueContainer1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field = new Y.inputEx.IntegerField({parentEl: 'container1', showMsg: true});
 			field.on('updated', function(value) {
 				Y.one('#valueContainer1').innerHTML = "value: "+value+", type: "+typeof(value);
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -31,12 +31,12 @@
 	<div class='demoContainer' id='container2'></div>
 	<div id='valueContainer2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field = new Y.inputEx.IntegerField({parentEl: 'container2', showMsg: true, required:true, typeInvite:"Enter a number", trim: true});
 			field.on('updated', function(value) {
 				Y.one('#valueContainer2').innerHTML = "value: "+value+", type: "+typeof(value);
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -47,9 +47,9 @@
 	<p>Set the negative attribute to true if you allow negative values.</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.IntegerField({parentEl: 'container3', showMsg: true, required:true, negative:true});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -60,9 +60,9 @@
 	<p>Check values are within a range</p>
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.IntegerField({parentEl: 'container4', showMsg: true, min:3, max:10, typeInvite:"Integers between 3 and 10 only", size:30});
-		</textarea>
+		</pre>
 	</div>
 </div>
 

@@ -24,9 +24,9 @@
 	<p>Use the following code to create a basic inputEx TinyMCEField.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.TinyMCEField({parentEl: 'container1', name: 'rteField', value: String.fromCharCode(60)+"b"+String.fromCharCode(62)+"I'm"+String.fromCharCode(60)+"/b"+String.fromCharCode(62)+" the default value. I've been set through the value option."});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -37,7 +37,7 @@
 	<p>Test for setValue/getValue using the TinyMCEField.</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var div = Y.one('#container2');
 			var htmlField = new Y.inputEx.TinyMCEField({parentEl: div, name: 'test2'});
 
@@ -51,7 +51,7 @@
 			Y.one(button2).on('click' ,function() { 
 				alert(htmlField.getValue());
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -62,10 +62,10 @@
 	<p>Use the following code to create a SimpleEditor widget</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field3 = new Y.inputEx.TinyMCEField({parentEl: 'container3', name: 'rteField3'});
 			field3.setValue("Value set just after init...");
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -77,7 +77,7 @@
 	<p>You can have access to all the tinymce config options through the "opts" attribute. Check out the <a href="http://tinymce.moxiecode.com/examples/full.php">TinyMCE examples</a> for all options.</p>
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field4 = new Y.inputEx.TinyMCEField({
 			  parentEl: 'container4', 
 			  name: 'rteField4',
@@ -90,7 +90,7 @@
       	}
 			});
 			field4.setValue("Value set just after init...");
-		</textarea>
+		</pre>
 	</div>
 </div>
 

@@ -19,7 +19,7 @@
 	<div class='demoContainer' id='container1'></div>
 
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 		  var YAHOO = Y.YUI2;
 		  
 			var myDataSource = new YAHOO.util.XHRDataSource("books.json"); 
@@ -27,7 +27,7 @@
 			myDataSource.responseSchema = { fields: ["id","quantity","amount","title", "category"], resultsList: "Results" };
 			
 			new Y.inputEx.DSSelectField({name: 'country', datasource: myDataSource, valueKey: "id", labelKey: "title", parentEl: 'container1'});
-		</textarea>
+		</pre>
 	</div>
 
 </div>
@@ -44,7 +44,7 @@
 	<div class='demoContainer' id='container2'></div>
 
 	<div class='codeContainer'>
-				<textarea name="code" class="JScript">
+				<pre class="brush:js">
 				  var YAHOO = Y.YUI2;
 				  
 					var myDataSource = new YAHOO.util.XHRDataSource("books.json"); 
@@ -60,7 +60,7 @@
 						logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 						logDiv.appendChild(inputEx.cn('br'));
 					});
-		</textarea>
+		</pre>
 			</div>
 
 </div>
@@ -77,7 +77,7 @@
 	<div class='demoContainer' id='container3'></div>
 
 	<div class='codeContainer'>
-				<textarea name="code" class="JScript">
+				<pre class="brush:js">
 				  var YAHOO = Y.YUI2;
 				  
 					var myDataSource = new YAHOO.util.XHRDataSource("books.json"); 
@@ -92,7 +92,7 @@
 					YAHOO.util.Event.addListener(setValueButton, 'click', function(e,params) {
 						field3.setValue("po-1482");
 					});
-		</textarea>
+		</pre>
 			</div>
 
 </div>

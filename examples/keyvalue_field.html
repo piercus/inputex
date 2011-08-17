@@ -14,7 +14,7 @@
  <p>The KeyValueField makes it easy to build a search form from an existing inputEx definition</p>
  <div class='demoContainer' id='container1'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		var field = new Y.inputEx.KeyValueField({
 			parentEl: 'container1',
 			availableFields: [
@@ -29,7 +29,7 @@
 		Y.one(button).on('click', function() { alert( Y.JSON.stringify(field.getValue())); });  
 			
 		
-  </textarea>
+  </pre>
  </div>
 </div>
 

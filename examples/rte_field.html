@@ -15,9 +15,9 @@
 	<p>Use the following code to create a basic inputEx RTEField.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.RTEField({parentEl: 'container1', name: 'rteField',value:"I'm the default value. I've been set through the value option."});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -28,7 +28,7 @@
 	<p>Test for setValue/getValue using the RTEField.</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var div = Y.one('#container2');
 			var htmlField = new Y.inputEx.RTEField({parentEl: div, name: 'test2'});
 
@@ -42,7 +42,7 @@
 			Y.one(button2).on('click' ,function() { 
 				alert(htmlField.getValue());
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -53,10 +53,10 @@
 	<p>Use the following code to create a SimpleEditor widget</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field3 = new Y.inputEx.RTEField({parentEl: 'container3', name: 'rteField3', editorType: 'simple'});
 			field3.setValue("Value set just after init...");
-		</textarea>
+		</pre>
 	</div>
 </div>
 

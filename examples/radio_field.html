@@ -15,7 +15,7 @@
 	<p>Use the following code to create a basic inputEx RadioField.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.RadioField({
 				label: 'Where did you learn about inputEx ?',
 				name: 'example1',
@@ -27,7 +27,7 @@
 				value:'Ajaxian',
 				parentEl: 'container1'
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -37,7 +37,7 @@
 	<p>Use the following code to create choices with labels different from values</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.RadioField({
 				label: 'Where are you from ?',
 				name: 'example2',
@@ -47,7 +47,7 @@
 				],
 				parentEl: 'container2'
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -58,7 +58,7 @@
 	<p>How to listen to the updated event :</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 		var el, field, button, val, logDiv;
 		
 		el = Y.one('#container3');
@@ -82,7 +82,7 @@
 			logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 			logDiv.appendChild(inputEx.cn('br'));
 		});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -100,7 +100,7 @@
 	</style>
 	
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.RadioField({
 				label: 'Where did you learn about inputEx ?',
 				display:'vertically',  // instead of default implicit "display:'inline'"
@@ -114,7 +114,7 @@
 			// <style>
 			//   .inputEx-RadioField .inputEx-selected label { text-decoration: underline; }
 			// </style>
-		</textarea>
+		</pre>
 	</div>
 
 </div>
@@ -125,12 +125,12 @@
 	<p>The "allowAny" option adds a radio associated to a StringField to let the user enter any value.</p>
 	<div class='demoContainer' id='container5'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field2 = new Y.inputEx.RadioField({label: 'Where did you learn about inputEx ?', name: 'example5', choices: ['Ajaxian','YUI blog'], parentEl: 'container5', allowAny: true});
 			field2.on('updated', function(value) {
 					Y.one('#container5').appendChild( inputEx.cn('div',null,null, "Updated with value: "+value) );
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -148,7 +148,7 @@
 	<div class='demoContainer' id='container6'></div>
 
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field, el, button1, button2, button3;
 			
 			el = Y.one('#container6');
@@ -192,7 +192,7 @@
 			/* Style
 			#container6 div.inputEx-StringField-wrapper input {width: 25px;}
 			*/
-		</textarea>
+		</pre>
 	</div>
 
 </div>
@@ -211,7 +211,7 @@
 	<div class='demoContainer' id='container7'></div>
 
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field, el, button1, button2, button3;
 			
 			el = Y.one('#container7');
@@ -254,7 +254,7 @@
 					el.appendChild( inputEx.cn('div',null,null, "Updated with value: "+value+" (minutes)") );
 			});
 			
-		</textarea>
+		</pre>
 	</div>
 
 </div>
@@ -267,7 +267,7 @@
 	<p>Disable the field (to disable radio inputs individually, see another example below)</p>
 	<div class='demoContainer' id='container8'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var el, field, button1, button2;
 			
 			el = Y.one('#container8');
@@ -281,7 +281,7 @@
 			el.appendChild(button2); 
 			Y.one(button2).on('click', function() { field.enable(); });
 			
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -291,7 +291,7 @@
 	<p>Add choices dynamically</p>
 	<div class='demoContainer' id='container9'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var el, field, button1, button2, button3, logDiv;
 			
 			el = Y.one('#container9');
@@ -326,7 +326,7 @@
 				logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 				logDiv.appendChild(inputEx.cn('br'));
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -336,7 +336,7 @@
 	<p>Remove choices dynamically</p>
 	<div class='demoContainer' id='container10'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var el, field, button1, button2, button3, logDiv;
 			
 			el = Y.one('#container10');
@@ -382,7 +382,7 @@
 				logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 				logDiv.appendChild(inputEx.cn('br'));
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -393,7 +393,7 @@
 	<p style="font-size:90%;padding-top:3px;">Note : disableChoice and enableChoice methods have no effect with IE &lt; 8 because it did not support disabled="disabled" attribute.</p>
 	<div class='demoContainer' id='container11'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 		var el, field, button1, button2, button3, button4, logDiv;
 		
 		el = Y.one('#container11');
@@ -445,7 +445,7 @@
 			logDiv.appendChild(inputEx.cn('br'));
 		});
 		
-		</textarea>
+		</pre>
 	</div>
 </div>
 

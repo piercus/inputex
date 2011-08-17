@@ -15,7 +15,7 @@
 	<p>How to listen to the updated event :</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 		var el = Y.one('#container1');
 		
 		var field1 = new Y.inputEx.SelectTwiceField({
@@ -42,7 +42,7 @@
 			logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 			logDiv.appendChild(inputEx.cn('br'));
 		});
-		</textarea>
+		</pre>
 	</div>
 </div>
 

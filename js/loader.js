@@ -21,13 +21,22 @@ YUI().use(function(Y) {
 				   },
 				
 				   // Examples
-				   'cssdpSyntaxHighlighter': {
+				   'cssSyntaxHighlighter': {
 						type: 'css',
-						path: 'res/dpSyntaxHighlighter.css'
+						path: 'res/syntaxhighlighter/styles/shCore.css'
 			      },
-				   'dpSyntaxHighlighter': {
-				      path: 'res/js/dpSyntaxHighlighter.js',
-				      requires: ['cssdpSyntaxHighlighter']
+			      'cssSyntaxHighlighter-theme': {
+			         type: 'css',
+			         path: 'res/syntaxhighlighter/styles/shThemeDefault.css',
+			         requires: ['cssSyntaxHighlighter']
+			      },
+				   'SyntaxHighlighter': {
+				      path: 'res/syntaxhighlighter/scripts/shCore.js',
+				      requires: ['cssSyntaxHighlighter-theme']
+				   },
+				   'SyntaxHighlighter-js': {
+				      path: 'res/syntaxhighlighter/scripts/shBrushJscript.js',
+				      requires: ['SyntaxHighlighter']
 				   },
 				   'cssInputex-examples': {
 				      path: 'res/demo.css',
@@ -35,7 +44,7 @@ YUI().use(function(Y) {
 				   },
 				   'inputex-examples': {
 				   	path: 'js/inputex-examples.js',
-				      requires: ['inputex','dpSyntaxHighlighter','cssInputex-examples']
+				      requires: ['inputex','SyntaxHighlighter-js','cssInputex-examples']
 				   },
 				
 					// inputEx base

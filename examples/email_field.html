@@ -18,7 +18,7 @@
 	<div class='demoContainer' id='container1'></div>
 
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 					var field = new Y.inputEx.EmailField({parentEl: 'container1', showMsg: true });
 
 					var logDiv = inputEx.cn('div', null, null, "Log :");
@@ -27,7 +27,7 @@
 						logDiv.innerHTML += "Updated at "+(new Date())+" with value: "+val;
 						logDiv.appendChild(inputEx.cn('br'));
 					});
-		</textarea>
+		</pre>
 	</div>
 
 </div>
@@ -42,7 +42,7 @@
 	<div class='demoContainer' id='container2'></div>
 
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 					var field = new Y.inputEx.EmailField({parentEl: 'container2', showMsg:true, fixdomain:true, description:"Try abc@gmail.co, abc@yaoo.fr..." });
 
 					var logDiv = inputEx.cn('div', null, null, "Log :");
@@ -51,7 +51,7 @@
 						logDiv.innerHTML += "Updated at "+(new Date())+" with value: "+val;
 						logDiv.appendChild(inputEx.cn('br'));
 					});
-		</textarea>
+		</pre>
 	</div>
 
 </div>

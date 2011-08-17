@@ -15,9 +15,9 @@
 	<p>Use the following code to create a basic inputEx DatePickerField.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.DatePickerField({parentEl: 'container1'});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -28,9 +28,9 @@
 	<p>Use the following code to select another date format</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.DatePickerField({parentEl: 'container2', value: new Date(1984,0,6), dateFormat: 'd/m/Y'});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -41,12 +41,12 @@
 	<p>Listening for the updated event</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var datepicker = new Y.inputEx.DatePickerField({parentEl: 'container3', value: new Date(), dateFormat: 'd/m/Y'});
 			datepicker.on('updated', function(value) {
 				Y.one('#container3').appendChild( inputEx.cn('div',null,null, value) );
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -59,12 +59,12 @@
 	<p>The setValue/getValue methods will parse/format the dates to the <i>valueFormat</i> option.</p>
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var datepicker2 = new Y.inputEx.DatePickerField({parentEl: 'container4', value: new Date(), valueFormat: 'Y-m-d', value: '2009-01-01'});
 			datepicker2.on('updated', function(value) {
 				Y.one('#container4').appendChild( inputEx.cn('div',null,null, value) );
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -75,7 +75,7 @@
 	<p>Disable method</p>
 	<div class='demoContainer' id='container5'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var f = new Y.inputEx.DatePickerField({parentEl: 'container5'});
 			
 			var exampleDiv = Y.one('#container5');
@@ -88,7 +88,7 @@
 			exampleDiv.appendChild(button2); 
 			Y.one(button2).on('click', function() { f.enable(); });
 			
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -100,9 +100,9 @@
 	<p>If you want to let users enter the date manually</p>
 	<div class='demoContainer' id='container6'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.DatePickerField({parentEl: 'container6', readonly: false, showMsg: true});
-		</textarea>
+		</pre>
 	</div>
 </div>
 

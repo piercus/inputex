@@ -15,9 +15,9 @@
 	<p>Use the following code to create a basic inputEx InPlaceEdit.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.InPlaceEdit({parentEl: 'container1', editorField:{type:'string'}, animColors:{from:"#FFFF99" , to:"#DDDDFF"} });
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -28,7 +28,7 @@
 	<p>Combine InPlaceEdit and groups</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.InPlaceEdit({
 				parentEl: 'container2', 
 				editorField:{
@@ -49,7 +49,7 @@
 						picUrl: 'http://www.limsi.fr/Individu/vezien/lena.jpg'
 				}
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -61,14 +61,14 @@
 	<p>When the editor is opened, getValue return the editor value.</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var field = new Y.inputEx.InPlaceEdit({parentEl: 'container3', editorField:{type:'string'} });
 			var button = inputEx.cn('button', null, null, "getValue");
 			Y.one(button).on('click', function() {
 				alert(field.getValue());
 			});
 			Y.one('#container3').appendChild(button);
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -81,7 +81,7 @@
 	<p></p>
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			inputEx({
 				type: 'inplaceedit',
 				parentEl: 'container4', 
@@ -99,7 +99,7 @@
 				},
 				value: '5'
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 

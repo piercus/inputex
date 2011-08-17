@@ -15,7 +15,7 @@
 	<p>Use the following code to create a basic inputEx group.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 					var contactFormFields = [
 							{type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }]},
 							{label: 'Firstname', name: 'firstname', required: true},
@@ -28,7 +28,7 @@
 							{type:'url', label: 'Website', name:'website'}
 					];
 					new Y.inputEx.Group({parentEl: 'container1', fields: contactFormFields, legend: 'Tell us about yourself...'});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -39,7 +39,7 @@
 	<p>The inputEx.Group class inherits from inputEx.Field</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var contactFormFields = [ {type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }]}, {label: 'Firstname', name: 'firstname', required: true}, {label: 'Lastname', name: 'lastname', value:'Dupont'}, {type:'email', label: 'Email', name: 'email', required: true, showMsg: true}, {type:'radio', label: 'Happy to be there ?', name: 'happy', values:["y","n"], choices:["yes","no"]}, {type:'boolean', label: 'Favorite colors ?', name: 'yellow', rightLabel:"yellow"}, {type:'boolean', label: ' ', name: 'blue', rightLabel:"blue"}, {type:'boolean', label: ' ', name: 'red', rightLabel:"red"}, {type:'url', label: 'Website', name:'website'} ];
 			
 			new Y.inputEx.ListField({
@@ -49,7 +49,7 @@
 				},
 				parentEl: 'container2'
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -60,7 +60,7 @@
 	<p>How to listen to the updated event :</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript" cols="60" rows="1">
+		<pre class="brush:js">
 			var contactFormFields = [ {type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }]}, {label: 'Firstname', name: 'firstname', required: true}, {label: 'Lastname', name: 'lastname', value:'Dupont'}, {type:'email', label: 'Email', name: 'email', required: true, showMsg: true}, {type:'radio', label: 'Happy to be there ?', name: 'happy', values:["y","n"], choices:["yes","no"]}, {type:'boolean', label: 'Favorite colors ?', name: 'yellow', rightLabel:"yellow"}, {type:'boolean', label: ' ', name: 'blue', rightLabel:"blue"}, {type:'boolean', label: ' ', name: 'red', rightLabel:"red"}, {type:'url', label: 'Website', name:'website'} ];
 			
 			var el = Y.one('#container3');
@@ -88,7 +88,7 @@
 				
 			});
 			el.appendChild(setValueButton);
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -100,11 +100,11 @@
 	<p>Collapsible</p>
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript" cols="60" rows="1">
+		<pre class="brush:js">
 			var contactFormFields = [ {type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }]}, {label: 'Firstname', name: 'firstname', required: true}, {label: 'Lastname', name: 'lastname', value:'Dupont'}, {type:'email', label: 'Email', name: 'email', required: true, showMsg: true}, {type:'radio', label: 'Happy to be there ?', name: 'happy', values:["y","n"], choices:["yes","no"]}, {type:'boolean', label: 'Favorite colors ?', name: 'yellow', rightLabel:"yellow"}, {type:'boolean', label: ' ', name: 'blue', rightLabel:"blue"}, {type:'boolean', label: ' ', name: 'red', rightLabel:"red"}, {type:'url', label: 'Website', name:'website'} ];
 			
 			new Y.inputEx.Group({parentEl: 'container4', fields: contactFormFields, legend: 'User Informations', collapsible: true});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -116,7 +116,7 @@
 	<p>Composition</p>
 	<div class='demoContainer' id='container5'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript" cols="60" rows="1">
+		<pre class="brush:js">
 					var contactFormFields2 = [ 
 							{type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }] },
 							{label: 'Firstname', name: 'firstname', required: true },
@@ -165,7 +165,7 @@
 					Y.one(validButton).on("click", function() {
 						alert( field5.validate() );
 					});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -178,7 +178,7 @@
 	<p>Specify field descriptions</p>
 	<div class='demoContainer' id='container6'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 					var descriptedFields = [ 
 							{ type: 'select', label: 'Title', name: 'title', description: 'Select your gender',  choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }] },
 							{ label: 'Firstname', description: 'Your firstname', name: 'firstname', required: true, value:'Jacques' },
@@ -188,7 +188,7 @@
 							{ type:'url', description: 'Your blog url', label: 'Website', name:'website'}
 					];
 					new Y.inputEx.Group({parentEl: 'container6', fields: descriptedFields, legend: 'User Informations'});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -200,7 +200,7 @@
 	<p>In this example, we return <i>{firstname: ..., lastname: ..., title:... }</i> instead of <i>{ MySubForm: {firstname: ..., lastname: ...}, title:... }</i>.</p>
 	<div class='demoContainer' id='container7'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 					var flattenGroup = new Y.inputEx.Group({
 						parentEl: 'container7', 
 						legend: 'Flatten demo', 
@@ -221,7 +221,7 @@
 					flattenGroup.on('updated',function(value) {
 						Y.one('#container7').appendChild( inputEx.cn('div',null,null, Y.JSON.stringify(value)) );
 					});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -235,7 +235,7 @@
 	<p>This feature is helpful for Ajax forms with server-side validation.</p>
 	<div class='demoContainer' id='container8'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 					var myForm = new Y.inputEx.Group({
 						parentEl: 'container8', 
 						name: "MyForm",
@@ -259,7 +259,7 @@
 						["title", "Cannot be empty !!! (not visible because no showMsg)"]
 					]);
 					
-		</textarea>
+		</pre>
 	</div>
 </div>
 

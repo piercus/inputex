@@ -15,7 +15,7 @@
 	<p></p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			// Convert the community json-schema to inputEx json
 			var builder = new Y.inputEx.JsonSchema.Builder({
 				'schemaIdentifierMap':base_schema_map,
@@ -42,7 +42,7 @@
 			var m = builder2.schemaToInputEx(communitySchema);
 			m.parentEl = 'container1';
 			var f = inputEx(m);
-		</textarea>
+		</pre>
 	</div>
 </div>
 

@@ -15,9 +15,9 @@
 	<p>Use the following code to create a basic inputEx Textarea.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 		new Y.inputEx.Textarea({parentEl: 'container1', value: 'Textarea can contain\nmultiline text !\n'});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -29,7 +29,7 @@
 	<p>Test of the setValue, getValue methods</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var div = Y.one('#container2');
 			var textField = new Y.inputEx.Textarea({parentEl: div, showMsg:true, required:true});
 
@@ -44,7 +44,7 @@
 			Y.on("click" ,function() { 
 				alert(textField.getValue());
 			},button2);
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -55,9 +55,9 @@
 	<p>Set the size using "rows" and "cols" attributes.</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.Textarea({parentEl: 'container3', value: 'Set the size...\nusing "rows" and "cols" attributes !\n', rows: 8, cols: 40});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -67,9 +67,9 @@
 	<p>Set the min/max length, typeInvite...</p>
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.Textarea({parentEl: 'container4', showMsg:true, required:true, typeInvite:"Type text here", minLength:10, maxLength:20, name: "Test4"});
-		</textarea>
+		</pre>
 	</div>
 </div>
 

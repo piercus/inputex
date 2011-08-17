@@ -14,7 +14,7 @@
  <p>The KeyOpValueField makes it easy to build a search form from an existing inputEx definition</p>
  <div class='demoContainer' id='container1'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		var field1 = new Y.inputEx.KeyOpValueField({
 			parentEl: 'container1',
 			availableFields: [
@@ -29,7 +29,7 @@
 		Y.one(button1).on('click', function() { alert( Y.JSON.stringify(field1.getValue())); });  
 			
 		
-  </textarea>
+  </pre>
  </div>
 </div>
 
@@ -41,7 +41,7 @@
  <p>Here is a search form with multiple conditions</p>
  <div class='demoContainer' id='container2'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 	inputEx({
 		type: 'list',
 		parentEl: 'container2',
@@ -54,7 +54,7 @@
 			]
 		}
 	});
-  </textarea>
+  </pre>
  </div>
 </div>
 
@@ -66,7 +66,7 @@
  <p>Two more options are available for this field: "operators" and "operatorLabels"</p>
  <div class='demoContainer' id='container3'></div>
  <div class='codeContainer'>
-  <textarea name="code" class="JScript">
+  <pre class="brush:js">
 		var field3 = new Y.inputEx.KeyOpValueField({
 			parentEl: 'container3',
 			availableFields: [
@@ -83,7 +83,7 @@
 		Y.one('#container3').appendChild(button3); 
 		Y.one(button3).on('click', function() { alert( Y.JSON.stringify(field3.getValue())); });  
 		
-  </textarea>
+  </pre>
  </div>
 </div>
 

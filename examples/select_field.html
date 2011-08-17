@@ -15,7 +15,7 @@
 	<p>Use the following code to create a basic inputEx SelectField.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.SelectField({
 				name: 'country',
 				choices: [                                  // choices: [                      <- alternative syntax (shorter)
@@ -24,7 +24,7 @@
 				],                                          // ],                              <-
 				parentEl: 'container1'
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -34,7 +34,7 @@
 	<p>Use the following code to create choices with labels different from values</p>
 	<div class='demoContainer' id='container1bis'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.SelectField({
 				label: 'Where are you from ?',
 				name: 'country',
@@ -44,7 +44,7 @@
 				],
 				parentEl: 'container1bis'
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -55,7 +55,7 @@
 	<p>How to listen to the updated event :</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 		var el = Y.one('#container2');
 		var field2 = new Y.inputEx.SelectField({ name: 'country', label: 'Where are you from ?', choices: [{ value: 'us', label: 'United States of America' }, { value: 'fr', label: 'France' }], parentEl: el });
 		
@@ -74,7 +74,7 @@
 			logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 			logDiv.appendChild(inputEx.cn('br'));
 		});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -85,7 +85,7 @@
 	<p>Add choices dynamically</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
          	var el = Y.one('#container3');
 			var field3 = new Y.inputEx.SelectField({name: 'country', choices: [{ value: 'United States of America' }, { value: 'France' }], parentEl: el});
 
@@ -117,7 +117,7 @@
 				logDiv3.innerHTML += "Updated at "+(new Date())+" with value "+value;
 				logDiv3.appendChild(inputEx.cn('br'));
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -127,7 +127,7 @@
 	<p>Remove choices dynamically</p>
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var el = Y.one('#container4');
 			var field4 = new Y.inputEx.SelectField({
 				name: 'country',
@@ -170,7 +170,7 @@
 				logDiv4.innerHTML += "Updated at "+(new Date())+" with value "+value;
 				logDiv4.appendChild(inputEx.cn('br'));
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -181,7 +181,7 @@
 	<p style="font-size:90%;padding-top:3px;">Note : disableChoice and enableChoice methods have no effect with IE &lt; 8 because it did not support disabled="disabled" attribute.</p>
 	<div class='demoContainer' id='container5'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 		var el = Y.one('#container5');
 		var field5 = new Y.inputEx.SelectField({name: 'country', choices: [ { value: 'usa', label: 'United States of America' }, { value: 'fr', label: 'France' }, { value: 'es', label: 'Spain' }], parentEl: el});
 		
@@ -234,7 +234,7 @@
 			logDiv5.appendChild(inputEx.cn('br'));
 		},button10);
 		
-		</textarea>
+		</pre>
 	</div>
 </div>
 

@@ -15,9 +15,9 @@
 	<p>Use the following code to create a basic inputEx DateField.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.DateField({parentEl: 'container1', value: new Date(), showMsg: true});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -28,9 +28,9 @@
 	<p>Set the formatDate to your localized date format ! Here is the french format :</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.DateField({dateFormat: 'd/m/Y', value: '27/03/2008', parentEl: 'container2', showMsg: true});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -41,7 +41,7 @@
 	<p>The DateField returns a javascript Date object instance :</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			var exampleDiv = Y.one('#container3');
 			var dateField = new Y.inputEx.DateField({value: new Date(),  parentEl: exampleDiv, showMsg: true, required:true, typeInvite:'m/d/Y'}); 
 			dateField.on('updated', function(val) {
@@ -55,7 +55,7 @@
 			var button2 = inputEx.cn('button', null, null, 'getValue()');
 			exampleDiv.appendChild(button2); 
 			Y.one(button2).on('click', function() { alert(dateField.getValue()); });
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -67,7 +67,7 @@
 	<p>The setValue/getValue methods will parse/format the dates to the <i>valueFormat</i> option.</p>
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			
 			// Instantiate the date field
 			var stringdateField = new Y.inputEx.DateField({value: new Date(),  parentEl: 'container4', showMsg: true, required:true, typeInvite:'m/d/Y', valueFormat: 'Y-m-d'}); 
@@ -87,7 +87,7 @@
 			var button2 = inputEx.cn('button', null, null, 'getValue()');
 			exampleDiv.appendChild(button2); 
 			Y.one(button2).on('click', function() { alert(stringdateField.getValue()); });
-		</textarea>
+		</pre>
 	</div>
 </div>
 

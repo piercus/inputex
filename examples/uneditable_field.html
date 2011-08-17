@@ -15,13 +15,13 @@
 	<p>To format the value of the field with an html string, use the <i>formatValue</i> function (schould return a string):</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.UneditableField({
 				name: 'date', 
 				value: new Date(), 
 				parentEl: 'container1'
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -32,7 +32,7 @@
 	<p>To render the value of the field with a DOM element (to add a behaviour), use the <i>formatDom</i> function (schould return a dom element):</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.UneditableField({
 				name: 'date', 
 				value: 'http://farm2.static.flickr.com/1052/913643741_a83000f8e4.jpg', 
@@ -42,7 +42,7 @@
 				},
 				parentEl: 'container2' 
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -52,7 +52,7 @@
 	<p>Display an image from the field value :</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			inputEx({
 				type: "uneditable",
 				name: 'pagerank', 
@@ -61,7 +61,7 @@
 				visu: {visuType: 'func', func: function(value){ return inputEx.cn('img',{src: "http://www.page-rank-lookup.com/i/style1/pagerank"+value+".png"}) } },
 				parentEl: 'container3'
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 

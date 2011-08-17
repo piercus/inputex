@@ -15,7 +15,7 @@
 	<p>Use the following code to create a basic inputEx DateTimeField.</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">	
+		<pre class="brush:js">	
 			// Example 1
 			field = new Y.inputEx.DateTimeField({parentEl: 'container1', value: new Date()});
 			var button = inputEx.cn('button', null, null, 'getValue');
@@ -23,7 +23,7 @@
 				alert(field.getValue());
 			});
 			Y.one('#container1').appendChild(button);
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -33,9 +33,9 @@
 	<p>Change the date format</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			new Y.inputEx.DateTimeField({parentEl: 'container2', value: new Date(), dateFormat: 'd/m/Y'});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
