@@ -1,3 +1,6 @@
+/**
+ * @module inputex-colorpickerfield
+ */
 YUI.add("inputex-colorpicker",function(Y){
 	
    var inputEx = Y.inputEx,
@@ -120,7 +123,7 @@ Y.extend(inputEx.ColorPickerField, inputEx.Field, {
 		el.innerHTML = "Current color is " + sColor;
 		this.el.value = sColor;
 		
-		// timer to filter very close events (updatedEvt is sent only 50ms after the onRgbChange event)
+		// timer to filter very close events ("updated" event is sent only 50ms after the onRgbChange event)
 		if(this.rgbChangeTimeout) {
 			clearTimeout(this.rgbChangeTimeout);
 		}
@@ -137,7 +140,7 @@ Y.extend(inputEx.ColorPickerField, inputEx.Field, {
 	/**
 	 * Set the value
 	 * @param {String} value Color to set
-	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 	 */
 	setValue: function(value, sendUpdatedEvt) {
 	   this.el.value = value;

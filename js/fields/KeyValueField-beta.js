@@ -1,3 +1,6 @@
+/**
+ * @module inputex-keyvalue
+ */
 YUI.add("inputex-keyvalue",function(Y){
 
    var lang = Y.Lang,
@@ -17,7 +20,7 @@ inputEx.KeyValueField = function(options) {
 Y.extend( inputEx.KeyValueField, inputEx.CombineField, {
    
    /**
-    * Subscribe the updatedEvt on the key selector
+    * Subscribe the "updated" event on the key selector
     */
    initEvents: function() {
       inputEx.KeyValueField.superclass.initEvents.call(this);

@@ -1,3 +1,6 @@
+/**
+ * @module inputex-uneditable
+ */
 YUI.add("inputex-uneditable", function(Y){
 
   var lang = Y.Lang,
@@ -31,7 +34,7 @@ Y.extend(inputEx.UneditableField, inputEx.Field, {
    /**
     * Store the value and update the visu
     * @param {Any} val The value that will be sent to the visu
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(val, sendUpdatedEvt) {
       this.value = val;

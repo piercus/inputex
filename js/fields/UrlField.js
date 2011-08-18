@@ -1,3 +1,6 @@
+/**
+ * @module inputex-url
+ */
 YUI.add("inputex-url",function(Y){
 
    var lang = Y.Lang,
@@ -92,9 +95,6 @@ Y.extend(inputEx.UrlField, inputEx.StringField, {
 
 
 });
-
-inputEx.messages.invalidUrl = "Invalid URL, ex: http://www.test.com";
-
 
 // Register this class as "url" type
 inputEx.registerType("url", inputEx.UrlField, [

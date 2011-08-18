@@ -1,3 +1,6 @@
+/**
+ * @module inputex-radio
+ */
 YUI.add("inputex-radio", function(Y){
 
    var lang = Y.Lang,

@@ -1,4 +1,8 @@
+/**
+ * @module inputex-hidden
+ */
 YUI.add("inputex-hidden", function(Y){
+   
   var inputEx = Y.inputEx;
 
 /**
@@ -31,7 +35,7 @@ Y.extend(inputEx.HiddenField, inputEx.Field, {
    /**
     * Stores the typed value in a local variable, and store the value in the hidden input (cast as string by the input)
     * @param {Any} val The value to set
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(val, sendUpdatedEvt) {
 	

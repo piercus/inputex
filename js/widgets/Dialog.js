@@ -1,3 +1,6 @@
+/**
+ * @module inputex-dialog
+ */
 YUI.add("inputex-dialog",function(Y){
 
    var inputEx = Y.inputEx,
@@ -97,7 +100,7 @@ Y.extend(inputEx.widget.Dialog, YAHOO.widget.Panel, {
    /**
     * Shortcut to set value
     * @param {Any} value The value to set on the field
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(value, sendUpdatedEvt) {
       this.getForm().setValue(value, sendUpdatedEvt);
@@ -106,7 +109,7 @@ Y.extend(inputEx.widget.Dialog, YAHOO.widget.Panel, {
 
    /**
     * Execute a callback as soon as the form is available
-    * @param {Object} callback An object like {fn: my_function, scope: my_scope}
+    * @param {Object} callback An object like with a "fn" property (the callback) and an optional "scope"
     */
 	whenFormAvailable: function (callback) {
 		

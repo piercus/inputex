@@ -2,6 +2,7 @@
  * Tweaking the TimeField to make a Time Range (two TimeFields)
  *    - doesn't show seconds
  *    - Minutes by group of 5
+ * @module inputex-timerange
  */
 inputEx.TimeRange = function(options) {
    
@@ -25,7 +26,7 @@ inputEx.TimeRange = function(options) {
    options.separators = options.separators || [false,"H","&nbsp; à &nbsp;","H",false];
    inputEx.TimeRange.superclass.constructor.call(this,options);
 
-	// Hook toogleEndMinutes to the updatedEvt of the 3d select
+	// Hook toogleEndMinutes to the "updated" event of the 3d select
 	// Like that when the user selects/unselects 24h the minutes will toogle accordingly
 	var that = this;
 	this.inputs[2].on('updated',function(){
@@ -51,7 +52,7 @@ Y.extend(inputEx.TimeRange, inputEx.CombineField, {
    /**
     * Set the value 
     * @param {array} array with 4 Hour strings in display order (format ["HH","MM", "HH","MM"])
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(arr, sendUpdatedEvt) {
 		var values = arr[0].split(":").concat(arr[1].split(":"));

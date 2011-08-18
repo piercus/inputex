@@ -1,8 +1,11 @@
+/**
+ * Provides the base "field" abstract class
+ * @module inputex-field
+ */
 YUI.add("inputex-field",function(Y) {
-     //var Dom = Y.node, 
-     var lang = Y.Lang;
-     //, util = YAHOO.util;
-     var inputEx = Y.inputEx;
+ 
+     var lang = Y.Lang,
+          inputEx = Y.inputEx;
 
   /** 
    * An abstract class (never instantiated) that contains the shared features for all fields.
@@ -27,9 +30,9 @@ YUI.add("inputex-field",function(Y) {
 	
 	  /**
 	   * Event fired after the user changed the value of the field.
-	   * @event updatedEvt
+	   * Fired when the field is "updated"<br /> subscribe with: myfield.on('updated', function(value) { console.log("updated",value); }, this, true);
+	   * @event updated
 	   * @param {Any} value The new value of the field
-	   * @desc YUI custom event fired when the field is "updated"<br /> subscribe with: this.on('updated', function(value) { console.log("updated",value); }, this, true);
 	   */
 	  this.publish("updated");
           
@@ -75,7 +78,7 @@ YUI.add("inputex-field",function(Y) {
      	this.options.description = options.description;
       this.options.wrapperClassName = options.wrapperClassName;
       
-        // Define default messages
+     // Define default messages
 	     this.options.messages = {};
 	     this.options.messages.required = (options.messages && options.messages.required) ? options.messages.required : inputEx.messages.required;
 	     this.options.messages.invalid = (options.messages && options.messages.invalid) ? options.messages.invalid : inputEx.messages.invalid;
@@ -178,7 +181,7 @@ YUI.add("inputex-field",function(Y) {
      /**
       * Function to set the value
       * @param {Any} value The new value
-      * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+      * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
       */
 	  setValue: function(value, sendUpdatedEvt) {
 	     // to be inherited
@@ -321,7 +324,7 @@ YUI.add("inputex-field",function(Y) {
      destroy: function() {
         var el = this.getEl();
         
-        // Unsubscribe all listeners on the updatedEvt
+        // Unsubscribe all listeners on the "updated" event
         //this.updatedEvt.unsubscribeAll();
         // no equivalent in YUI3 Event mechanism
         
@@ -367,7 +370,7 @@ YUI.add("inputex-field",function(Y) {
      
      /**
       * Clear the field by setting the field value to this.options.value
-      * @param {boolean} [sendUpdatedEvt] (optional) Wether this clear should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+      * @param {boolean} [sendUpdatedEvt] (optional) Wether this clear should fire the 'updated' event or not (default is true, pass false to NOT send the event)
       */
      clear: function(sendUpdatedEvt) {
         this.setValue(lang.isUndefined(this.options.value) ? '' : this.options.value, sendUpdatedEvt);

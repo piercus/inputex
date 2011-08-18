@@ -1,3 +1,6 @@
+/**
+ * @module inputex-date
+ */
 YUI.add("inputex-date", function(Y){
 
    var lang = Y.Lang,
@@ -28,7 +31,7 @@ Y.extend(inputEx.DateField, inputEx.StringField, {
    	
    	// Overwrite options
    	this.options.className = options.className ? options.className : 'inputEx-Field inputEx-DateField';
-   	this.options.messages.invalid = inputEx.messages.invalidDate ? inputEx.messages.invalidDate : "Invalid date, ex: 03/27/2008";
+   	this.options.messages.invalid = options.invalidDate ? options.invalidDate : inputEx.messages.invalidDate;
    	
    	// Added options
    	this.options.dateFormat = options.dateFormat || inputEx.messages.defaultDateFormat;
@@ -133,10 +136,7 @@ inputEx.DateField.formatDate = function(d,format) {
    str = str.replace('d', ((day < 10)? '0':'')+day);
 	return str;
 };
-	
-// Specific message for the container
-// inputEx.messages.invalidDate = "Invalid date, ex: 03/27/2008";
-	
+
 // Register this class as "date" type
 inputEx.registerType("date", inputEx.DateField, [
    {type: 'select', label: 'Date format', name: 'dateFormat', choices: [{ value: "m/d/Y" }, { value:"d/m/Y" }] }

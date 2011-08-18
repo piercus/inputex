@@ -1,3 +1,6 @@
+/**
+ * @module inputex-combine
+ */
 YUI.add("inputex-combine", function(Y){
 
    var lang = Y.Lang,
@@ -168,7 +171,7 @@ Y.extend( inputEx.CombineField, inputEx.Group, {
 	/**
 	 * Set the value
 	 * @param {Array} values [value1, value2, ...]
-	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 	 */
 	setValue: function(values, sendUpdatedEvt) {
 		if(!values) {

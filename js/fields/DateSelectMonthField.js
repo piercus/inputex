@@ -1,3 +1,6 @@
+/**
+ * @module inputex-dateselectmonth
+ */
 YUI.add("inputex-dateselectmonth", function(Y) {
 
   var lang = Y.Lang,
@@ -115,10 +118,6 @@ YUI.add("inputex-dateselectmonth", function(Y) {
 		}
 		
 	});
-	
-	inputEx.messages.selectMonth = "- Select Month -";
-	inputEx.messages.dayTypeInvite = "Day";
-	inputEx.messages.yearTypeInvite = "Year";
 	
 	// Register this class as "dateselectmonth" type
 	inputEx.registerType("dateselectmonth", inputEx.DateSelectMonthField);

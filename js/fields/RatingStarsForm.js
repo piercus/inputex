@@ -1,3 +1,6 @@
+/**
+ * @module inputex-ratingstarsform
+ */
 YUI.add("inputex-ratingstarsform",function(Y){
 
    var lang = Y.Lang,

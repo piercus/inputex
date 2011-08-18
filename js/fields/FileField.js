@@ -1,3 +1,6 @@
+/**
+ * @module inputex-file
+ */
 YUI.add("inputex-file", function(Y){
 
    var lang = Y.Lang,

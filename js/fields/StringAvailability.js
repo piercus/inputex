@@ -1,3 +1,6 @@
+/**
+ * @module inputex-stringavailability
+ */
 (function() {
 	
    var Event=YAHOO.util.Event,DOM=YAHOO.util.Dom,lang=Y.Lang;
@@ -196,14 +199,7 @@ Y.extend(inputEx.StringAvailability, inputEx.StringField, {
 	   
 });
 
-
-// Specific message for the stringAvailability field
-inputEx.messages.stringLoading = "Checking if available ...";
-inputEx.messages.stringAvailable = "This ressource is available";
-inputEx.messages.stringUnAvailable = "This ressource is not available";
-
 // Register this class as "string-availability" type
 inputEx.registerType("string-availability", inputEx.StringAvailability);
-
 
 })();

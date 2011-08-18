@@ -1,3 +1,6 @@
+/**
+ * @module inputex-color
+ */
 YUI.add("inputex-color",function(Y){
 	
    var inputEx = Y.inputEx;
@@ -227,7 +230,7 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
 	/**
 	 * Set the value
 	 * @param {String} value Color to set
-	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 	 */
 	setValue: function(value, sendUpdatedEvt) {
 		
@@ -305,9 +308,6 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
 	}
 	  
 }); 
-	
-// Specific message for the container
-inputEx.messages.selectColor = "Select a color :";
 	
 /**
  * Default palettes

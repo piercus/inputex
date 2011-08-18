@@ -1,3 +1,6 @@
+/**
+ * @module inputex-tinymce
+ */
 YUI.add("inputex-tinymce", function(Y) {
 
   var lang = Y.Lang,
@@ -83,7 +86,7 @@ Y.extend(inputEx.TinyMCEField, inputEx.Field, {
 	/**
 	 * Set the html content
 	 * @param {String} value The html string
-	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 	 */
 	setValue: function(value, sendUpdatedEvt) {
 		

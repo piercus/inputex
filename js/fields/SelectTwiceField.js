@@ -1,3 +1,6 @@
+/**
+ * @module inputex-selecttwice
+ */
 (function () {
 
 	var Event = YAHOO.util.Event, lang = Y.Lang;
@@ -125,7 +128,7 @@
 				
 				// set field style
 				this.setClassFromState();
-				// fire field updatedEvt
+				// fire field "updated" event
 				this.fireUpdatedEvt();
 				
 			}, this, true);
@@ -149,7 +152,7 @@
 				testValue = choicesList[i].value;
 				
 				if (inputEx.indexOf(testValue, secondSelectValues) === -1) {
-					this.selects[1].hideChoice({ position: i }, false); // no updatedEvt in case of clear (because multiple clear could happen...)
+					this.selects[1].hideChoice({ position: i }, false); // no "updated" event in case of clear (because multiple clear could happen...)
 				} else {
 					this.selects[1].showChoice({ position: i });
 				}
@@ -161,7 +164,7 @@
 		/**
 		 * Set the value
 		 * @param {String} value The value to set
-		 * @param {boolean} [sendUpdatedEvt] (optional) Whether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+		 * @param {boolean} [sendUpdatedEvt] (optional) Whether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 		 */
 		setValue: function (value, sendUpdatedEvt) {
 			

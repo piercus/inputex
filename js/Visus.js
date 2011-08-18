@@ -1,7 +1,11 @@
+/**
+ * Used by InPlaceEdit and Uneditable fields
+ * @module inputex-visus
+ */
 YUI.add("inputex-visus",function(Y){
    
-   var lang = Y.Lang;
-   var inputEx = Y.inputEx;
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 /**
  * Contains the various visualization methods
  * @class inputEx.visus

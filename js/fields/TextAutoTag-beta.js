@@ -1,11 +1,14 @@
+/**
+ * @module inputex-textautotag
+ */
  (function() {
   
   var Event = YAHOO.util.Event;
   
 /**
  * Create a textarea input
- * @class inputEx.Textarea
- * @extends inputEx.Field
+ * @class inputEx.TextAutoTag
+ * @extends inputEx.Textarea
  * @constructor
  * @param {Object} options Added options:
  * <ul>
@@ -52,11 +55,11 @@
 
       
       },
-    /**
+     /**
       * handleUpadte
       */                    
-      // to do : cache function to not call api every time
-      handleUpdate: function(){
+      handleUpdate: function() {
+         // TODO : cache function to not call api every time
         var value = this.getValue();
         if (this.doWeRequest(value)){
           var callback = {

@@ -1,10 +1,14 @@
+/**
+ * @module inputex-object
+ */
 YUI.add("inputex-object", function(Y){
 
    var inputEx = Y.inputEx,
        lang = Y.Lang;
    
 /**
- * @class list of PairField where where the returned value is converted to an object
+ * list of PairField where where the returned value is converted to an object
+ * @class inputEx.ObjectField
  * @extends inputEx.ListField
  * @constructor
  * @param {Object} options inputEx.Field options object
@@ -48,9 +52,7 @@ Y.extend(inputEx.ObjectField, inputEx.ListField, {
    }
 });
 
-/**
- * Register this class as "object" type
- */
+// Register this class as "object" type
 inputEx.registerType('object', inputEx.ObjectField);
 
 },'3.0.0a',{

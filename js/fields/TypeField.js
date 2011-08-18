@@ -1,3 +1,6 @@
+/**
+ * @module inputex-type
+ */
 YUI.add("inputex-type", function(Y){
 
    var lang = Y.Lang,
@@ -134,7 +137,7 @@ Y.extend(inputEx.TypeField, inputEx.Field, {
       // Update the field value 
       this.updateFieldValue();
       
-      // Fire updatedEvt
+      // Fire "updated" event
       this.fireUpdatedEvt();
    },
    
@@ -173,7 +176,7 @@ Y.extend(inputEx.TypeField, inputEx.Field, {
    /**
     * Set the value of the label, typeProperties and group
     * @param {Object} value Type object configuration
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(value, sendUpdatedEvt) {
 

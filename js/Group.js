@@ -1,3 +1,6 @@
+/**
+ * @module inputex-group
+ */
 YUI.add("inputex-group", function(Y){
    
    var lang = Y.Lang;//, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
@@ -254,7 +257,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
    /**
     * Set the values of each field from a key/value hash object
      * @param {Any} value The group value
-     * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+     * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(oValues, sendUpdatedEvt) {
       if(!oValues) {
@@ -431,7 +434,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
    
 	/**
 	 * Clear all subfields
-	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this clear should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this clear should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 	 */
 	clear: function(sendUpdatedEvt) {
 	   for(var i = 0 ; i < this.inputs.length ; i++) {

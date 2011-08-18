@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
- <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <title>inputEx - Guide</title>
 <link rel="alternate" type="application/rss+xml" title="neyric&#8217;s Javascript RSS Feed" href="http://javascript.neyric.com/blog/feed/" />
 <link rel="pingback" href="http://neyric.com/blog/xmlrpc.php" />
@@ -105,6 +105,15 @@
 	    		<li><a href="#MarkupStructure">Markup Structure</a></li>
 				</ul>
 			</li>
+			
+			
+			<li>
+				<a href="#Production"><span>Production</span></a>
+
+				<ul class="secondLevel">
+	    		<li><a href="#Minification">Minification</a></li>
+	    	</ul>
+	    </li>
 			
 			<li>
 				<a href="#Contribute"><span>Contribute</span></a>
@@ -476,7 +485,7 @@
 
 			 <li><b>InPlaceEdit</b>: Make any subfield inplace-editable.</li>
 
-	 		 <li><b>Typefield</b>: A special field that returns a config object to create an instance through the inputEx.buildField function. We create a form for each Field class to define the parameters for the specified field.</li>
+	 		 <li><b>Typefield</b>: A special field that returns a config object to create an instance through the inputEx function. We create a form for each Field class to define the parameters for the specified field.</li>
 			</ul>
 
 			<p></p>
@@ -519,7 +528,7 @@
 
 
 <pre class="brush:js">
-	// This setValue won't fire the updatedEvt
+	// This setValue won't fire the "updated" event
 	myField.setValue("My Value", false);
 </pre>
 	
@@ -666,9 +675,9 @@
 
 	<a name="Production"><h1>5 Production</h1></a>
 	
-	<a name="Minimizing"><h2>5.1 Minimizing</h2></a>
+	<a name="Minification"><h2>5.1 Minification</h2></a>
 	
-	<p>When using inputEx in production, you might want to combine all the files into one (to reduce the number of HTTP requests) and minimize it. Here is a little script, which uses YUI compressor :</p>
+	<p>When using inputEx in production, you might want to combine all the files into one (to reduce the number of HTTP requests) and minify it. Here is a little script, which uses YUI compressor :</p>
 	
   <pre class="brush:ps">
     #!/bin/sh

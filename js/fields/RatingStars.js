@@ -1,3 +1,6 @@
+/**
+ * @module inputex-ratingstars
+ */
 YUI.add("inputex-ratingstars",function(Y){
 
    var lang = Y.Lang,
@@ -230,11 +233,6 @@ Y.extend(inputEx.RatingStars, inputEx.Field,{
     }
 });
 
-inputEx.messages.ratingMsg = "Rating: % (% votes cast) ";// we choose a % convention to replace by values
-inputEx.messages.thanksRate = "Thanks for voting!";
-inputEx.messages.sendingRate = "Sending your rate ...";
-
- 
  
  // Register this class as "url" type
  inputEx.registerType("ratingstars", inputEx.RatingStars);

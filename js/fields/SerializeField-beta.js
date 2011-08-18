@@ -1,3 +1,6 @@
+/**
+ * @module inputex-serialize
+ */
 YUI.add("inputex-serialize", function(Y){
 
   var lang = Y.Lang,

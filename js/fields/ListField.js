@@ -1,3 +1,6 @@
+/**
+ * @module inputex-list
+ */
 YUI.add("inputex-list",function(Y){
 	
    var lang = Y.Lang,
@@ -134,7 +137,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	/**
 	 * Set the value of all the subfields
 	 * @param {Array} value The list of values to set
-	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 	 */
 	setValue: function(value, sendUpdatedEvt) {
 	   
@@ -438,7 +441,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	
 	/**
     * Clear the field by setting the field value to this.options.value
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this clear should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this clear should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
     clear: function(sendUpdatedEvt) {
         this.setValue(lang.isUndefined(this.options.value) ? [] : this.options.value, sendUpdatedEvt);
@@ -451,10 +454,6 @@ inputEx.registerType("list", inputEx.ListField, [
    { type: 'string', label: 'List label', name: 'listLabel', value: ''},
    { type: 'type', label: 'List element type', required: true, name: 'elementType' }
 ]);
-
-
-inputEx.messages.listAddLink = "Add";
-inputEx.messages.listRemoveLink = "remove";
 	
 },'3.0.0a',{
   requires: ["inputex-field","anim"]

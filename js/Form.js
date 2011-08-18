@@ -1,3 +1,6 @@
+/**
+ * @module inputex-form
+ */
 YUI.add("inputex-form", function(Y){
 
   var lang = Y.Lang,
@@ -376,10 +379,6 @@ Y.extend(inputEx.Form, inputEx.Group, {
    }
 
 });
-
-
-// Specific waiting message in ajax submit
-inputEx.messages.ajaxWait = "Please wait...";
 
 // Register this class as "form" type
 inputEx.registerType("form", inputEx.Form, [

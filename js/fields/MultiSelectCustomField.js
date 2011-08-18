@@ -1,3 +1,6 @@
+/**
+ * @module inputex-multiselectcustom
+ */
 YUI.add("inputex-multiselectcustom", function(Y) {
   
   var inputEx = Y.inputEx, lang = Y.Lang;

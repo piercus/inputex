@@ -1,6 +1,6 @@
 /**
  * The inputEx Library
- * @module inputEx
+ * @module inputex
  */
 /*global inputEx: false, YAHOO: false */
 
@@ -90,16 +90,9 @@ YUI.add("inputex", function(Y){
      stateInvalid: 'invalid',
      
      /**
-      * Associative array containing field messages
+      * Associative array containing field messages => using intl module from YUI
       */
-	  messages: {
-		  required: "This field is required",
-		  invalid: "This field is invalid",
-		  valid: "This field is valid",
-		  defaultDateFormat: "m/d/Y",
-		  months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-		  timeUnits: { SECOND: "seconds", MINUTE: "minutes", HOUR: "hours", DAY: "days", MONTH: "months", YEAR: "years" }
-	  },
+	  messages: null,
      
      /**
       * inputEx widget namespace
@@ -188,13 +181,44 @@ YUI.add("inputex", function(Y){
         return null;
      },
      
+     
      /**
-      * @deprecated Kept for backward compatibility (alias for inputEx() )
-      * @param {Object} fieldOptions
-      * @return {inputEx.Field} Created field instance
+      * Return recursively the inputex modules from their 'type' property using (modulesByType from loader.js)
       */
-     buildField: function(fieldOptions) {      
-        return inputEx(fieldOptions);
+     getRawModulesFromDefinition: function(inputexDef) {
+        
+        var type = inputexDef.type || 'string',
+            module = YUI_config.groups.inputex.modulesByType[type],
+            modules = [module];
+        
+        // recursive for group,forms,list,combine, etc...
+        if(inputexDef.fields) {
+           Y.Array.each(inputexDef.fields, function(field) {
+                modules = modules.concat( this.getModulesFromDefinition(field) );
+           }, this);
+        }
+        
+        // TODO: list elementType
+        // TODO: inplaceedit  editorField
+        
+        return modules;
+     },
+     
+     /**
+      * Return unique modules definitions
+      */
+     getModulesFromDefinition: function(inputexDef) {
+        var modules = this.getRawModulesFromDefinition(inputexDef);
+        return Y.Object.keys(Y.Array.hash(modules));
+     },
+     
+     /**
+      * Load the modules from an inputEx definition
+      */
+     use: function(inputexDef, cb) {
+        var modules = this.getModulesFromDefinition(inputexDef);
+        modules.push(cb);
+		  Y.use.apply( Y, modules);
      },
      
      /**

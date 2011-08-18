@@ -1,9 +1,18 @@
+/**
+ * @module inputex-choice
+ */
 YUI.add("inputex-choice", function(Y){
 	
-	// shortcuts
-	var lang = Y.Lang;
-	var inputEx = Y.inputEx;
+	var lang = Y.Lang,
+	    inputEx = Y.inputEx;
 	
+	/**
+	 * This static class is used to provide basic choices functionnalities such as in "select" and "radio" fields
+	 * We use it by mixin the methods below to the target prototype: 
+	 *  eg.  Y.mix(inputEx.SelectField.prototype, inputEx.mixin.choice);
+	 * It provides the following methods : addChoice, removeChoice, hideChoice, showChoice, disableChoice, enableChoice, and getChoicePosition
+	 * @class inputEx.mixin.choice
+	 */
 	inputEx.mixin.choice = {
 		
 		/**

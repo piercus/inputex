@@ -1,3 +1,6 @@
+/**
+ * @module inputex-ipv4
+ */
 YUI.add("inputex-ipv4",function(Y){
 	
    var lang = Y.Lang,
@@ -26,9 +29,6 @@ Y.extend(inputEx.IPv4Field, inputEx.StringField, {
    }
   
 });
-
-// Specific message for the email field
-inputEx.messages.invalidIPv4 = "Invalid IPv4 address, ex: 192.168.0.1";
 
 // Register this class as "IPv4" type
 inputEx.registerType("IPv4", inputEx.IPv4Field, []);

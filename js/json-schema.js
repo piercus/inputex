@@ -1,3 +1,6 @@
+/**
+ * @module inputex-jsonschema
+ */
 YUI.add("inputex-jsonschema", function(Y){
 
   var lang = Y.Lang,

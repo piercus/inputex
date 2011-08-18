@@ -1,3 +1,6 @@
+/**
+ * @module inputex-smdtester
+ */
 YUI.add("inputex-smdtester", function(Y){
 
   var lang = Y.Lang,

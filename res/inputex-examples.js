@@ -1,8 +1,43 @@
+
+// Adding modules definitions for the inputex-examples module dependencies
+(function() {
+   var m = YUI_config.groups.inputex.modules;
+   m["cssSyntaxHighlighter"] = {
+      type: 'css',
+      path: 'res/syntaxhighlighter/styles/shCore.css'
+   };
+   m['cssSyntaxHighlighter-theme'] = {
+      type: 'css',
+      path: 'res/syntaxhighlighter/styles/shThemeDefault.css',
+      requires: ['cssSyntaxHighlighter']
+   };
+   m['SyntaxHighlighter'] = {
+      path: 'res/syntaxhighlighter/scripts/shCore.js',
+      requires: ['cssSyntaxHighlighter-theme']
+   };
+   m['SyntaxHighlighter-js']= {
+      path: 'res/syntaxhighlighter/scripts/shBrushJscript.js',
+      requires: ['SyntaxHighlighter']
+   };
+   m['cssInputex-examples'] = {
+      path: 'res/demo.css',
+      type: 'css'
+   };
+   m['inputex-examples']= {
+      path: 'js/inputex-examples.js',
+      requires: ['inputex','SyntaxHighlighter-js','cssInputex-examples']
+   };
+})();
+
+
 /**
  * This module is used for inputEx examples :
- *   - Search all elements with class="JScript"
+ *  
+ *   - Search all <pre> tags
  *   - decode the HTML entities to get the code
- *   - evalulate & highlight the examples
+ *   - evalulate & highlight the examples using SyntaxHighlighter
+ * 
+ * @module inputex-examples
  */
 YUI.add('inputex-examples', function (Y) {
 

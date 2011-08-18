@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>inputEx - Definition Loading</title>
+ </head>
+
+ <body class="yui-skin-sam">
+
+<h1>inputEx - Definition Loading</h1>
+
+
+<!-- Example 1 -->
+<div class='exampleDiv'>
+
+	<h2>How to load inputEx modules from an inputEx definition</h2>
+
+	<div class='demoContainer' id='container1'></div>
+
+	<div class='codeContainer'>
+		<pre class="brush:js">
+		  
+		  /**
+		   * Only bootstrap: YUI().use('inputex','inputex-examples'); // no additional inputex module
+		   */
+		  
+		  var def = {
+		    type: 'group', 
+		    parentEl: 'container1', 
+		    fields: [
+  					{type: 'select', label: 'Title', name: 'title', choices: [{ value: 'Mr' }, { value: 'Mrs' }, { value: 'Ms' }]},
+  					{label: 'Firstname', name: 'firstname', required: true},
+  					{label: 'Lastname', name: 'lastname', value:'Dupont'},
+  					{type:'email', label: 'Email', name: 'email', required: true, showMsg: true},
+  					{type:'radio', label: 'Happy to be there ?', name: 'happy', display:'vertically', choices:[{value: "y", label:"yes"}, {value:"n", label:"no"}]},
+  					{type:'boolean', label: 'Favorite colors ?', name: 'yellow', rightLabel:"yellow"},
+  					{type:'boolean', label: ' ', name: 'blue', rightLabel:"blue"},
+  					{type:'boolean', label: ' ', name: 'red', rightLabel:"red"},
+  					{type:'url', label: 'Website', name:'website'}
+  			], 
+		    legend: 'Tell us about yourself...'
+      };
+		  
+		  // Load the modules using Y.use (asynchronously)
+		  Y.inputEx.use(def, function(){
+		    
+		    // Instantiate the form using Y.inputEx
+		    Y.inputEx(def);
+		    
+		  });
+		  
+		  
+		</pre>
+	</div>
+
+</div>
+</div>
+<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+<script src="../js/loader.js"  type='text/javascript'></script>
+<script src="../res/inputex-examples.js"  type='text/javascript'></script>
+<script>
+YUI_config.groups.inputex.base = '../';
+YUI().use('inputex','inputex-examples');
+</script>
+
+ </body>
+</html>

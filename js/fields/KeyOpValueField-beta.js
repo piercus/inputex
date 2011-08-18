@@ -1,3 +1,6 @@
+/**
+ * @module inputex-keyopvalue
+ */
 YUI.add("inputex-keyopvalue",function(Y){
 
    var lang = Y.Lang,

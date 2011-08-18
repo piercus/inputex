@@ -1,3 +1,6 @@
+/**
+ * @module inputex-time
+ */
 YUI.add("inputex-time", function(Y){
 
    var lang = Y.Lang,
@@ -38,7 +41,7 @@ Y.extend(inputEx.TimeField, inputEx.CombineField, {
    /**
     * Set the value 
     * @param {String} str Hour string (format HH:MM:SS)
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(str, sendUpdatedEvt) {
       inputEx.TimeField.superclass.setValue.call(this, str.split(':'), sendUpdatedEvt);

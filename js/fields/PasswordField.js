@@ -1,3 +1,6 @@
+/**
+ * @module inputex-password
+ */
 YUI.add("inputex-password", function(Y){
 
    var inputEx = Y.inputEx,lang=Y.Lang;
@@ -250,13 +253,6 @@ inputEx.PasswordField.getPasswordStrength = function(pw) {
     if ( pwstrength > 100 ) { pwstrength = 100;}
     return pwstrength;
 };
-
-	
-// Specific message for the password field
-inputEx.messages.invalidPassword = ["The password schould contain at least "," numbers or characters"];
-inputEx.messages.invalidPasswordConfirmation = "Passwords are different !";
-inputEx.messages.capslockWarning = "Warning: CapsLock is on";
-inputEx.messages.passwordStrength = "Password Strength";
 
 // Register this class as "password" type
 inputEx.registerType("password", inputEx.PasswordField, [

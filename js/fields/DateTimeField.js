@@ -1,3 +1,6 @@
+/**
+ * @module inputex-datetime
+ */
 YUI.add("inputex-datetime", function(Y) {
 
   var lang = Y.Lang,
@@ -44,7 +47,7 @@ Y.extend(inputEx.DateTimeField, inputEx.CombineField, {
    /**
     * Set the value of both subfields
     * @param {Date} val Date to set
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(val, sendUpdatedEvt) {
       if(!lang.isObject(val)) {return;}

@@ -1,3 +1,6 @@
+/**
+ * @module inputex-uppercase
+ */
 YUI.add("inputex-uppercase",function(Y){
 	
    var inputEx = Y.inputEx,
@@ -19,7 +22,7 @@ Y.extend(inputEx.UpperCaseField, inputEx.StringField, {
    /**
     * Set the value and call toUpperCase
     * @param {String} val The string
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(val, sendUpdatedEvt) {
       // don't always rewrite the value to able selections with Ctrl+A

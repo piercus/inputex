@@ -1,3 +1,6 @@
+/**
+ * @module inputex-dtinplaceedit
+ */
 YUI.add("inputex-dtinplaceedit",function(Y){
 
    var inputEx = Y.inputEx,

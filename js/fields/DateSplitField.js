@@ -1,3 +1,6 @@
+/**
+ * @module inputex-datesplit
+ */
 YUI.add("inputex-datesplit", function(Y) {
 
   var lang = Y.Lang,
@@ -42,7 +45,7 @@ Y.extend(inputEx.DateSplitField, inputEx.CombineField, {
    /**
 	 * Set the value. Format the date according to options.dateFormat
 	 * @param {Date} val Date to set
-	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 	 */
    setValue: function(value, sendUpdatedEvt) {
       var values = [];
@@ -155,10 +158,6 @@ Y.extend(inputEx.DateSplitField, inputEx.CombineField, {
 	}
    
 });
-
-inputEx.messages.monthTypeInvite = "Month";
-inputEx.messages.dayTypeInvite = "Day";
-inputEx.messages.yearTypeInvite = "Year";
 
 // Register this class as "datesplit" type
 inputEx.registerType("datesplit", inputEx.DateSplitField);

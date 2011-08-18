@@ -1,3 +1,6 @@
+/**
+ * @module inputex-vector
+ */
 YUI.add("inputex-vector",function(Y){
 
    var lang = Y.Lang,

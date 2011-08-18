@@ -1,4 +1,8 @@
+/**
+ * @module inputex-email
+ */
 YUI.add("inputex-email",function(Y){
+   
   var inputEx = Y.inputEx;
 /**
  * Field that adds the email regexp for validation. Result is always lower case.
@@ -138,11 +142,6 @@ Y.extend(inputEx.EmailField, inputEx.StringField, {
 
 });
    
-// Specific message for the email field
-inputEx.messages.invalidEmail = "Invalid email, ex: sample@test.com";
-
-inputEx.messages.didYouMeant = "Did you mean : ";
-
 // Register this class as "email" type
 inputEx.registerType("email", inputEx.EmailField, []);
 

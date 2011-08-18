@@ -1,3 +1,6 @@
+/**
+ * @module inputex-slider
+ */
 YUI.add("inputex-slider", function(Y) {
 
    var inputEx = Y.inputEx,
@@ -67,7 +70,7 @@ Y.extend(inputEx.SliderField, inputEx.Field, {
    /**
     * Function to set the value
     * @param {Any} value The new value
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */  
    setValue: function(val, sendUpdatedEvt) {
       

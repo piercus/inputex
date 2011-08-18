@@ -1,3 +1,6 @@
+/**
+ * @module inputex-rpc
+ */
 YUI.add("inputex-rpc", function(Y){
 
    window.inputEx = Y.inputEx;

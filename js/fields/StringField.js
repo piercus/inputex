@@ -1,3 +1,6 @@
+/**
+ * @module inputex-string
+ */
 YUI.add("inputex-string", function(Y){
    
    var lang = Y.Lang,
@@ -25,7 +28,7 @@ inputEx.StringField = function(options) {
 	     this.updateTypeInvite();
 	  }
 };
-inputEx.messages.stringTooShort = ["This field should contain at least "," numbers or characters"];
+
 Y.extend(inputEx.StringField, inputEx.Field, {
    /**
     * Set the default values of the options
@@ -123,13 +126,13 @@ Y.extend(inputEx.StringField, inputEx.Field, {
    /**
     * Function to set the value
     * @param {String} value The new value
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(value, sendUpdatedEvt) {
 		// + check : if Null or Undefined we put '' in the stringField
 		this.el.value = ( lang.isNull(value) || lang.isUndefined(value) ) ? '' : value;
 
-      // call parent class method to set style and fire updatedEvt
+      // call parent class method to set style and fire "updated" event
       inputEx.StringField.superclass.setValue.call(this, value, sendUpdatedEvt);
    },
 

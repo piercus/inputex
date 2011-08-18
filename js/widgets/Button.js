@@ -1,6 +1,10 @@
+/**
+ * @module inputex-button
+ */
 YUI.add("inputex-button",function(Y){
-   var lang = Y.Lang;
-   var inputEx = Y.inputEx;
+   
+   var lang = Y.Lang,
+       inputEx = Y.inputEx;
 
 /**
  * Create a button

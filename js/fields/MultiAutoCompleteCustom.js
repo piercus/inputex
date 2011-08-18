@@ -1,3 +1,6 @@
+/**
+ * @module inputex-multiautocompletecustom
+ */
 YUI.add("inputex-multiautocompletecustom",function(Y){
 
   var inputEx = Y.inputEx;

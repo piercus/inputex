@@ -1,3 +1,6 @@
+/**
+ * @module inputex-autocomplete
+ */
 YUI.add('inputex-autocomplete', function(Y) {
 
   var lang = Y.Lang,

@@ -1,3 +1,6 @@
+/**
+ * @module inputex-map
+ */
 YUI.add("inputex-map",function(Y){
 	
    var lang = Y.Lang,

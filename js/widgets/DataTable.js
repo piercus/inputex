@@ -1,3 +1,6 @@
+/**
+ * @module inputex-datatable
+ */
 YUI.add("inputex-datatable",function(Y){
 
    var inputEx = Y.inputEx,
@@ -107,23 +110,23 @@ inputEx.widget.DataTable.prototype = {
       }
 
       /**
-   	 * @event Event fired when an item is removed
+       * YAHOO custom event fired when an item is removed
+   	 * @event itemRemoved
    	 * @param {YAHOO.widget.Record} Removed record
-   	 * @desc YAHOO custom event fired when an item is removed
    	 */
     	this.itemRemovedEvt = new util.CustomEvent('itemRemoved', this);
 
       /**
-   	 * @event Event fired when an item is added
+       * YAHOO custom event fired when an item is added
+   	 * @event itemAdded
     	 * @param {YAHOO.widget.Record} Added record
-   	 * @desc YAHOO custom event fired when an item is added
    	 */
     	this.itemAddedEvt = new util.CustomEvent('itemAdded', this);
 
       /**
-   	 * @event Event fired when an item is modified
+       * YAHOO custom event fired when an item is modified
+   	 * @event itemModified
     	 * @param {YAHOO.widget.Record} Modified record
-   	 * @desc YAHOO custom event fired when an item is modified
    	 */
     	this.itemModifiedEvt = new util.CustomEvent('itemModified', this);
    },
@@ -562,25 +565,6 @@ inputEx.widget.DataTable.prototype = {
    }
    
 };
-
-
-msgs.saveText = "Save";
-msgs.cancelText = "Cancel";
-msgs.deleteText = "delete";
-msgs.modifyText = "modify";
-msgs.insertItemText = "Insert";
-msgs.addButtonText = "Add";
-msgs.loadingText = "Loading...";
-msgs.emptyDataText = "No records found.";
-msgs.errorDataText = "Data error.";
-msgs.confirmDeletion = "Are you sure?";
-
-msgs.tableOptions = "Table options";
-msgs.showColumnButton = "Show";
-msgs.hideColumnButton = "Hide";
-msgs.columnDialogTitle = "Choose which columns you would like to see";
-msgs.columnDialogCloseButton = "Close";
-
 
 }, '3.0.0a',{
   requires: ['yui2-datatable', 'yui2-button','inputex', 'inputex-dialog']

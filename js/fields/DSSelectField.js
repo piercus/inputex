@@ -1,3 +1,6 @@
+/**
+ * @module inputex-dsselect
+ */
 YUI.add("inputex-dsselect", function(Y) {
 
   var lang = Y.Lang,

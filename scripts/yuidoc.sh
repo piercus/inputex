@@ -37,5 +37,8 @@ projectUrl="http://neyric.github.com/inputex"
 ##############################################################################
 # add -s to the end of the line to show items marked private
 
+mkdir -p $generator_out/js
+mkdir -p $generator_out/assets
+
 $yuidoc_home/bin/yuidoc.py $parser_in -p $parser_out -o $generator_out -t $template -v $version -Y $yuiversion --project $projectName --projecturl $projectUrl --copyright="Eric Abouaf"
 rm -rf $parser_out

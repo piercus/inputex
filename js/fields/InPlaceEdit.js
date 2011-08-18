@@ -1,3 +1,6 @@
+/**
+ * @module inputex-inplaceedit
+ */
 YUI.add("inputex-inplaceedit", function(Y){
 
    var lang = Y.Lang,
@@ -285,7 +288,7 @@ Y.extend(inputEx.InPlaceEdit, inputEx.Field, {
    /**
     * Set the value and update the display
     * @param {Any} value The value to set
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(value, sendUpdatedEvt) {   
       // Store the value
@@ -317,10 +320,6 @@ Y.extend(inputEx.InPlaceEdit, inputEx.Field, {
 
 });
   
-inputEx.messages.emptyInPlaceEdit = "(click to edit)";
-inputEx.messages.cancelEditor = "cancel";
-inputEx.messages.okEditor = "Ok";
-
 // Register this class as "inplaceedit" type
 inputEx.registerType("inplaceedit", inputEx.InPlaceEdit, [
    { type:'type', label: 'Editor', name: 'editorField'}

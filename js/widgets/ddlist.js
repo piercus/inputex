@@ -1,3 +1,6 @@
+/**
+ * @module inputex-ddlist
+ */
 YUI.add("inputex-ddlist", function(Y){
 
    var lang = Y.Lang,
@@ -29,9 +32,7 @@ inputEx.widget.DDListItem = function(options) {
 
 Y.extend(inputEx.widget.DDListItem, Y.DD.Drag, {
 
-   /**
-    * Create the proxy element
-    */
+   // Create the proxy element
   /* startDrag: function(x, y) {
         // make the proxy look like the source element
         var dragEl = this.getDragEl();
@@ -42,9 +43,7 @@ Y.extend(inputEx.widget.DDListItem, Y.DD.Drag, {
         dragEl.innerHTML = clickEl.innerHTML;
     },*/
 
-    /**
-     * Handle the endDrag and eventually fire the listReordered event
-     */
+    // Handle the endDrag and eventually fire the listReordered event
   /*  endDrag: function(e) {
         Dom.setStyle(this.id, "visibility", "");
         
@@ -56,9 +55,7 @@ Y.extend(inputEx.widget.DDListItem, Y.DD.Drag, {
         }
     },*/
 
-    /**
-     * @method onDragDrop
-     */
+    // @method onDragDrop
   /*  onDragDrop: function(e, id) {
 
         // If there is one drop interaction, the li was dropped either on the list,
@@ -87,9 +84,7 @@ Y.extend(inputEx.widget.DDListItem, Y.DD.Drag, {
         }
     },*/
 
-    /**
-     * Keep track of the direction of the drag for use during onDragOver
-     */
+    // Keep track of the direction of the drag for use during onDragOver
   /*  onDrag: function(e) {
         var y = Event.getPageY(e);
 

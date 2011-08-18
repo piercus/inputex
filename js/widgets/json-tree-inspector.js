@@ -1,3 +1,6 @@
+/**
+ * @module inputex-jsontreeinspector
+ */
 YUI.add("inputex-jsontreeinspector",function(Y){
 
    var lang = Y.Lang,

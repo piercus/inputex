@@ -1,3 +1,6 @@
+/**
+ * @module inputex-textarea
+ */
 YUI.add("inputex-textarea",function(Y){
 
    var inputEx = Y.inputEx;
@@ -114,8 +117,6 @@ Y.extend(inputEx.Textarea, inputEx.StringField, {
 	}
 
 });
-
-inputEx.messages.stringTooLong = ["This field should contain at most "," numbers or characters"];
 
 // Register this class as "text" type
 inputEx.registerType("text", inputEx.Textarea, [

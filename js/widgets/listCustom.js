@@ -1,3 +1,6 @@
+/**
+ * @module inputex-pie-listcustom
+ */
 YUI.add("inputex-pie-listcustom", function(Y) {
 
    var inputEx = Y.inputEx;

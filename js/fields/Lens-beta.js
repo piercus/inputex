@@ -1,3 +1,6 @@
+/**
+ * @module inputex-lens
+ */
 YUI.add("inputex-lens",function(Y){
 	
    var lang = Y.Lang,

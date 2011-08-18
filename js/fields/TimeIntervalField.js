@@ -1,3 +1,6 @@
+/**
+ * @module inputex-timeinterval
+ */
 YUI.add("inputex-timeinterval", function(Y){
 
    var lang = Y.Lang,
@@ -63,7 +66,7 @@ Y.extend(inputEx.TimeIntervalField, inputEx.CombineField, {
    /**
     * Set the value of both subfields
     * @param {Number} val The time interval integer (with the given unit)
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
     */
    setValue: function(val, sendUpdatedEvt) {
       var seconds = (typeof val == "string" ? parseFloat(val,10) : val)*this.options.unit;

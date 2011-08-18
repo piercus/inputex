@@ -1,3 +1,6 @@
+/**
+ * @module inputex-tree
+ */
 YUI.add("inputex-tree", function(Y){
 
   var lang = Y.Lang,
@@ -78,7 +81,7 @@ Y.extend(inputEx.TreeField, inputEx.ListField, {
 	/**
 	 * Set the value 
 	 * @param {Any} obj The tree object
-	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 	 */
 	setValue: function(obj, sendUpdatedEvt) {
 	   this.subField.setValue(obj.value, false);

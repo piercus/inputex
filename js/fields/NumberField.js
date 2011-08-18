@@ -1,3 +1,6 @@
+/**
+ * @module inputex-number
+ */
 YUI.add("inputex-number", function(Y) {
 
   var lang = Y.Lang,

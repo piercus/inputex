@@ -1,3 +1,6 @@
+/**
+ * @module inputex-datepicker
+ */
 YUI.add("inputex-datepicker",function(Y){
 
    var inputEx = Y.inputEx,
@@ -161,7 +164,7 @@ Y.extend(inputEx.DatePickerField, inputEx.DateField, {
          var date = args[0][0];
          var year = date[0], month = date[1], day = date[2];
          
-         // set value (updatedEvt fired by setValue)
+         // set value ("updated" event fired by setValue)
          this.setValue(new Date(year,month-1, day) );
          
       }, this, true);
@@ -191,7 +194,7 @@ Y.extend(inputEx.DatePickerField, inputEx.DateField, {
          // check date to exclude empty values ('')
 			if (valid && !!date) {
 			   
-         	// HACK: don't fire Field updatedEvt when selecting date
+         	// HACK: don't fire Field "updated" event when selecting date
          	this.ignoreBeforeShowOverlayCall = true;
          	// select the previous date in calendar
         		this.calendar.select(date);

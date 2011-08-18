@@ -1,3 +1,6 @@
+/**
+ * @module inputex-menu
+ */
 YUI.add("inputex-menu",function(Y){
 	
    var inputEx = Y.inputEx,
@@ -170,8 +173,6 @@ Y.extend(inputEx.MenuField, inputEx.Field, {
    }
    
 });
-
-inputEx.messages.menuTypeInvite = "Click here to select";
 
 // Register this class as "menu" type
 inputEx.registerType("menu", inputEx.MenuField);

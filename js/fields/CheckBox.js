@@ -1,3 +1,6 @@
+/**
+ * @module inputex-checkbox
+ */
 YUI.add("inputex-checkbox",function(Y){
 
    var lang = Y.Lang,
@@ -98,7 +101,7 @@ Y.extend(inputEx.CheckBox, inputEx.Field, {
 	/**
 	 * Set the value of the checkedbox
 	 * @param {Any} value The value schould be one of [checkedValue,uncheckedValue]
-    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+    * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 	 */
 	setValue: function(value, sendUpdatedEvt) {
 	   if (value===this.checkedValue || (typeof(value) == 'string' && typeof(this.checkedValue) == 'boolean' &&
