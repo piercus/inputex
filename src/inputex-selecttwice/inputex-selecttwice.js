@@ -25,7 +25,7 @@
 		}
 	};
 	
-	on('updated', function(value) {(inputEx.SelectTwiceField, inputEx.Field, {
+Y.extend(inputEx.SelectTwiceField, inputEx.Field, {
 		
 		
 		/**
