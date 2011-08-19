@@ -23,7 +23,6 @@ Guidelines to give inputEx 3 a fresh start :
 ## LATER :
 
 * merge examples scripts with a unit-test engine ?
-* build script
 * move exemples into each module
 
 
