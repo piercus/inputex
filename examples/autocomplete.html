@@ -2,6 +2,15 @@
 <html>
  <head>
   <title>inputEx - Autocomplete Usage</title>
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../res/demo.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../res/syntaxhighlighter/scripts/shBrushJscript.js"  type='text/javascript'></script>
+
  </head>
 
  <body class="yui3-skin-sam">
@@ -134,80 +143,16 @@
 
 </div>
 
-
-<!-- Example 3 -->
-<!--div class='exampleDiv'>
-
-	<h2>YUI JSON autocomplete</h2>
-
-	<p>Uses the Yahoo search API within posts</p>
-
-	<div class='demoContainer' id='container3'></div>
-
-	<div class='codeContainer'>
-		<pre class="brush:js">
-
-			// Example 3: YUI autocompleter
-
-		    // Setting to default value for demonstration purposes.
-		    // The webservice needs to support execution of a callback function.
-
-			var yuiAC = inputEx({
-				type: "autocomplete",
-				label: 'Search the YUI Site bookmarks',
-				description: 'Try "javascript" or "Tree"',
-				parentEl: 'container3',
-				name: 'chosen_url',
-			
-				// Format the hidden value (value returned by the form)
-				returnValue: function(oResultItem) {
-					var post = oResultItem[1];
-					return post;
-				},
-				
-				// Autocompleter options
-				autoComp: {
-				  source: new Y.DataSource.Get({
-              source: "http://search.yahooapis.com/WebSearchService/V1/webSearch?appid=YahooDemo&output=json&site=developer.yahoo.com&site=yuiblog.com&region=us&query="/*,
-              scriptCallbackParam : "callback",
-    					responseSchema : {
-    						resultsList: "ResultSet.Result",
-    						fields: ["Title","Url","ClickUrl"]
-    				  }*/
-          }),
-					forceSelection: true,
-					minQueryLength: 2,
-					maxResultsDisplayed: 50,
-					formatResult: function(oResultItem, sQuery) {
-				        return oResultItem[0] + " (" + oResultItem[1] + ")";
-					}
-				}
-			});
-			var button = inputEx.cn('button', null, null, 'GetValue');
-			Y.one('#container3').appendChild(button);
-			
-			Y.one(button).on('click', function() {
-				alert( yuiAC.getValue() );
-			});
-
-		</pre>
-	</div>
-
-</div-->
-
 <!-- For the state autocompleter -->
 <script src="http://developer.yahoo.com/yui/examples/autocomplete/assets/js/states_jsfunction.js" type='text/javascript'></script>
 
 <script src="http://feeds.delicious.com/feeds/json/neyric?count=100" type='text/javascript'></script>
 
-
-<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
-<script src="../js/loader.js"  type='text/javascript'></script>
-<script src="../res/inputex-examples.js"  type='text/javascript'></script>
+<script src="../src/loader.js"  type='text/javascript'></script>
 <script src="../res/inputex-examples.js"  type='text/javascript'></script>
 <script>
-YUI_config.groups.inputex.base = '../';
-YUI().use('inputex-autocomplete','inputex-examples');
+YUI_config.groups.inputex.base = '../src/';
+YUI({filter: 'raw'}).use('inputex-autocomplete','inputex-examples');
 </script>
 
  </body>

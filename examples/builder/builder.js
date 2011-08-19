@@ -54,6 +54,11 @@ Y.one('#generateButton').on('click', function() {
 		"<head>",
 		"  <title>inputEx Builder: generate inputEx Forms</title>",
 		"  <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />\n",
+		
+      "<link rel='stylesheet' href='http://yui.yahooapis.com/3.4.0/build/cssgrids/grids-min.css'>",
+
+      "<link rel='stylesheet' href='http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css'>",
+      
 		"  <style>",
 		"#formContainer {",
 		"background-color:#EEEEFF;",
@@ -63,22 +68,29 @@ Y.one('#generateButton').on('click', function() {
 		"}",
 		"  </style>",
 		"</head>\n",
-		"<body class='yui-skin-sam'>",
+		"<body class='yui3-skin-sam yui-skin-sam'>",
 		"	 <div id='formContainer'> </div>",
 		"",
-		"<scr"+"ipt type='text/javascript' src='http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js'></scr"+"ipt>",
-		"<scr"+"ipt type='text/javascript' src='../../js/loader.js'></scr"+"ipt>",
+		"<scr"+"ipt type='text/javascript' src='http://yui.yahooapis.com/3.4.0/build/yui/yui-debug.js'></scr"+"ipt>",
+		"<scr"+"ipt type='text/javascript' src='../../src/loader.js'></scr"+"ipt>",
 		"<scr"+"ipt>",
-		"YUI_config.groups.inputex.base = '../../';",
-   "// Add the callback method to the list",
-   "var modulesToLoad = YUI_config.groups.inputex.allModules;",
-   "modulesToLoad.push(function(Y) {",
+		"YUI_config.groups.inputex.base = '../../src/';",
+		
 		  "var formDef = "+g.getValue().toPrettyJSONString(true)+";",
-		"formDef.parentEl = 'formContainer';",
-		"new Y.inputEx.Group(formDef);",
-   "});",
-   "var yuiInstance = YUI();",
-   "yuiInstance.use.apply(yuiInstance, modulesToLoad);",
+		
+        "YUI({filter: 'raw'}).use('inputex-group', function(Y) {",
+
+         " // Load the modules using Y.use (asynchronously)",
+         " Y.inputEx.use(formDef, function(){",
+
+         "   // Instantiate the form using Y.inputEx",
+         "   formDef.parentEl = 'formContainer';",
+         "   new Y.inputEx.Group(formDef);",
+
+         " });",
+       " });",
+		
+		
 		"</scr"+"ipt>",
 		"</body>",
 		"</html>"
@@ -138,7 +150,17 @@ var formConfig = {
 							     'showMsg':true
 							  }
 						  });
-							var lastSchema = (function(o){var r;for(var k in o){if(o.hasOwnProperty(k))r = o[k];} return r;})(code);
+						  
+							var lastSchema = (function(o){
+							   var r;
+							   for(var k in o) {
+							      if(o.hasOwnProperty(k)) {
+							         r = o[k];
+						         }
+							   } 
+							   return r;
+							})(code);
+							
 							var m = builder.schemaToInputEx(lastSchema);
 							g.setValue(m);
 							
@@ -165,7 +187,7 @@ var formConfig = {
     ]
  };
 	
-	Example1.myPanel = new Y.inputEx.widget.Dialog({
+	Example1.myPanel = new Y.inputEx.Panel({
 		inputExDef: formConfig,
 		title: 'Copy/Paste your inputEx JSON or JSON Schema here :',
 		panelConfig: {

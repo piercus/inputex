@@ -12,25 +12,39 @@ Guidelines to give inputEx 3 a fresh start :
 * Remove as many YUI2 dependencies as possible
 * Change the API as little as possible: 
   * eg. Dom element references are not Y.Node(s) yet. But you can use them in your subclasses !
-* Use the YUI loader (now unique in js/loader.js)
+* Use the YUI loader (now unique in src/loader.js)
 * remove deprecated/unused/broken code
 
 ## TODO:
 
-* merge examples scripts with a unit-test engine ? 
-* repair ddlist
-* repair autocomplete
-* finish ObjectField
-* apidoc
+* Fix fields: autocomplete, multi*, object
+* Add dtInPlace
 
-* locals -> locales (will become i18n ???)
+## LATER :
+
+* merge examples scripts with a unit-test engine ?
+* build script
+* move exemples into each module
 
 
 ## Changelog
 
-* Adding: RatingStars
-* removed: YQL utilities, dependency-configurator, task manager demo, inputExHTML, YUI2 loader
 
+* locals -> using native YUI intl module
+* moved every field as a YUI module
+* Adding: 
+  * RatingStars from @piercus
+  * Y.inputEx.Base
+  * Y.inputEx.Panel, to replace Dialog
+
+* removed inputEx.Datatable replaced by: Y.Plugin.DatatableInputex
+
+* removed: 
+  * YQL utilities (already in YUI3)
+  * dependency-configurator, 
+  * outdated demos: task manager, inputExHTML
+  * ddlist (replaced by YUI's 'sortable' module)
+  * remove widget.Dialog
 
 ## Developer guide
 

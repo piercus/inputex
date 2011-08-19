@@ -10,7 +10,7 @@ INPUTEXPATH="$HOME/Projets/inputex/master"
 # there are duplicate file names in these directories.  You can specify multiple
 # source trees:
 #     parser_in="%HOME/www/yui/src %HOME/www/event/src"
-parser_in="$INPUTEXPATH/js"
+parser_in="$INPUTEXPATH/src"
 
 # The location to output the parser data.  This output is a file containing a 
 # json string, and copies of the parsed files.
@@ -28,7 +28,7 @@ version=3.0.0a
 
 # The version of YUI the project is using.  This effects the output for
 # YUI configuration attributes.  This should start with '2' or '3'.
-yuiversion=3.3.0
+yuiversion=3.4.0
 
 projectName="inputEx-library"
 

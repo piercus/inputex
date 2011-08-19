@@ -2,6 +2,15 @@
 <html>
  <head>
   <title>inputEx - CheckBox Usage</title>
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../res/demo.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../res/syntaxhighlighter/scripts/shBrushJscript.js"  type='text/javascript'></script>
+
  </head>
 
  <body>
@@ -41,12 +50,12 @@
 	<p>In its simplest form, the CheckBox returns <i>true</i> if checked, <i>false</i> otherwise.</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<pre class="brush:js">
-			var exampleDiv = Y.one('#container3');
-			var field1 = new Y.inputEx.CheckBox({rightLabel: 'I return true/false', parentEl: exampleDiv});
-			var button = inputEx.cn('button', null, null, 'getValue()');
-			exampleDiv.appendChild(button); 
-			Y.one(button).on('click', function() { alert(field1.getValue()); });
+		<pre class="brush:js">			
+			var field1 = new Y.inputEx.CheckBox({rightLabel: 'I return true/false', parentEl: 'container3'});
+			
+			Y.Node.create("<button>getValue()</button>").appendTo('#container3').on('click', function() {
+				alert( field1.getValue() );
+			});
 		</pre>
 	</div>
 </div>
@@ -59,17 +68,22 @@
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-			var exampleDiv = Y.one('#container4');
-			var field2 = new Y.inputEx.CheckBox({sentValues: ['Yes', 'No'], rightLabel: 'Do you agree ?', parentEl: exampleDiv, value: 'Yes'});
-			var button = inputEx.cn('button', null, null, 'getValue()');
-			var button2 = inputEx.cn('button', null, null, 'setValue("No")');
-			var button3 = inputEx.cn('button', null, null, 'setValue("Yes")');
-			exampleDiv.appendChild(button); 
-			exampleDiv.appendChild(button2); 
-			exampleDiv.appendChild(button3); 
-			Y.one(button).on('click', function() { alert(field2.getValue()); });
-			Y.one(button2).on('click', function() { field2.setValue('No'); });
-			Y.one(button3).on('click', function() { field2.setValue('Yes'); });
+
+var field2 = new Y.inputEx.CheckBox({sentValues: ['Yes', 'No'], rightLabel: 'Do you agree ?', parentEl: 'container4', value: 'Yes'});
+
+
+Y.Node.create("<button>getValue()</button>").appendTo('#container4').on('click', function() {
+  alert( field2.getValue() );
+});
+
+Y.Node.create("<button>setValue('No')</button>").appendTo('#container4').on('click', function() {
+  field2.setValue('No');
+});
+
+Y.Node.create("<button>setValue('Yes')</button>").appendTo('#container4').on('click', function() {
+  field2.setValue('Yes');
+});
+
 		</pre>
 	</div>
 </div>
@@ -111,12 +125,11 @@
 </div>
 
 
-<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
-<script src="../js/loader.js"  type='text/javascript'></script>
+<script src="../src/loader.js"  type='text/javascript'></script>
 <script src="../res/inputex-examples.js"  type='text/javascript'></script>
 <script>
-YUI_config.groups.inputex.base = '../';
-YUI().use('inputex-checkbox','inputex-examples');
+YUI_config.groups.inputex.base = '../src/';
+YUI({filter: 'raw'}).use('inputex-checkbox','inputex-examples');
 </script>
 
  </body>

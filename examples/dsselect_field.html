@@ -2,6 +2,15 @@
 <html>
  <head>
   <title>inputEx - DSSelectField Usage</title>
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../res/demo.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../res/syntaxhighlighter/scripts/shBrushJscript.js"  type='text/javascript'></script>
+
  </head>
 
  <body>
@@ -20,89 +29,38 @@
 
 	<div class='codeContainer'>
 		<pre class="brush:js">
-		  var YAHOO = Y.YUI2;
-		  
-			var myDataSource = new YAHOO.util.XHRDataSource("books.json"); 
-			myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-			myDataSource.responseSchema = { fields: ["id","quantity","amount","title", "category"], resultsList: "Results" };
-			
-			new Y.inputEx.DSSelectField({name: 'country', datasource: myDataSource, valueKey: "id", labelKey: "title", parentEl: 'container1'});
+
+// Configure datasource
+var myDataSource = new Y.DataSource.IO({ source: "books.json" });
+myDataSource.plug({fn: Y.Plugin.DataSourceJSONSchema, cfg: {
+    schema: {
+        resultListLocator: "Results",
+        resultFields: ["id","quantity","amount","title", "category"]
+    }
+}});
+
+// Instantiate field
+field = new Y.inputEx.DSSelectField({
+  name: 'book', 
+  datasource: myDataSource, 
+  valueKey: "id", 
+  labelKey: "title", 
+  parentEl: 'container1'
+});
+
+Y.Node.create("<button>Get Value</button>").appendTo('#container1').on( 'click', function() {
+	alert( field.getValue() );
+});
 		</pre>
 	</div>
 
 </div>
 
-
-
-<!-- Example 2 -->
-<div class='exampleDiv'>
-
-	<h2>Updated event</h2>
-	
-	<p>How to listen to the updated event :</p>
-
-	<div class='demoContainer' id='container2'></div>
-
-	<div class='codeContainer'>
-				<pre class="brush:js">
-				  var YAHOO = Y.YUI2;
-				  
-					var myDataSource = new YAHOO.util.XHRDataSource("books.json"); 
-					myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-					myDataSource.responseSchema = { fields: ["id","quantity","amount","title", "category"], resultsList: "Results" };
-					
-					var el = Y.one('#container2');
-					var field2 = new Y.inputEx.DSSelectField({name: 'country', datasource: myDataSource, valueKey: "id", labelKey: "title", parentEl: el});
-					
-					var logDiv = inputEx.cn('div', null, null, "Log :");
-					el.appendChild(logDiv);
-					field2.on('updated', function(value) {
-						logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
-						logDiv.appendChild(inputEx.cn('br'));
-					});
-		</pre>
-			</div>
-
-</div>
-
-
-
-<!-- Example 3 -->
-<div class='exampleDiv'>
-
-	<h2>Set Value</h2>
-	
-	<p>How to set the value :</p>
-
-	<div class='demoContainer' id='container3'></div>
-
-	<div class='codeContainer'>
-				<pre class="brush:js">
-				  var YAHOO = Y.YUI2;
-				  
-					var myDataSource = new YAHOO.util.XHRDataSource("books.json"); 
-					myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-					myDataSource.responseSchema = { fields: ["id","quantity","amount","title", "category"], resultsList: "Results" };
-					
-					var el = Y.one('#container3');
-					var field3 = new Y.inputEx.DSSelectField({name: 'country', datasource: myDataSource, valueKey: "id", labelKey: "title", parentEl: el});
-					
-					var setValueButton = inputEx.cn('button', null, null, "setValue to po-1482");
-					el.appendChild(setValueButton);
-					YAHOO.util.Event.addListener(setValueButton, 'click', function(e,params) {
-						field3.setValue("po-1482");
-					});
-		</pre>
-			</div>
-
-</div>
-
-<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
-<script src="../js/loader.js"  type='text/javascript'></script>
+<script src="../src/loader.js"  type='text/javascript'></script>
 <script src="../res/inputex-examples.js"  type='text/javascript'></script>
 <script>
-YUI_config.groups.inputex.base = '../';
-YUI().use('inputex-dsselect', 'inputex-examples');
+YUI_config.groups.inputex.base = '../src/';
+YUI({filter: 'raw'}).use('inputex-dsselect', 'inputex-examples');
 </script>
 
  </body>

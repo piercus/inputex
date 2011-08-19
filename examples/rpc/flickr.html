@@ -3,6 +3,14 @@
 <head>
 <title>inputEx RPC</title>
 
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../../res/demo.css">
+<link rel="stylesheet" href="../../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../../res/syntaxhighlighter/scripts/shBrushJscript.js"  type='text/javascript'></script>
+
 <style>
 p { margin: 10px; }
 strong { font-weight: bold; }
@@ -31,9 +39,9 @@ strong { font-weight: bold; }
 				success: function() {
 
 					// Creates the form from service.getPublicPhotos method
-					inputEx.RPC.generateServiceForm(service.getPublicPhotos, { parentEl: 'container1' },{
+					Y.inputEx.RPC.generateServiceForm(service.getPublicPhotos, { parentEl: 'container1' },{
 							success: function(results) {
-
+							  
 								// Get the result and display the images
 								var treeContainer = Y.one('#photos');
 								treeContainer.innerHTML = "";
@@ -41,7 +49,7 @@ strong { font-weight: bold; }
 								for(var i = 0 ; i != list.length-1 ; i++) {
 									var photo = list[i];
 									var url = "http://farm"+photo.farm+".static.flickr.com/"+photo.server+"/"+photo.id+"_"+photo.secret+"_m.jpg";
-									treeContainer.appendChild( inputEx.cn('div', {className: 'photo'}, null, String.fromCharCode(60)+"img src='"+url+"' /"+String.fromCharCode(62) ) );
+									treeContainer.appendChild( Y.inputEx.cn('div', {className: 'photo'}, null, String.fromCharCode(60)+"img src='"+url+"' /"+String.fromCharCode(62) ) );
 								}	
 
 							}
@@ -54,11 +62,11 @@ strong { font-weight: bold; }
 </div>
 
 
-<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
-<script src="../../js/loader.js"  type='text/javascript'></script>
+<script src="../../src/loader.js"  type='text/javascript'></script>
+<script src="../../res/inputex-examples.js"  type='text/javascript'></script>
 <script>
-YUI_config.groups.inputex.base = '../../';
-YUI().use('inputex-form','inputex-email','inputex-url', 'inputex-rpc', 'inputex-examples');
+YUI_config.groups.inputex.base = '../../src/';
+YUI({filter: 'raw'}).use('inputex-form','inputex-email','inputex-url', 'inputex-rpc', 'inputex-examples');
 </script>
 
 </body>

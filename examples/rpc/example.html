@@ -3,6 +3,13 @@
 <head>
 <title>inputEx RPC</title>
 
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../../res/demo.css">
+<link rel="stylesheet" href="../../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../../res/syntaxhighlighter/scripts/shBrushJscript.js"  type='text/javascript'></script>
 <style>
 #mainBox {
 	margin:40px auto;
@@ -35,17 +42,17 @@ p {
 	</div>
 
 
-<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
-<script src="../../js/loader.js"  type='text/javascript'></script>
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+<script src="../../src/loader.js"  type='text/javascript'></script>
 <script>
-YUI_config.groups.inputex.base = '../../';
-YUI().use('inputex-form','inputex-email','inputex-url', 'inputex-select','inputex-integer', 'inputex-rpc', 'inputex-jsontreeinspector', function(Y) {
+YUI_config.groups.inputex.base = '../../src/';
+YUI({filter: 'raw'}).use('inputex-form','inputex-email','inputex-url', 'inputex-select','inputex-integer', 'inputex-rpc', 'inputex-jsontreeinspector', function(Y) {
   
 	/**
 	 * generate a form from the service.questionSearch method
 	 */
 	var onServiceReady = function() {
-		inputEx.RPC.generateServiceForm(service.questionSearch, { parentEl: 'formContainer' },{
+		Y.inputEx.RPC.generateServiceForm(service.questionSearch, { parentEl: 'formContainer' },{
 				success: function(results) {
 					var treeContainer = Y.one('#treeContainer');
 					treeContainer.innerHTML = "";

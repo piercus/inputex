@@ -1,35 +1,3 @@
-
-// Adding modules definitions for the inputex-examples module dependencies
-(function() {
-   var m = YUI_config.groups.inputex.modules;
-   m["cssSyntaxHighlighter"] = {
-      type: 'css',
-      path: 'res/syntaxhighlighter/styles/shCore.css'
-   };
-   m['cssSyntaxHighlighter-theme'] = {
-      type: 'css',
-      path: 'res/syntaxhighlighter/styles/shThemeDefault.css',
-      requires: ['cssSyntaxHighlighter']
-   };
-   m['SyntaxHighlighter'] = {
-      path: 'res/syntaxhighlighter/scripts/shCore.js',
-      requires: ['cssSyntaxHighlighter-theme']
-   };
-   m['SyntaxHighlighter-js']= {
-      path: 'res/syntaxhighlighter/scripts/shBrushJscript.js',
-      requires: ['SyntaxHighlighter']
-   };
-   m['cssInputex-examples'] = {
-      path: 'res/demo.css',
-      type: 'css'
-   };
-   m['inputex-examples']= {
-      path: 'js/inputex-examples.js',
-      requires: ['inputex','SyntaxHighlighter-js','cssInputex-examples']
-   };
-})();
-
-
 /**
  * This module is used for inputEx examples :
  *  
@@ -42,9 +10,6 @@
 YUI.add('inputex-examples', function (Y) {
 
    window.Y = Y;
-
-	// Required for the ListField
-	//Y.inputEx.spacerUrl = "../images/space.gif";	
 	
 	Y.on("domready",function() {
 		
@@ -71,6 +36,7 @@ YUI.add('inputex-examples', function (Y) {
 				if(console) {
 					console.log("Error while executing example "+(i+1), ex);
 				}
+				// debug: throw ex;
 			}
 		}
 		
@@ -200,5 +166,5 @@ YUI.add('inputex-examples', function (Y) {
 		return text;
 	};
 
-}, '@VERSION@', {requires: ["inputex","SyntaxHighlighter"]});
+}, '@VERSION@', {requires: ['inputex']});
 
