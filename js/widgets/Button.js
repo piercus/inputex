@@ -143,7 +143,7 @@ Y.mix(inputEx.widget.Button.prototype,{
       
       // Subscribe onClick handler
       if (this.options.onClick) {
-         this.on("click", this.options.onClick.fn,this.options.onClick.scope);
+         this.on("click",this.options.onClick.fn, this.options.onClick.scope);
       }
       
    },

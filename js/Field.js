@@ -409,5 +409,5 @@ YUI.add("inputex-field",function(Y) {
   ];
 
 }, '0.1.1',{
-  requires: ["inputex","event-custom"]
+  requires: ["inputex","event-custom","oop","node-base"]
 });

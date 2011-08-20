@@ -1,3 +1,7 @@
+YUI.add("inputex-rpc", function(Y){
+    var inputEx = Y.inputEx;
+    var lang = Y.Lang;
+
 /**
  * inputEx RPC utility functions
  * Implements SMD and create forms directly from services
@@ -14,27 +18,26 @@ inputEx.RPC = {
    generateServiceForm: function(method, formOpts, callback) {
    
       var options = null;
-      if(YAHOO.lang.isObject(formOpts) && YAHOO.lang.isArray(formOpts.fields) ) {
+      if(lang.isObject(formOpts) && lang.isArray(formOpts.fields) ) {
          options = formOpts;
       }
       // create the form directly from the method params
       else {
          options = inputEx.RPC.formForMethod(method);
       	// Add user options from formOpts
-         YAHOO.lang.augmentObject(options, formOpts, true);
+         Y.mix(options, formOpts, true);
       }
    
       // Add buttons to launch the service
       options.type = "form";
       if(!options.buttons) {
          options.buttons = [
-            {type: 'submit', value: method.name, onClick: function(e) {
-               YAHOO.util.Event.stopEvent(e);
+            {type: 'submit', value: method.name, onClick: function() {
                form.showMask();
                method(form.getValue(), {
                   success: function(results) {
                      form.hideMask();
-                     if(YAHOO.lang.isObject(callback) && YAHOO.lang.isFunction(callback.success)) {
+                     if(lang.isObject(callback) && lang.isFunction(callback.success)) {
                		   callback.success.call(callback.scope || this, results);
                		}
                   },
@@ -86,10 +89,6 @@ inputEx.RPC = {
 
 
 
-(function() {
-   
-   var rpc = inputEx.RPC, lang = YAHOO.lang, util = YAHOO.util;
-
 /**
  * Provide SMD support 
  * http://groups.google.com/group/json-schema/web/service-mapping-description-proposal
@@ -132,6 +131,7 @@ inputEx.RPC.Service.prototype = {
 		method.name = serviceName;
 	
 		var self = this;
+		var rpc = inputEx.RPC
 		var func = function(data, opts) {
 		   var envelope = rpc.Envelope[method.envelope || self._smd.envelope];
 		   var callback = {
@@ -156,7 +156,7 @@ inputEx.RPC.Service.prototype = {
    	         params[p.name] = p["default"];
    	      }
    	   }
-   	   lang.augmentObject(params, data, true);
+   	   Y.mix(params, data, true);
    	   
    	   var url = method.target || self._smd.target;
    	   var urlRegexp = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/i;
@@ -182,7 +182,7 @@ inputEx.RPC.Service.prototype = {
             transport: method.transport || self._smd.transport
          };
    	   var serialized = envelope.serialize(self._smd, method, params);
-         lang.augmentObject(r, serialized, true);
+         Y.mix(r, serialized, true);
          
    	   rpc.Transport[r.transport].call(self, r ); 
 		};
@@ -233,29 +233,30 @@ inputEx.RPC.Service.prototype = {
    fetch: function(url, callback) {
       
       // TODO: if url is not in the same domain, we should use jsonp !
-      util.Connect.asyncRequest('GET', url, { 
-         success: function(o) {
-            try {
-               this._smd = lang.JSON.parse(o.responseText);
-               this.process(callback);
-            }
-            catch(ex) {
-               if(lang.isObject(console) && lang.isFunction(console.log))
-                  console.log(ex);
-               if( lang.isFunction(callback.failure) ) {
-                  callback.failure.call(callback.scope || this, {error: ex});
-               }
-            }
-         }, 
-         failure: function(o) {
-            if( lang.isFunction(callback.failure) ) {
-               callback.failure.call(callback.scope || this, {error: "unable to fetch url "+url});
-            }
-         },
-         scope: this
-      });
+      Y.io(url,{
+          on: {
+              success:function(s,o) {
+                  try {
+                     this._smd = Y.JSON.parse(o.responseText);
+                     this.process(callback);
+                  }
+                  catch(ex) {
+                     if(lang.isObject(console) && lang.isFunction(console.log))
+                        console.log(ex);
+                     if( lang.isFunction(callback.failure) ) {
+                        callback.failure.call(callback.scope || this, {error: ex});
+                     }
+                  }
+               },
+              failure: function(s,o) {
+                   if( lang.isFunction(callback.failure) ) {
+                      callback.failure.call(callback.scope || this, {error: "unable to fetch url "+url});
+                   }
+                }
+          },
+          context: this
+      });  
    }
-   
     
 };
 
@@ -278,7 +279,7 @@ inputEx.RPC.Transport = {
 	 * @param {Object} r Object specifying target, callback and data attributes
 	 */
    "POST": function(r) {
-      return util.Connect.asyncRequest('POST', r.target, r.callback, r.data );
+      return Y.io( r.target,{method: 'POST', on: r.callback, data : r.data} );
    },
    
 	/**
@@ -287,7 +288,7 @@ inputEx.RPC.Transport = {
 	 * @param {Object} r Object specifying target, callback and data attributes
 	 */
    "GET": function(r) {
-      return util.Connect.asyncRequest('GET', r.target + (r.data ? '?'+  r.data : ''), r.callback, '');
+      return Y.io( r.target,{method: 'GET', on: r.callback, data : r.data} );
    },
    
 	/**
@@ -306,15 +307,13 @@ inputEx.RPC.Transport = {
 	 * @param {Object} r Object specifying target, callback and data attributes
 	 */
    "JSONP": function(r) {
-		r.callbackParamName = r.callbackParamName || "callback";
-		var fctName = encodeURIComponent("inputEx.RPC.Transport.JSONP.jsonpCallback"+inputEx.RPC.Transport.jsonp_id);
-		inputEx.RPC.Transport["JSONP"]["jsonpCallback"+inputEx.RPC.Transport.jsonp_id] = function(results) {
-      	if(lang.isObject(r.callback) && lang.isFunction(r.callback.success)) {
-      	   r.callback.success.call(r.callback.scope || this, results);
-      	}
-		};
-   	inputEx.RPC.Transport.jsonp_id+=1;
-      return util.Get.script( r.target + ((r.target.indexOf("?") == -1) ? '?' : '&') + r.data + "&"+r.callbackParamName+"="+fctName);
+       var handleJSONP = function(results) {
+           if(lang.isObject(r.callback) && lang.isFunction(r.callback.success)) {
+         	   r.callback.success.call(r.callback.scope || this, results);
+         	}       
+        }
+        var url = r.target + ((r.target.indexOf("?") == -1) ? '?' : '&') + r.data + "&"+r.callbackParamName+"={callback}";
+        Y.jsonp(url,handleJSONP);
    },
    
 	/**
@@ -380,7 +379,7 @@ inputEx.RPC.Envelope = {
    "PATH": {
 		  /**
 		 	* serialize
-		   */
+		    */
         serialize: function(smd, method, data) {
      			var target = method.target || smd.target, i;
      			if(lang.isArray(data)){
@@ -418,7 +417,7 @@ inputEx.RPC.Envelope = {
 		  */
        serialize: function(smd, method, data) {
           return {
-             data: lang.JSON.stringify(data)
+             data: Y.JSON.stringify(data)
           };   
        },
  		 /**
@@ -440,7 +439,7 @@ inputEx.RPC.Envelope = {
 		  */
        serialize: function(smd, method, data) {
           return {
-             data: lang.JSON.stringify({
+             data: Y.JSON.stringify({
        	      "id": rpc.Service._requestId++,
        	      "method": method.name,
        	      "params": data
@@ -466,7 +465,7 @@ inputEx.RPC.Envelope = {
 		 */
       serialize: function(smd, method, data) {
          return {
-            data: lang.JSON.stringify({
+            data: Y.JSON.stringify({
       	      "id": rpc.Service._requestId++,
       	      "method": method.name,
       	      "version": "json-rpc-2.0",
@@ -478,10 +477,13 @@ inputEx.RPC.Envelope = {
  	 	 * serialize
 		 */
       deserialize: function(results) {
-         return lang.JSON.parse(results.responseText);
+         return Y.JSON.parse(results.responseText);
       }
    }
    
 };
 
-})();
+
+},"0.1.1",{
+    requires : ["io-base", 'jsonp',"json","inputex",'inputex-jsonschema']
+});

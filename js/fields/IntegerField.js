@@ -1,7 +1,7 @@
-(function() {
+YUI.add("inputex-integer",function(Y){
 
-   var lang = YAHOO.lang, Event = YAHOO.util.Event;
-
+   var lang = Y.Lang;
+   var inputEx = Y.inputEx;
 /**
  * A field limited to number inputs
  * @class inputEx.IntegerField
@@ -15,7 +15,7 @@
 inputEx.IntegerField = function(options) {
    inputEx.IntegerField.superclass.constructor.call(this,options);
 };
-YAHOO.lang.extend(inputEx.IntegerField, inputEx.StringField, {
+Y.extend(inputEx.IntegerField, inputEx.StringField, {
    /**
     * Adds the negative, min, and max options
     * @param {Object} options
@@ -76,4 +76,6 @@ inputEx.registerType("integer", inputEx.IntegerField, [
    {type: 'boolean', label: 'Accept negative', name: 'negative', value: false }
 ]);
 
-})();
+}, '0.0.1',{
+    requires : ["inputex-string"]
+}); 

@@ -125,6 +125,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
    addField: function(fieldOptions) {
 		var field = this.renderField(fieldOptions);
       this.fieldset.appendChild(field.getEl() );
+      return field;
 	},
 
    /**
@@ -158,7 +159,20 @@ Y.extend(inputEx.Group, inputEx.Field, {
    	  
       return fieldInstance;
    },
-  
+   /**
+	 * Remove a field from the object abd from the field set
+   * @param {name} the name of the field to remove
+	 */
+   removeField: function(name) {
+		var field = this.getFieldByName(name),
+		    index = inputEx.indexOf(field,this.inputs);
+		this.inputs[index] = null;
+		this.inputs = inputEx.compactArray(this.inputs);
+		delete this.inputsNames.name;
+		field.detach("updated",this.onChange, this);
+        this.fieldset.removeChild(field.getEl());
+        return field;
+	},
    /**
     * Add a listener for the 'collapsible' option
     */

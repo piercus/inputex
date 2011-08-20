@@ -10,7 +10,7 @@ YUI.add("inputex-select",function(Y){
 	 * @constructor
 	 * @param {Object} options Added options:
 	 * <ul>
-	 *    <li>choices: contains the list of choices configs ([{value:'usa'}, {value:'fr', label:'France'}])</li>
+	 *    <li>choices: contains the list of choices configs ([{value:'usa'}, {value:'fr', label:'France'}]) OR a function function(opts,cb)</li>
 	 * </ul>
 	 */
 	inputEx.SelectField = function (options) {
@@ -28,9 +28,19 @@ YUI.add("inputex-select",function(Y){
 			var i, length;
 		
 			inputEx.SelectField.superclass.setOptions.call(this, options);
-		
-			this.options.choices = lang.isArray(options.choices) ? options.choices : [];
-		
+			
+			if(lang.isArray(options.choices)){
+			    this.options.choices = options.choices;
+			    this.choicesReady = true;
+			} else if (lang.isFunction(options.choices)) {
+			    // create choices in a callback
+			    this.choicesReady = false;
+			    this.options.choices = options.choices;
+			} else {
+			    this.options.choices = false;
+			    this.choicesReady = true;
+			}	
+				
 			// Retro-compatibility with old pattern (changed since 2010-06-30)
 			if (lang.isArray(options.selectValues)) {
 			
@@ -45,12 +55,28 @@ YUI.add("inputex-select",function(Y){
 			}
 		
 		},
+		buildChoices: function(){
+		    var self = this;
+		    var cb = function(res){
+		        self.options.choices = res;
+		        self.choicesReady = true;
+		        self.renderComponent();
+		    };
+		    try {
+		      this.options.choices.call(this,this.options,cb);
+	        } catch(e) {
+	          if(window.console){
+	            console.log("choices are not ready",e,e.stack);
+              }
+              self.choicesReady = false;
+	        }
+		},
 	
 		/**
 		 * Build a select tag with options
 		 */
 		renderComponent: function () {
-		
+		    if (!this.choicesReady) { return this.buildChoices(); } 
 			var i, length;
 		
 			// create DOM <select> node
@@ -133,9 +159,9 @@ YUI.add("inputex-select",function(Y){
 		 * @return {Any} the selected value
 		 */
 		getValue: function () {
+			if(!this.choicesReady){ return ""; }
 		
 			var choiceIndex;
-			
 			if (this.el.selectedIndex >= 0) {
 				
 				choiceIndex = inputEx.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {

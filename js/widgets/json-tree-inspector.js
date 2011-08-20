@@ -1,6 +1,7 @@
-(function() {
+YUI.add("inputex-jsontreeinspector",function(Y) {
 
-   var lang = YAHOO.lang, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
+   var lang = Y.Lang;
+   var inputEx = Y.inputEx;
 
 /**
  * Create a treeview to inspect a javascript object
@@ -22,9 +23,9 @@ inputEx.widget.JsonTreeInspector = function(parentEl, object, jsonPath) {
     */
    this.el = inputEx.cn('div');
    
-   this.buildBranch( lang.isString(jsonPath) ? inputEx.widget.JsonTreeInspector.jsonPath(object,jsonPath) : object, this.el);
+   this.buildBranch( lang.isString(jsonPath) ? inputEx.widget.JsonTreeInspector.jsonPath(object,jsonPath) : object, Y.one(this.el));
    
-   (lang.isString(parentEl) ? Dom.get(parentEl) : parentEl).appendChild(this.el);
+   (lang.isString(parentEl) ? Y.one("#"+parentEl)._node : parentEl).appendChild(this.el);
 };
 
 inputEx.widget.JsonTreeInspector.prototype = {
@@ -35,18 +36,18 @@ inputEx.widget.JsonTreeInspector.prototype = {
    destroy: function() {
       
       // Remove from DOM
-      if(Dom.inDocument(this.el)) {
+      if(Y.one(this.el).inDoc()) {
          this.el.parentNode.removeChild(this.el);
       }
       
       // recursively purge element
-      Event.purgeElement(this.el, true);
+      Y.Event.purgeElement(this.el,true);
    },
    
    /**
     * Build the sub-branch for obj
     */
-   buildBranch: function(obj,parentEl) {
+   buildBranch: function(obj,yParentEl) {
       
       var ul = inputEx.cn('ul', {className: 'inputEx-JsonTreeInspector'});
       
@@ -54,7 +55,7 @@ inputEx.widget.JsonTreeInspector.prototype = {
          if(obj.hasOwnProperty(key)) {
             var value = obj[key];
             
-            var id = Dom.generateId();
+            var id = Y.guid();
             var li = inputEx.cn('li', {id: id}, null, key+':');
             this.hash[id] = {value: value, expanded: false};
             
@@ -63,8 +64,9 @@ inputEx.widget.JsonTreeInspector.prototype = {
                if(lang.isArray(value)) {
                   li.appendChild( inputEx.cn('span', null, null, "[ "+value.length+" element"+(value.length > 1 ? 's':'')+"]" ) );
                }
-               Dom.addClass(li,'collapsed');
-               Event.addListener(li, 'click', this.onItemClick, this, true);
+               var yLi = Y.one(li)
+               yLi.addClass('collapsed')
+               yLi.on('click',this.onItemClick, this)
             }
             else {
                var spanContent = '';
@@ -74,8 +76,9 @@ inputEx.widget.JsonTreeInspector.prototype = {
                else {
                   if(value === null) {
                      spanContent = "null";
-                  }
-                  else {
+                  } else if (typeof(value) === "undefined"){
+                      spanContent = "undefined";
+                  } else {
                      spanContent = value.toString();
                   }
                }
@@ -87,7 +90,7 @@ inputEx.widget.JsonTreeInspector.prototype = {
          }
       }
       
-      parentEl.appendChild(ul);
+      yParentEl.append(ul);
       
       return ul;
    },
@@ -97,10 +100,10 @@ inputEx.widget.JsonTreeInspector.prototype = {
     * When the user click on a node
     */
    onItemClick: function(e, params) {
-      Event.stopEvent(e);
-      var tgt = Event.getTarget(e);
+      e.halt();
+      var tgt = e.target;
       
-      if( Dom.hasClass(tgt, 'expanded') || Dom.hasClass(tgt, 'collapsed') ) {
+      if( tgt.hasClass('expanded') || tgt.hasClass('collapsed') ) {
          this.expandElement(tgt);
       }
    },
@@ -109,12 +112,12 @@ inputEx.widget.JsonTreeInspector.prototype = {
    /**
     * expand the node given the li element
     */
-   expandElement: function(li) {
+   expandElement: function(yLi) {
       
-      var isExpanded = Dom.hasClass(li, 'expanded');
-      Dom.replaceClass(li, isExpanded ? 'expanded' : 'collapsed' , isExpanded ? 'collapsed':'expanded');
+      var isExpanded = yLi.hasClass('expanded');
+      yLi.replaceClass(isExpanded ? 'expanded' : 'collapsed' , isExpanded ? 'collapsed':'expanded')
 
-      var h = this.hash[li.id];
+      var h = this.hash[yLi.get("id")];
 
       if(isExpanded) {
          // hide the sub-branch
@@ -123,7 +126,7 @@ inputEx.widget.JsonTreeInspector.prototype = {
       else {
          if(h.expanded === false) {
             // generate the sub-branch
-            h.expanded = this.buildBranch(h.value, li);
+            h.expanded = this.buildBranch(h.value, yLi);
          }
          // show the sub-branch
          h.expanded.style.display = '';
@@ -135,12 +138,12 @@ inputEx.widget.JsonTreeInspector.prototype = {
     * @param {HTMLElement} li 
     * @param {Integer} maxLevel
     */
-   expandBranch: function(li,maxLevel) {
+   expandBranch: function(yLi,maxLevel) {
       this.expandElement(li);
-      var sub = Dom.getChildrenBy(li, function(c) {return c.tagName == "UL";})[0].childNodes;
+      var sub = yLi.one("ul").get("children");
       for(var j = 0 ; j < sub.length ; j++) {
          var s = sub[j];
-         if(Dom.hasClass(s,"collapsed") && maxLevel != 0) {
+         if(s.hasClass("collapsed") && maxLevel != 0) {
             this.expandBranch(s,maxLevel-1);
          }
       }
@@ -155,7 +158,7 @@ inputEx.widget.JsonTreeInspector.prototype = {
       var liEls = ul.childNodes;
       for(var i = 0 ; i < liEls.length ; i++) {
          var li = liEls[i];
-         this.expandBranch(li,maxLevel);
+         this.expandBranch(Y.one(li),maxLevel);
       }
    }
    
