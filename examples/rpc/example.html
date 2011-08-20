@@ -26,7 +26,7 @@ p {
 </head>
 
 <body class="yui-skin-sam">
-	
+<!-- 	
 	<div id='mainBox'>
 		
 		
@@ -41,51 +41,29 @@ p {
 		<div style='clear: both;'></div>
 		
 	</div>
+	-->
+	<div id='secondBox'>
+		
+		
+		<p>Form generated from this SMD: <a href="yahoo.smd">smd/yahoo.smd</a></p>
+		<div id='dynamicFormContainer'>
+		</div>
+		
+		<p>Results :</p>
+		<div id='treeResultsContainer'>
+		</div>
+		
+		<div style='clear: both;'></div>
+		
+	</div>
 
-<!-- YUI -->
-<script type="text/javascript" src="../../lib/yui/utilities/utilities.js"></script>
-<script type="text/javascript" src="../../lib/yui/get/get-min.js"></script>
-<script type="text/javascript" src="../../lib/yui/json/json-min.js"></script>
+<!-- YUI Library -->
+<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui.js" charset="utf-8"></script>
 
 <!-- inputEx -->
-<script type="text/javascript" src="../../js/inputex.js"></script>
-<script type="text/javascript" src="../../js/mixins/choice.js"></script>
-<script type="text/javascript" src="../../js/Field.js"></script>
-<script type="text/javascript" src="../../js/Group.js"></script>
-<script type="text/javascript" src="../../js/widgets/Button.js"></script>
-<script type="text/javascript" src="../../js/Form.js"></script>
-<script type="text/javascript" src="../../js/fields/StringField.js"></script>
-<script type="text/javascript" src="../../js/fields/SelectField.js"></script>
-<script type="text/javascript" src="../../js/fields/IntegerField.js"></script>
-<script type="text/javascript" src="../../js/json-schema.js"></script> 
-<script type="text/javascript" src="../../js/rpc/inputex-rpc.js"></script> 
-<script type="text/javascript" src="../../js/widgets/json-tree-inspector.js"></script>
+<script src="../../js/loader.js"></script>
 
-<script>
-
-YAHOO.util.Event.onDOMReady(function() {
-
-	/**
-	 * generate a form from the service.questionSearch method
-	 */
-	var onServiceReady = function() {
-		inputEx.RPC.generateServiceForm(service.questionSearch, { parentEl: 'formContainer' },{
-				success: function(results) {
-					var treeContainer = YAHOO.util.Dom.get('treeContainer');
-					treeContainer.innerHTML = "";
-					new inputEx.widget.JsonTreeInspector(treeContainer, results);
-				}
-			});
-	}
-
-	/**
-	 * automatically creates service method from the smd description
-	 */
-	var service = new inputEx.RPC.Service("yahoo.smd",{ success: onServiceReady }	);
-
-});
-
-</script>
+<script src="ModelsWB.js"></script>
 
 </body>
 </html>
