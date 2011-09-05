@@ -14,6 +14,7 @@ YUI.add('inputex-autocomplete', function(Y) {
  * @param {Object} options Added options for Autocompleter
  * <ul>
  *  <li>source: the datasource</li>
+ *  <li>acceptOutsideValues: when the value of the field is outside the datasource, accept it or not (if not the value is ""), if it's a function, it is used to set value from a string</li>
  *  <li>autoComp: autocompleter options</li>
  *   <li>returnValue: function to format the returned value (optional)</li>
  * </ul>
@@ -36,6 +37,7 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
       
       // Added options
       this.options.autoComp = options.autoComp;
+      this.options.acceptOutsideValues = options.acceptOutsideValues;
       this.options.returnValue = options.returnValue;
    },
    
@@ -155,7 +157,13 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
     * Return the hidden value (stored in a hidden input)
     */
    getValue: function() {
-      return this.hiddenEl.value;
+      if(this.options.acceptOutsideValues){
+          if(this.hiddenEl.value == "" && this.el.value != ""){
+              this.setValue(this.el.value,false)
+          }
+      } 
+          
+      return this.hiddenEl.value;          
    }
 
 });

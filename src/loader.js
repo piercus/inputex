@@ -254,6 +254,14 @@ YUI().use(function(Y) {
 					'inputex-tinymce': {
 					   requires: ['inputex-field'],
 						ix_provides: 'tinymce'
+					},
+					'inputex-label':{
+					    requires: ["inputex-field","inputex-hidden"],
+					    ix_provides : "label"
+					},
+					'inputex-multi':{
+					    requires: ["inputex-list"],
+					    ix_provides : "multi"
 					}
 					/*,
 					// Piercus widgets

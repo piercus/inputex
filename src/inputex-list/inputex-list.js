@@ -57,6 +57,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	   this.options.unique = lang.isUndefined(options.unique) ? false : options.unique;
 	   
 	   this.options.listAddLabel = options.listAddLabel || inputEx.messages.listAddLink;
+	   this.options.listLabel = options.listLabel;
 	   this.options.listRemoveLabel = options.listRemoveLabel || inputEx.messages.listRemoveLink;
 	   
 	   this.options.maxItems = options.maxItems;
@@ -240,7 +241,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	renderSubField: function(value) {
 	      
 	   // Div that wraps the deleteButton + the subField
-	   var newDiv = inputEx.cn('div'), delButton;
+	   var newDiv = inputEx.cn('div'), delButton, opts;
 	      
 	   // Delete button
 	   if(this.options.useButtons) {
@@ -248,15 +249,19 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	      Y.one(delButton).on('click', this.onDelete, this);
 	      newDiv.appendChild( delButton );
       }
-	      
+	  
 	   // Instantiate the new subField
-	   var opts = Y.merge({}, this.options.elementType);
+	  //when we want to render a group, it can be useful yo use a function as elemntType, to set the value as we want to
+	   if(Y.Lang.isFunction(this.options.elementType)){
+	       opts = this.options.elementType(value);
+	   } else {
+	       var opts = Y.merge({}, this.options.elementType);
 	   
-      // New prefered way to set options of a field
-      if (!lang.isUndefined(value)) {
-         opts.value = value;
+          // New prefered way to set options of a field
+          if (!lang.isUndefined(value)) {
+             opts.value = value;
+          }
       }
-	   
 	   var el = inputEx(opts,this);
 	   
 	   var subFieldEl = el.getEl();
