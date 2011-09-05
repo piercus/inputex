@@ -2,79 +2,104 @@
 <html>
 <head>
 <title>InputEx - using XML, example with RSS</title>	
-
-<!-- YUI CSS -->
-<link rel="stylesheet" type="text/css" href="../lib/yui/reset-fonts/reset-fonts.css">
-<link rel="stylesheet" type="text/css" href="../lib/yui/container/assets/container.css"> 
-<link rel="stylesheet" type="text/css" href="../lib/yui/assets/skins/sam/skin.css">
-
-<!-- InputEx CSS -->
-<link type='text/css' rel='stylesheet' href='../css/inputEx.css' />
-
-<!-- Demo CSS -->
-<link rel="stylesheet" type="text/css" href="css/demo.css"/>
-<link rel="stylesheet" type="text/css" href="css/dpSyntaxHighlighter.css">
-	
-<script src="../lib/yui/utilities/utilities.js"></script>
 <script src="../lib/XML/ObjTree.js"></script>
-<script src="../build/inputex.js"></script>
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../res/demo.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../res/syntaxhighlighter/scripts/shBrushJScript.js"  type='text/javascript'></script>
 
 </head>
 <body>
-	
-	<div id="formContainer" class='exampleDiv'></div>
-	
-<script>
 
-// Required for the UrlField and ListField
-inputEx.spacerUrl = "../images/space.gif";
+
+<style>
+
+#container1 a.inputEx-List-link {
+  float: right;
+}
+
+#container1 div.inputEx-ListField-subFieldEl {
+  border: 1px solid #ccc;
+  margin: 10px;
+  padding: 10px;
+  width: 700px;
+}
+
+</style>
+
+<!-- Example 1 -->
+<div class='exampleDiv'>
+
+	<h2>Using XML</h2>
+
+	<p>Let's use some inputEx wisdom to create an editor for a RSS feed</p>
+
+	<div id="container1" class='demoContainer'></div>
+
+	<div class='codeContainer'>
+<pre class="brush:js">
 
 var rssFormDef = {
-	type: 'group',
-	parentEl: 'formContainer',
-	fields: [
-		{type: 'number', label: 'Version', name: '-version' },
-		{
-		   type: 'group',
-			name: 'channel',
-			fields: [
-				{type: 'string', label: 'Title', name: 'title'},
-				{type: 'string', label: 'Description', name: 'description'},
-				{type: 'url', label: 'Link', name: 'link'},
-				{type: 'select', label: 'Language', name: 'language', choices: ['en', 'fr']},
-				{
-				   type: 'list',
-				   name: 'item',
-				   useButtons: true,
-				   elementType:{
-					   type: 'group',
-   					fields: [
-   						{type: 'string', label: 'Title', name: 'title'},
-   						{type: 'string', label: 'Description', name: 'description'},
-   						{type: 'string', label: 'Link', name: 'link'}
-   					]
-				   }
-				}
-			]
-		}
-	]
+  type: 'group',
+  parentEl: 'container1',
+  fields: [
+    {type: 'select', label: 'Version', name: '-version', choices: ['1.0','2.0'] },
+    {
+      type: 'group',
+      name: 'channel',
+      fields: [
+        {type: 'string', label: 'Title', name: 'title'},
+        {type: 'string', label: 'Description', name: 'description', size: 53},
+        {type: 'url', label: 'Link', name: 'link'},
+        {type: 'select', label: 'Language', name: 'language', choices: ['en', 'fr']},
+        {
+          label: 'Posts',
+          type: 'list',
+          name: 'item',
+          elementType:{
+            type: 'group',
+            fields: [
+              {type: 'string', label: 'Title', name: 'title', size: 60},
+              {type: 'string', label: 'Description', name: 'description', size: 60},
+              {type: 'inplaceedit', editorField:{type: 'url', showMsg: true}, name: 'link', label: 'Link', animColors:{from:"#FFFF99" , to:"#DDDDFF"} }
+            ]
+          }
+        }
+      ]
+    }
+  ]
 };
 
-
-YAHOO.util.Event.onDOMReady( function() {
-	
-		var rssForm = inputEx(rssFormDef);
-		
-		// Get the rss and populate the form
-		YAHOO.util.Connect.asyncRequest('GET', 'rss-example.xml', {
-			success: function(o) {
-				var xotree = new XML.ObjTree();
-			  var tree = xotree.parseXML( o.responseText );
-				rssForm.setValue(tree.rss);
-			}
-		});
-   
+// Get the rss and populate the form
+Y.io('rss-example.xml', {
+  method: 'GET',
+  on: {
+	  success: function(id, o, args) {
+		  var xotree = new XML.ObjTree();
+	    var tree = xotree.parseXML( o.responseText );
+	    console.log(tree.rss);
+		  Y.inputEx(rssFormDef).setValue(tree.rss);
+	  }
+  }
 });
+
+</pre>
+			</div>
+
+</div>
+
+
+	
+
+<script src="../src/loader.js"  type='text/javascript'></script>
+<script src="../res/inputex-examples.js"  type='text/javascript'></script>
+<script>
+  YUI_config.groups.inputex.base = '../src/';
+  YUI({filter: 'raw'}).use('inputex-form','inputex-email','inputex-url', 'inputex-select','inputex-integer', 'inputex-number','inputex-list', 'inputex-inplaceedit', 'io', 'inputex-examples');
 </script>
 </body>
 </html>

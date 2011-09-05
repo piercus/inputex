@@ -1,20 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html>
  <head>
   <title>inputEx - SelectTwiceField Usage</title>
 
-<!-- YUI CSS -->
-<link rel="stylesheet" type="text/css" href="../lib/yui/reset-fonts/reset-fonts.css">
-<link rel="stylesheet" type="text/css" href="../lib/yui/container/assets/container.css"> 
-<link rel="stylesheet" type="text/css" href="../lib/yui/assets/skins/sam/skin.css">
-
-<!-- InputEx CSS -->
-<link type='text/css' rel='stylesheet' href='../css/inputEx.css' />
-
-<!-- Demo CSS -->
-<link rel="stylesheet" type="text/css" href="css/demo.css"/>
-<link rel="stylesheet" type="text/css" href="css/dpSyntaxHighlighter.css">
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../res/demo.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../res/syntaxhighlighter/scripts/shBrushJScript.js"  type='text/javascript'></script>
 
  </head>
 
@@ -29,10 +24,10 @@
 	<p>How to listen to the updated event :</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
-		var el = YAHOO.util.Dom.get('container1');
+		<pre class="brush:js">
+		var el = Y.one('#container1');
 		
-		var field1 = new inputEx.SelectTwiceField({
+		var field1 = new Y.inputEx.SelectTwiceField({
 			name: 'car',
 			label: 'Which car ?',
 			choices: [
@@ -46,36 +41,27 @@
 		
 		var button = inputEx.cn('button', null, null, "SetValue with 'MINI_One'");
 		el.appendChild(button);
-		YAHOO.util.Event.addListener(button, "click" ,function() {
+		Y.one(button).on('click' ,function() {
 		   field1.setValue('MINI_One');
 		});
 		
 		var logDiv = inputEx.cn('div', null, null, "Log :");
 		el.appendChild(logDiv);
-		field1.updatedEvt.subscribe(function(e,params) {
-			var value = params[0];
+		field1.on('updated', function(value) {
 			logDiv.innerHTML += "Updated at "+(new Date())+" with value "+value;
 			logDiv.appendChild(inputEx.cn('br'));
 		});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
 
-<!-- YUI Library -->
-<script type="text/javascript" src="../lib/yui/utilities/utilities.js"></script> 
-
-<!-- InputEx -->
-<script src="../js/inputex.js"  type='text/javascript'></script>
-<script src="../js/Field.js"  type='text/javascript'></script>
-<script src="../js/fields/StringField.js"  type='text/javascript'></script>
-<script src="../js/mixins/choice.js"  type='text/javascript'></script>
-<script src="../js/fields/SelectField.js"  type='text/javascript'></script>
-<script src="../js/fields/SelectTwiceField.js"  type='text/javascript'></script>
-
-<!-- inputEx examples -->
-<script src="js/dpSyntaxHighlighter.js"></script>
-<script src="inputex-examples.js"></script>
+<script src="../src/loader.js"  type='text/javascript'></script>
+<script src="../res/inputex-examples.js"  type='text/javascript'></script>
+<script>
+YUI_config.groups.inputex.base = '../src/';
+YUI({filter: 'raw'}).use('inputex-selecttwice','inputex-examples');
+</script>
 
  </body>
 </html>

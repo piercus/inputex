@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>inputEx - Internationalization</title>
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../res/demo.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../res/syntaxhighlighter/scripts/shBrushJScript.js"  type='text/javascript'></script>
+
+ </head>
+
+ <body class="yui-skin-sam">
+
+<h1>inputEx - Internationalization</h1>
+
+
+<!-- Example 1 -->
+<div class='exampleDiv'>
+
+	<h2>To French</h2>
+
+	<div class='demoContainer' id='container1'></div>
+
+	<div class='codeContainer'>
+		<pre class="brush:js">
+		  
+		  /*
+		    Note the 'lang: fr' in the YUI config :
+          YUI({lang:"fr"}).use('inputex-datepicker','inputex-examples');
+		  */
+		  
+			var field = new Y.inputEx.DatePickerField({parentEl: 'container1', value: new Date()});
+		</pre>
+	</div>
+
+</div>
+</div>
+<script src="../src/loader.js"  type='text/javascript'></script>
+<script src="../res/inputex-examples.js"  type='text/javascript'></script>
+<script>
+YUI_config.groups.inputex.base = '../src/';
+YUI({lang:"fr", filter: "raw"}).use('inputex-datepicker','inputex-examples');
+</script>
+
+ </body>
+</html>
