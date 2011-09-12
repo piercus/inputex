@@ -157,13 +157,30 @@ inputEx.RPC.Service.prototype = {
    	   
    	   
    	   var params = {};
-   	   if(self._smd.additionalParameters && lang.isArray(self._smd.parameters) ) {
+   	   var paramKeys = [];
+   	   if(lang.isArray(self._smd.parameters) ) {
    	      for(var i = 0 ; i < self._smd.parameters.length ; i++) {
    	         var p = self._smd.parameters[i];
    	         params[p.name] = p["default"];
+   	         paramKeys.push(p.name);
    	      }
    	   }
-   	   Y.mix(params, data, true);
+   	   
+   	   // Choose which keys of data must be copied in params, depending on the additionnalParameters config
+       if(lang.isObject(self._smd.additionalParameters) || lang.isArray(self._smd.additionalParameters)){
+   	       // to do 
+   	       // following smd specification
+   	       // when it's an object or an array, it can be a list of schemas of accepted additionnalParameters
+   	       
+   	       //temporary works as "true"
+   	       Y.mix(params, data, true);
+   	       
+   	   } else if(self._smd.additionalParameters === false){
+   	       Y.mix(params, data, true,paramKeys);
+   	   } else {
+   	       Y.mix(params, data, true);
+   	   }
+   	   
    	   
    	   var url = method.target || self._smd.target;
    	   var urlRegexp = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/i;
@@ -179,7 +196,7 @@ inputEx.RPC.Service.prototype = {
    	   }
    	   
    	     // use Y.substitute with the url
-   	     url = Y.substitute(url,params);
+   	     url = Y.substitute(url,data);
          var r = {
             target: url,
             callback: callback,

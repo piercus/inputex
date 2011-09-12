@@ -13,13 +13,13 @@
 
  </head>
 
- <body>
+ <body class="yui-skin-sam">
 
 <h1>inputEx - MultiField Usage</h1>
 
 <!-- Example 1 -->
 <div class='exampleDiv'>
- <h2>Basic MultiField creation</h2>
+ <h2>Basic MultiField creation (With Label Field)</h2>
  <p>Use the following code to create a basic inputEx MultiField.</p>
  <div class='demoContainer' id='container1'></div>
  <div class='codeContainer'>
@@ -63,8 +63,8 @@
 
 <!-- Example 2 -->
 <div class='exampleDiv'>
- <h2>Basic ListField creation</h2>
- <p>Use the following code to create a basic inputEx ListField.</p>
+ <h2>MultiField creation with url Field</h2>
+ <p>Use the following code to create a basic inputEx Multi with an url element field.</p>
  <div class='demoContainer' id='container2'></div>
  <div class='codeContainer'>
   <pre class="brush:js">
@@ -101,7 +101,7 @@
 <!-- Example 3 -->
 <div class='exampleDiv'>
  <h2>Basic MultiField With elementType as a function</h2>
- <p>Use the following code to create a basic inputEx ListField.</p>
+ <p>Use the following code to create a basic inputEx MultiField, the element is function of the value selected.</p>
  <div class='demoContainer' id='container3'></div>
  <div class='codeContainer'>
   <pre class="brush:js">
@@ -151,7 +151,7 @@
 <!-- Example 4 -->
 <div class='exampleDiv'>
  <h2>Basic MultiField With Autocomplete</h2>
- <p>Use the following code to create a basic inputEx MultiField with Autocomplete.</p>
+ <p>Use the following code to create a basic inputEx MultiField with Autocomplete, the field can set values that are not proposed.</p>
  <div class='demoContainer' id='container4'></div>
  <div class='codeContainer'>
   <pre class="brush:js">
@@ -187,12 +187,82 @@
   </pre>
  </div>
 </div>
+<!-- Example 5 -->
+<div class='exampleDiv'>
+ <h2>Basic MultiField With MenuField</h2>
+ <p>Use the following code to create a basic inputEx MultiField with MenuField.</p>
+ <div class='demoContainer' id='container5'></div>
+ <div class='codeContainer'>
+  <pre class="brush:js">
+	var menuItems = [
+	    {
+	        text:'America',
+	        submenu:{
+	            itemdata:[
+	                 {text:'United States of America',value:'Us'},
+	                 {text:'Canada',value:'Ca'}
+	             ]
+	         }
+	    },
+	     {
+	        text:'Europe',
+	        submenu:{
+	            itemdata:[
+	                 {
+	                     text:'Western Europe',
+	                     submenu:{
+	                        itemdata:[
+	                             {text:'France',value:'Fr'},
+	                             {text:'United Kingdom',value:'Uk'},
+	                             {text:'Germany',value:'De'}
+	                         ]
+	                     }
+	                 },
+	                 {
+	                     text:'Eastern Europe',
+	                     submenu:{
+	                        itemdata:[
+	                             {text:'Poland',value:'Pl'},
+	                             {text:'Czech Republic',value:'Cz'},
+	                             {text:'Slovakia',value:'Sk'}
+	                         ]
+	                     }
+	                 }
+	             ]
+	         }
+	    },
+	    {
+	         text:'Africa',
+	        submenu:{
+	            itemdata:[
+	                 {text:'Senegal',value:'Sn'},
+	                 {text:'Madagascar',value:'Mg'}
+	             ]
+	         }
+	     }
+	];
+
+       var addField = {
+          type: "menu",
+          label: 'Choose Countries',
+          menuItems: menuItems
+      };
+		var field = new Y.inputEx.MultiField({
+			name: 'countries', 
+			listLabel: 'Countries',
+			elementType: {type: "label"}, 
+			addField: addField,
+			parentEl: 'container5'
+		});
+  </pre>
+ </div>
+</div>
 <script src="../src/loader.js"  type='text/javascript'></script>
 <script src="../src/inputex-multi/inputex-multi.js"  type='text/javascript'></script>
 <script src="../res/inputex-examples.js"  type='text/javascript'></script>
 <script>
 YUI_config.groups.inputex.base = '../src/';
-YUI({filter: 'raw'}).use('inputex-form','inputex-list', 'inputex-url', 'inputex-select','inputex-hidden','inputex-autocomplete','inputex-label','inputex-multi', 'inputex-examples');
+YUI({filter: 'raw'}).use('inputex-form','inputex-list', 'inputex-url', 'inputex-select','inputex-hidden','inputex-autocomplete','inputex-label','inputex-menu','inputex-multi', 'inputex-examples');
 </script>
 
 
