@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>inputEx - How to use the Panel widget</title>
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../res/demo.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../res/syntaxhighlighter/scripts/shBrushJScript.js"  type='text/javascript'></script>
+</head>
+<body class="yui3-skin-sam">
+	
+	<h1>inputEx - Panel Widget Usage</h1>
+	
+	<!-- Example 1 -->
+	<div class='exampleDiv'>
+
+		<h2>Basic Panel creation</h2>
+
+		<p>Use the following code to create a basic inputEx Panel.</p>
+
+		<div class='demoContainer' id='container1'>
+		</div>
+
+		<div class='codeContainer'>
+			<pre class="brush:js">
+var nestedPanel = new Y.inputEx.Panel({
+    headerContent: "A Panel with a Form within",
+
+    bodyContent: "You can add content...",
+
+    zIndex: 5,
+    //We set a z-index higher than the parent's z-index
+    centered: true,
+    width: 500,
+    modal: true,
+    visible: false,
+
+    inputEx: {
+        type: "group",
+        fields: [
+          { type: 'select', label: 'Title', name: 'title', choices: ['Mr', 'Mrs', 'Ms'] },
+          { label: 'Firstname', name: 'firstname', required: true, value: 'Jacques' },
+          { label: 'Lastname', name: 'lastname', value: 'Dupont' },
+          { type: 'email', label: 'Email', name: 'email' },
+          { type: 'url', label: 'Website', name: 'website' }
+        ]
+    },
+
+    //We add the "Yes" and "No" buttons
+    buttons: [
+    {
+        value: "Yes",
+        action: function(e) {
+            e.preventDefault();
+            nestedPanel.hide();
+
+            alert(Y.JSON.stringify(nestedPanel.get('field').getValue()));
+        },
+        section: Y.WidgetStdMod.FOOTER
+    },
+    {
+        value: "No",
+        action: function(e) {
+            e.preventDefault();
+            nestedPanel.hide();
+        },
+        section: Y.WidgetStdMod.FOOTER
+    }
+    ]
+});
+
+nestedPanel.render();
+
+
+Y.Node.create("<button>Show</button>").appendTo('#container1').on('click',
+function() {
+    nestedPanel.show();
+});
+        
+			</pre>
+		</div>
+
+	</div>
+
+
+<script src="../src/loader.js"  type='text/javascript'></script>
+<script src="../res/inputex-examples.js"  type='text/javascript'></script>
+<script>
+YUI_config.groups.inputex.base = '../src/';
+YUI({filter: 'raw'}).use('inputex-form','inputex-string','inputex-select','inputex-email','inputex-url','inputex-textarea','inputex-panel', 'json', 'inputex-examples');
+</script>
+
+
+</body>
+</html>

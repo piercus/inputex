@@ -1,0 +1,27 @@
+{
+	"SMDVersion": "2.0",
+	"id": "http://developer.yahoo.com/yql/", 
+	"description": "Some examples to show how to use YQL with jsonp and YUI-RPC",
+		
+	"target": "http://developer.yahoo.com/yql/",
+	"transport": "JSONP",
+	"envelope": "URL",
+	"callbackParamName": "callback",
+	
+	"additionalParameters": true,
+	"parameters": [
+		{ "name": "format", "optional": false, "default": "json" }
+	],
+
+	"services": {
+	   
+		"yql": {
+		   "target": "http://query.yahooapis.com/v1/public/yql",
+			"parameters": [
+			   { "name": "q", "type":"string", "format": "text", "default":"select * from html where url='http://finance.yahoo.com/q?s=yhoo' and xpath='//div[@id=\"yfi_headlines\"]/div[2]/ul/li/a'", "_inputex": { "label": "YQL query", "rows": 5, "cols": 40} }
+			]
+		}
+		
+	}
+}
+

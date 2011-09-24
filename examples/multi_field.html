@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>inputEx - MultiField Usage</title>
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../res/demo.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../res/syntaxhighlighter/scripts/shBrushJScript.js"  type='text/javascript'></script>
+
+ </head>
+
+ <body>
+
+<h1>inputEx - MultiField Usage</h1>
+
+<!-- Example 1 -->
+<div class='exampleDiv'>
+ <h2>Basic MultiField creation</h2>
+ <p>Use the following code to create a basic inputEx MultiField.</p>
+ <div class='demoContainer' id='container1'></div>
+ <div class='codeContainer'>
+  <pre class="brush:js">
+		var field = new Y.inputEx.MultiField({
+			name: 'websiteUrl', 
+			listLabel: 'Websites',
+			addField: {'type':"select", choices: [
+			    'http://www.neyric.com',
+			    'http://www.ajaxian.com', 
+			    'http://www.google.com', 
+			    'http://www.yahoo.com',
+			    'http://www.sncf.com',
+				'http://www.clicrdv.com',
+				'http://www.neyric.com',
+				'http://javascript.neyric.com/wireit'
+			]},
+			parentEl: 'container1'
+		});
+		var button = inputEx.cn('button', null, null, 'getValue()');
+		Y.one('#container1').appendChild(button); 
+		Y.one(button).on('click', function() { alert( Y.JSON.stringify(field.getValue())); });  
+		var button2 = inputEx.cn('button', null, null, 'setValue()');
+		Y.one('#container1').appendChild(button2); 
+		Y.one(button2).on('click', function() {
+			field.setValue(['http://www.sncf.com',
+											'http://www.clicrdv.com',
+											'http://www.neyric.com',
+											'http://javascript.neyric.com/wireit']);			
+		});
+		var button3 = inputEx.cn('button', null, null, 'Clear');
+		Y.one('#container1').appendChild(button3); 
+		Y.one(button3).on('click', function() {
+			field.setValue([]);
+		});
+	
+  </pre>
+ </div>
+</div>
+
+
+<!-- Example 2 -->
+<div class='exampleDiv'>
+ <h2>Basic ListField creation</h2>
+ <p>Use the following code to create a basic inputEx ListField.</p>
+ <div class='demoContainer' id='container2'></div>
+ <div class='codeContainer'>
+  <pre class="brush:js">
+		var field = new Y.inputEx.MultiField({
+			name: 'websiteUrl', 
+			listLabel: 'Websites',
+			elementType: {type: 'url'}, 
+			addField: {'type':"select", choices: [
+			    'http://www.neyric.com',
+			    'http://www.ajaxian.com', 
+			    'http://www.google.com', 
+			    'http://www.yahoo.com',
+			    'http://www.sncf.com',
+				'http://www.clicrdv.com',
+				'http://www.neyric.com',
+				'http://javascript.neyric.com/wireit'
+			]},
+			parentEl: 'container2'
+		});
+		var button = inputEx.cn('button', null, null, 'getValue()');
+		Y.one('#container2').appendChild(button); 
+		Y.one(button).on('click', function() { alert( Y.JSON.stringify(field.getValue())); });  
+
+		var button3 = inputEx.cn('button', null, null, 'Clear');
+		Y.one('#container2').appendChild(button3); 
+		Y.one(button3).on('click', function() {
+			field.setValue([]);
+		});
+	
+  </pre>
+ </div>
+</div>
+
+<!-- Example 3 -->
+<div class='exampleDiv'>
+ <h2>Basic MultiField With elementType as a function</h2>
+ <p>Use the following code to create a basic inputEx ListField.</p>
+ <div class='demoContainer' id='container3'></div>
+ <div class='codeContainer'>
+  <pre class="brush:js">
+	
+	    var getElementOptionsFromValue = function(v){
+		   	return {
+			 	  type: "group",
+			      name: v+"group",
+			      fields:[{
+					   type: "select", 
+					   value: "ok", 
+					   name: "okbutton",
+					   label: "what do you think about "+v, 
+					   choices: ["ok","not good","very good"]
+					}]
+			   }
+	    }
+		var field = new Y.inputEx.MultiField({
+			name: 'websiteUrl', 
+			listLabel: 'Websites',
+			elementType: getElementOptionsFromValue, 
+			addField: {'type':"select", choices: [
+			    'http://www.neyric.com',
+			    'http://www.ajaxian.com', 
+			    'http://www.google.com', 
+			    'http://www.yahoo.com',
+			    'http://www.sncf.com',
+				'http://www.clicrdv.com',
+				'http://www.neyric.com',
+				'http://javascript.neyric.com/wireit'
+			]},
+			parentEl: 'container3'
+		});
+		var button = inputEx.cn('button', null, null, 'getValue()');
+		Y.one('#container3').appendChild(button); 
+		Y.one(button).on('click', function() { alert( Y.JSON.stringify(field.getValue())); });  
+
+		var button3 = inputEx.cn('button', null, null, 'Clear');
+		Y.one('#container3').appendChild(button3); 
+		Y.one(button3).on('click', function() {
+			field.setValue([]);
+		});
+	
+  </pre>
+ </div>
+</div>
+<!-- Example 4 -->
+<div class='exampleDiv'>
+ <h2>Basic MultiField With Autocomplete</h2>
+ <p>Use the following code to create a basic inputEx MultiField with Autocomplete.</p>
+ <div class='demoContainer' id='container4'></div>
+ <div class='codeContainer'>
+  <pre class="brush:js">
+
+       var addField = {
+          type: "autocomplete",
+          label: 'Search US state',
+ 
+          // Format the hidden value (value returned by the form)
+          returnValue: function(oResultItem) {
+              return oResultItem.value;
+          },
+          acceptOutsideValues: true,
+          autoComp: {// options of the YUI3 autocompleter (see http://developer.yahoo.com/yui/3/autocomplete/#config)
+              minQueryLength: 2,
+              maxResults: 50,
+              resultTextLocator: 'label',
+              source:
+              [{label: "Massachusets", value: "MA"},
+              {label: "state2", value: 2},
+              {label: "state3", value:3}]   
+          }
+      };
+		var field = new Y.inputEx.MultiField({
+			name: 'websiteUrl', 
+			delimiter: ",",
+			description: 'type "test" or "test1,test2"',
+			listLabel: 'Websites',
+			elementType: {type: "label"}, 
+			addField: addField,
+			parentEl: 'container4'
+		});
+  </pre>
+ </div>
+</div>
+<script src="../src/loader.js"  type='text/javascript'></script>
+<script src="../src/inputex-multi/inputex-multi.js"  type='text/javascript'></script>
+<script src="../res/inputex-examples.js"  type='text/javascript'></script>
+<script>
+YUI_config.groups.inputex.base = '../src/';
+YUI({filter: 'raw'}).use('inputex-form','inputex-list', 'inputex-url', 'inputex-select','inputex-hidden','inputex-autocomplete','inputex-label','inputex-multi', 'inputex-examples');
+</script>
+
+
+ </body>
+</html>

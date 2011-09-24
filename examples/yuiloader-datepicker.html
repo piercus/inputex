@@ -30,7 +30,7 @@
 		</div>
 
 		<div class='codeContainer'>
-			<textarea name="code" class="JScript">
+			<pre class="brush:js">
 
 				var loader = new YAHOO.util.YUILoader({
 				    loadOptional: true,
@@ -39,7 +39,7 @@
 					require: ["inputex-datetimefield"],
 
 				    onSuccess: function() {
-						new inputEx.DateTimeField( { 
+						new Y.inputEx.DateTimeField( { 
 							parentEl: 'container1',
 							name: "date",
 							value: new Date()
@@ -53,7 +53,7 @@
 				YAHOO.addInputExModules(loader, '../');
 				loader.insert();
 
-			</textarea>
+			</pre>
 		</div>
 
 	</div>
@@ -71,7 +71,7 @@ var loader = new YAHOO.util.YUILoader({
 	require: ["inputex-datetimefield"],
 	
     onSuccess: function() {
-		new inputEx.DateTimeField( { 
+		new Y.inputEx.DateTimeField( { 
 			parentEl: 'container1',
 			name: "date",
 			value: new Date()

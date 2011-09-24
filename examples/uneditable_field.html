@@ -1,20 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html>
  <head>
   <title>inputEx - UneditableField Usage</title>
 
-<!-- YUI CSS -->
-<link rel="stylesheet" type="text/css" href="../lib/yui/reset-fonts/reset-fonts.css">
-<link rel="stylesheet" type="text/css" href="../lib/yui/container/assets/container.css"> 
-<link rel="stylesheet" type="text/css" href="../lib/yui/assets/skins/sam/skin.css">
-
-<!-- InputEx CSS -->
-<link type='text/css' rel='stylesheet' href='../css/inputEx.css' />
-
-<!-- Demo CSS -->
-<link rel="stylesheet" type="text/css" href="css/demo.css"/>
-<link rel="stylesheet" type="text/css" href="css/dpSyntaxHighlighter.css">
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../res/demo.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shCore.css">
+<link rel="stylesheet" href="../res/syntaxhighlighter/styles/shThemeDefault.css">
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script>
+<script src="../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
+<script src="../res/syntaxhighlighter/scripts/shBrushJScript.js"  type='text/javascript'></script>
 
  </head>
 
@@ -29,13 +24,13 @@
 	<p>To format the value of the field with an html string, use the <i>formatValue</i> function (schould return a string):</p>
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
-			new inputEx.UneditableField({
+		<pre class="brush:js">
+			new Y.inputEx.UneditableField({
 				name: 'date', 
 				value: new Date(), 
 				parentEl: 'container1'
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -46,17 +41,17 @@
 	<p>To render the value of the field with a DOM element (to add a behaviour), use the <i>formatDom</i> function (schould return a dom element):</p>
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
-			new inputEx.UneditableField({
+		<pre class="brush:js">
+			new Y.inputEx.UneditableField({
 				name: 'date', 
-				value: 'http://neyric.com/images/diabolo.png', 
+				value: 'http://farm2.static.flickr.com/1052/913643741_a83000f8e4.jpg', 
 				visu: {
 					visuType: 'func', 
 					func: function(value){ return inputEx.cn('img',{src:value},{border: '2px solid black'}); } 
 				},
 				parentEl: 'container2' 
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
@@ -66,7 +61,7 @@
 	<p>Display an image from the field value :</p>
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
-		<textarea name="code" class="JScript">
+		<pre class="brush:js">
 			inputEx({
 				type: "uneditable",
 				name: 'pagerank', 
@@ -75,24 +70,16 @@
 				visu: {visuType: 'func', func: function(value){ return inputEx.cn('img',{src: "http://www.page-rank-lookup.com/i/style1/pagerank"+value+".png"}) } },
 				parentEl: 'container3'
 			});
-		</textarea>
+		</pre>
 	</div>
 </div>
 
-<!-- YUI Library -->
-<script type="text/javascript" src="../lib/yui/utilities/utilities.js"></script>
-<script type="text/javascript" src="../lib/yui/container/container-min.js"></script>
-
-<!-- InputEx -->
-<script src="../js/inputex.js"  type='text/javascript'></script>
-<script src="../js/Field.js"  type='text/javascript'></script>
-<script src="../js/Visus.js"  type='text/javascript'></script>
-<script src="../js/fields/StringField.js"  type='text/javascript'></script>
-<script src="../js/fields/UneditableField.js"  type='text/javascript'></script>
-
-<!-- inputEx examples -->
-<script src="js/dpSyntaxHighlighter.js"></script>
-<script src="inputex-examples.js"></script>
+<script src="../src/loader.js"  type='text/javascript'></script>
+<script src="../res/inputex-examples.js"  type='text/javascript'></script>
+<script>
+YUI_config.groups.inputex.base = '../src/';
+YUI({filter: 'raw'}).use('inputex-uneditable','inputex-examples');
+</script>
 
  </body>
 </html>
