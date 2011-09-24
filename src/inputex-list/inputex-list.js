@@ -18,6 +18,7 @@ YUI.add("inputex-list",function(Y){
  *   <li>useButtons: use buttons instead of links (default false)</li>
  *   <li>unique: require values to be unique (default false)</li>
  *   <li>listAddLabel: if useButtons is false, text to add an item</li>
+ *   <li>appendFirst: boolean, if true then a new element is add at the top of the list</li>
  *   <li>listRemoveLabel: if useButtons is false, text to remove an item</li>
  *   <li>maxItems: maximum number of items (leave undefined if no maximum, default)</li>
  *   <li>minItems: minimum number of items to validate (leave undefined if no minimum, default)</li>
@@ -55,6 +56,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	   this.options.elementType = options.elementType || {type: 'string'};
 	   this.options.useButtons = lang.isUndefined(options.useButtons) ? false : options.useButtons;
 	   this.options.unique = lang.isUndefined(options.unique) ? false : options.unique;
+	   this.options.appendFirst = lang.isUndefined(options.appendFirst) ? false : options.appendFirst;
 	   
 	   this.options.listAddLabel = options.listAddLabel || inputEx.messages.listAddLink;
 	   this.options.listLabel = options.listLabel;
@@ -195,7 +197,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	
 	   // Adds it to the local list
 	   this.subFields.push(subFieldEl);
-	   
+	      
 	   return subFieldEl;
 	},
 	
@@ -241,7 +243,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	renderSubField: function(value) {
 	      
 	   // Div that wraps the deleteButton + the subField
-	   var newDiv = inputEx.cn('div'), delButton, opts;
+	   var newDiv = inputEx.cn('div',{className: 'inputEx-List-child'}), delButton, opts;
 	      
 	   // Delete button
 	   if(this.options.useButtons) {
@@ -290,8 +292,12 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	
 	   // Line breaker
 	   newDiv.appendChild( inputEx.cn('div', null, {clear: "both"}) );
-	
-	   this.childContainer.appendChild(newDiv);
+	   
+	   if(this.options.appendFirst){
+	        Y.one(this.childContainer).insert(newDiv,0);
+	   } else {
+	       this.childContainer.appendChild(newDiv);
+	   }
 	      
 	   return el;
 	},
@@ -405,7 +411,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	   }
 	      
 	   // Get the wrapping div element
-	   var elementDiv = e.target._node.parentNode;
+	   var elementDiv = e.target.ancestor(".inputEx-List-child")._node;
 	   
 	   // Get the index of the subField
 	   var index = -1;

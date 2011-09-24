@@ -1,13 +1,55 @@
 /**
  * @module inputex-menu
  */
-YUI.add("inputex-menu",function(Y){
+YUI.add("inputex-selectasmenu-plugin",function(Y){
 	
-   var inputEx = Y.inputEx,
-       lang = Y.Lang;
-	
-	var YAHOO = Y.YUI2, Event = YAHOO.util.Event;
+   var inputEx = Y.inputEx;
+   var basicSelectProto = Y.merge(inputEx.SelectField.prototype);
+   
 
+   var basicMenuProto = Y.merge(inputEx.MenuField.prototype);
+   Y.inputEx.SelectAsMenu = function(options){
+         // do nothing constructor
+   };
+   
+   var excludeKeys = ["setOptions"];
+   
+   for (var fnName in basicMenuProto){
+       if(basicMenuProto.hasOwnProperty(fnName) && inputEx.indexOf(fnName,excludeKeys) === -1 ){
+           if(basicSelectProto.hasOwnProperty(fnName)){
+              Y.inputEx.SelectAsMenu.prototype[fnName] = function(){
+                if(this.options.menu){
+                   basicMenuProto.apply(this,arguments);        
+                } else {
+                   basicSelectProto.apply(this,arguments); 
+                }
+              }   
+           } else {
+               Y.inputEx.SelectAsMenu.prototype[fnName] = function(){
+                   if(this.options.menu){
+                      basicMenuProto.apply(this,arguments);        
+                   } else {
+                      throw("Error in inputex-selectasmenu-plugin : this method shouldn't be called for this field");
+                   }
+                 }
+           }
+           
+       }
+   }
+   Y.inputEx.SelectAsMenu.prototype.setOptions = function(options){
+     this.options.menu = options.menu || false;
+     basicSelectProto.setOptions.call(this,options);
+     if(this.options.menu){
+         basicMenuProto.setOptions.call(this,options);
+         if(!this.options.menuItems){
+            this.options.menuItems = this.options.choices; 
+         }
+     }
+   }
+   
+   Y.augment(inputEx.Select,inputEx.SelectAsMenu,true);
+});
+   
 /**
  * Create a menu field
  * @class inputEx.MenuField
@@ -41,20 +83,8 @@ Y.extend(inputEx.MenuField, inputEx.Field, {
 	   this.options.typeInvite = options.typeInvite || inputEx.messages.menuTypeInvite;
 	   this.options.menuTrigger = options.menuTrigger || "click";
 	   this.options.menuPosition = options.menuPosition || ["tl","tr"];
+	   this.options.menuItems = options.menuItems;
 	   
-	   //this.options.menuItems = options.menuItems;	   
-	   if(lang.isObject(options.menuItems) && !lang.isFunction(options.menuItems)){
-		    this.options.menuItems = options.menuItems;
-		    this.menuReady = true;
-		} else if (lang.isFunction(options.menuItems)) {
-		    // create menu in a callback
-		    this.menuReady = false;
-		    this.options.menuItems = options.menuItems;
-		} else {
-		    this.options.menuItems = false;
-		    this.menuReady = true;
-		}
-		
 	   // Configuration options for the generated YUI Menu instance
 	   this.options.menuConfig = options.menuConfig || {};
 	},
@@ -64,7 +94,6 @@ Y.extend(inputEx.MenuField, inputEx.Field, {
     * Build a menu
     */
    renderComponent: function() {
-	  if (!this.menuReady) { return this.buildMenu(); }
       
       // Div to display the invite, then the selected text
       this.el = inputEx.cn('div', {className:'inputEx-Result'}, null, this.options.typeInvite);
@@ -152,22 +181,6 @@ Y.extend(inputEx.MenuField, inputEx.Field, {
       this.menu.render(this.menuContainer);
    },
    
-   buildMenu: function(){
-	    var self = this;
-	    var cb = function(res){
-	        self.options.menuItems = res;
-	        self.menuReady = true;
-	        self.renderComponent();
-	    };
-	    try {
-	      this.options.menuItems.call(this,this.options,cb);
-       } catch(e) {
-         if(window.console){
-           console.log("menu is not ready",e,e.stack);
-         }
-         self.menuReady = false;
-       }
-	},
    
    initEvents: function() {
       this.menu.subscribe("show", this.menu.focus);
@@ -188,7 +201,6 @@ Y.extend(inputEx.MenuField, inputEx.Field, {
    
    
    getValue: function() {
-      if(!this.menuReady){ return ""; }
       return this.hiddenEl.value;
    },
    
@@ -204,10 +216,7 @@ Y.extend(inputEx.MenuField, inputEx.Field, {
    
 });
 
-// Register this class as "menu" type
-inputEx.registerType("menu", inputEx.MenuField);
-
 }, '3.0.0a',{
-requires: ['inputex-field', 'yui2-menu']
+requires: ['inputex-menu', 'inputex-select']
 });
 

@@ -9,6 +9,10 @@ YUI().add("inputex-multi",function(Y){
         Y.inputEx.MultiField.superclass.setOptions.call(this, options);
         // override basic value
         this.options.elementType = options.elementType || {type: 'label'};
+        if(typeof(options.addField.description) == "undefined" && options.description){
+            options.addField.description = options.description;
+            this.options.description = false;
+        }
         this.options.addField = options.addField;
         this.options.delimiter = options.delimiter;
         if (typeof(this.options.addField.label) == "undefined"){
@@ -24,6 +28,7 @@ YUI().add("inputex-multi",function(Y){
 	      
 	   // Div element to contain the children
 	   this.childContainer = Y.inputEx.cn('div', {className: 'inputEx-ListField-childContainer'});
+	   this.childContainer.appendChild(Y.inputEx.cn('div',null,{"clear":"both"}))
 	   this.fieldContainer.appendChild(this.childContainer);
 	   
 	},
@@ -58,7 +63,7 @@ YUI().add("inputex-multi",function(Y){
 	   
 	   
 	   this.addField.clear(false);
-	   
+
 	   // Fire updated !
 	   this.fireUpdatedEvt();	   
 	},

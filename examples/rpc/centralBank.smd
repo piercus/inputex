@@ -1,0 +1,28 @@
+{
+	"SMDVersion": "0.2",
+	"id": "http://data.worldbank.org/", 
+	"description": "Data Worldbank API",
+
+	"transport": "JSONP",
+	"envelope": "URL",
+	
+	"additionalParameters": false,
+	"parameters": [
+		{ "name": "format", "optional": false, "default": "jsonp" },
+		{"name": "per_page", "type": "number", "default" : 500}
+	],
+   "callbackParamName": "prefix",
+
+	"services": {
+		"indicators": {
+			  "target": "http://api.worldbank.org/fr/countries/{countries}/indicators/{indicators}",
+			  "parameters": [
+			    {"name": "page", "type": "string"},
+			    {"name": "per_page", "type": "string"},
+			    {"name": "MRV", "type": "string"},
+			    {"name": "Gapfill", "type": "string"},
+			    {"name": "Frequency", "type": "string"}
+			  ]
+		}
+	}
+}
