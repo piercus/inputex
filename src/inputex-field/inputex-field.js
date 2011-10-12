@@ -2,10 +2,10 @@
  * Provides the base "field" abstract class
  * @module inputex-field
  */
-YUI.add("inputex-field",function(Y) {
+gIE.addModule("inputex-field",function(I) {
  
-     var lang = Y.Lang,
-          inputEx = Y.inputEx;
+     var lang = I.Lang,
+          inputEx = I.inputEx;
 
   /** 
    * An abstract class (never instantiated) that contains the shared features for all fields.
@@ -108,7 +108,7 @@ YUI.add("inputex-field",function(Y) {
 	        this.divEl.id = this.options.id;
 	     }
 	     if(this.options.required) {
-	        Y.one(this.divEl).addClass("inputEx-required");
+	        I.addClass(this.divEl,"inputEx-required")
 	     }
 	     
 	     // Label element
@@ -205,15 +205,15 @@ YUI.add("inputex-field",function(Y) {
 	     if( this.previousState ) {
 	        // remove invalid className for both required and invalid fields
 	        className = 'inputEx-'+((this.previousState == inputEx.stateRequired) ? inputEx.stateInvalid : this.previousState);
-		     Y.one(this.divEl).removeClass(className);
+	         I.removeClass(el,className);
 	     }
 	     
 	     // add new class
 	     state = state || this.getState();
-	     if( !(state == inputEx.stateEmpty && Y.one(this.divEl).hasClass( 'inputEx-focused') ) ) {
+	     if( !(state == inputEx.stateEmpty && I.hasClass(this.divEl,'inputEx-focused') ) {
 	        // add invalid className for both required and invalid fields
 	        className = 'inputEx-'+((state == inputEx.stateRequired) ? inputEx.stateInvalid : state);
-	        Y.one(this.divEl).addClass(className );
+	        I.addClass(this.divEl,className);
         }
 	
 	     if(this.options.showMsg) {
@@ -263,9 +263,10 @@ YUI.add("inputex-field",function(Y) {
       * @param {Event} e The original 'focus' event
       */
 	  onFocus: function(e) {
-	     var el = Y.one(this.getEl());
-	     el.removeClass('inputEx-empty');
-	     el.addClass('inputEx-focused');
+	     var el = this.getEl();
+	     I.removeClass(el,'inputEx-empty');
+	     I.addClass(el,'inputEx-focused');
+	     
 	  },
 
      /**
@@ -273,7 +274,7 @@ YUI.add("inputex-field",function(Y) {
       * @param {Event} e The original 'blur' event
       */
 	  onBlur: function(e) {
-	     Y.one(this.getEl()).removeClass('inputEx-focused');
+	     I.removeClass(this.getEl(),'inputEx-focused');
 	     
 	     // Call setClassFromState on Blur
 	     this.setClassFromState();
@@ -329,10 +330,10 @@ YUI.add("inputex-field",function(Y) {
         // no equivalent in YUI3 Event mechanism
         
         // Purge element (remove listeners on el and childNodes recursively)
-        Y.Event.purgeElement(el, true);
+        I.purgeElement(el)        
         
         // Remove from DOM
-        if(Y.one(el).inDoc()) {
+        if(I.isInDoc(el)) {
            el.parentNode.removeChild(el);
         }
         
@@ -402,7 +403,7 @@ YUI.add("inputex-field",function(Y) {
      
   };
 
-  Y.augment(inputEx.Field, Y.EventTarget, null, null, {});
+  I.augment(inputEx.Field, I.EventTarget, null, null, {});
 
   inputEx.Field.groupOptions = [
 	  { type: "string", label: "Name", name: "name", value: '', required: true },
@@ -413,5 +414,5 @@ YUI.add("inputex-field",function(Y) {
   ];
 
 }, '3.0.0a',{
-  requires: ["inputex","event-custom"]
+  requires: ["inputex","inputex-event-custom"]
 });

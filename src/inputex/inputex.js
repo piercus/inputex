@@ -4,10 +4,11 @@
  */
 /*global inputEx: false, YAHOO: false */
 
+Gi.addModule("inputex", function(I){
+    
+  // I is a localInputEx instance that contains tools added requires modules or librairies
 
-
-YUI.add("inputex", function(Y){
-  var lang = Y.Lang;
+  var lang = I.Lang;
   /**
    * The inputEx method lets you create a field from the JSON definition:
    * <pre>
@@ -22,15 +23,15 @@ YUI.add("inputex", function(Y){
    * @param {inputEx.Group|inputEx.Form|inputEx.ListField|inputEx.CombineField} (optional) parentField The parent field instance
    * @return {inputEx.Field} Created field instance
    */
-  Y.inputEx = function(fieldOptions, parentField) {
+  I.inputEx = function(fieldOptions, parentField) {
      var fieldClass = null,
          inputInstance;
          
     if(fieldOptions.type) {
        fieldClass = inputEx.getFieldClass(fieldOptions.type);
        
-        if( !Y.Lang.isFunction(fieldClass) ){
-           throw new Error("Missing inputEx module for type: '"+fieldOptions.type+"' ?");
+        if( !lang.isFunction(fieldClass) ){
+           I.error("Missing inputEx module for type: '"+fieldOptions.type+"' ?")
         }
     }
     else {
@@ -53,9 +54,9 @@ YUI.add("inputex", function(Y){
      return inputInstance;
   };
   
-  var inputEx = Y.inputEx;
+  var inputEx = I.inputEx;
   
-  Y.mix(Y.inputEx, {
+  I.mix(I.inputEx, {
      
      VERSION: "3.0.0a",
      
@@ -193,8 +194,8 @@ YUI.add("inputex", function(Y){
         
         // recursive for group,forms,list,combine, etc...
         if(inputexDef.fields) {
-           Y.Array.each(inputexDef.fields, function(field) {
-                modules = modules.concat( this.getModulesFromDefinition(field) );
+           I.each(inputexDef.fields, function(field) {
+                    modules = modules.concat( this.getModulesFromDefinition(field) );
            }, this);
         }
         
@@ -208,8 +209,11 @@ YUI.add("inputex", function(Y){
       * Return unique modules definitions
       */
      getModulesFromDefinition: function(inputexDef) {
-        var modules = this.getRawModulesFromDefinition(inputexDef);
-        return Y.Object.keys(Y.Array.hash(modules));
+        console.log("to do",inputexDef, "debug this for library independent");
+        
+        //var modules = this.getRawModulesFromDefinition(inputexDef);
+        
+        //return Y.Object.keys(Y.Array.hash(modules));
      },
      
      /**
@@ -218,7 +222,7 @@ YUI.add("inputex", function(Y){
      use: function(inputexDef, cb) {
         var modules = this.getModulesFromDefinition(inputexDef);
         modules.push(cb);
-		  Y.use.apply( Y, modules);
+		I.use.apply( Y, modules);
      },
      
      /**
@@ -279,7 +283,7 @@ YUI.add("inputex", function(Y){
       * @return {HTMLElement} The created node
       */
      cn: function(tag, domAttributes, styleAttributes, innerHTML) {
-          if (tag == 'input' && Y.UA.ie && Y.UA.ie < 9) { //only limit to input tag that has no tag body
+          if (tag == 'input' && I.UA.ie && I.UA.ie < 9) { //only limit to input tag that has no tag body
               var strDom = '<' + tag;
               if (domAttributes!=='undefined'){
                   for (var k in domAttributes){
