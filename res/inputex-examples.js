@@ -7,16 +7,16 @@
  * 
  * @module inputex-examples
  */
-YUI.add('inputex-examples', function (Y) {
-
-   window.Y = Y;
-	
-	Y.on("domready",function() {
+Gi.addModule('inputex-examples', function (I) {
+    window.I = I;	
+	I.on("domready",function() {
 		
 		var examples = [], i, length, textarea, code;
-		
-		// i'm not proud of using n._node ... but the method getDOMNode (http://developer.yahoo.com/yui/3/api/Node.html#method_getDOMNode) is not implemented yet
-		Y.all('pre').each(function(n){ examples.push(n._node);},this);
+		var tags = I.all('pre');
+		for(var i = 0; i< tags.length; i++){
+		    examples.push(tags[i]);
+		}
+
 		
 		for(i = 0, length = examples.length ; i < length ; i += 1) {
 			
@@ -29,7 +29,6 @@ YUI.add('inputex-examples', function (Y) {
 				// wrap in anonymous to create a separate context for local variables
 				// (avoid collision between variables from different examples !)
 				code = "(function () {"+code+"}());";
-				var inputEx = Y.inputEx;
 				eval(code);
 			}
 			catch(ex) {

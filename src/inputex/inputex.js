@@ -3,7 +3,6 @@
  * @module inputex
  */
 /*global inputEx: false, YAHOO: false */
-
 Gi.addModule("inputex", function(I){
     
   // I is a localInputEx instance that contains tools added requires modules or librairies
@@ -54,9 +53,7 @@ Gi.addModule("inputex", function(I){
      return inputInstance;
   };
   
-  var inputEx = I.inputEx;
-  
-  I.mix(I.inputEx, {
+  I.mix(I, {
      
      VERSION: "3.0.0a",
      
@@ -64,7 +61,7 @@ Gi.addModule("inputex", function(I){
       * Url to the spacer image. This url schould be changed according to your project directories
       * @type String
       */
-     spacerUrl: YUI_config.groups.inputex.base+"inputex/assets/skins/sam/images/space.gif", // 1x1 px
+     spacerUrl: "inputex/assets/skins/sam/images/space.gif",//YUI_config.groups.inputex.base+"inputex/assets/skins/sam/images/space.gif", // 1x1 px
      
      /**
       * Field empty state constant
@@ -222,7 +219,7 @@ Gi.addModule("inputex", function(I){
      use: function(inputexDef, cb) {
         var modules = this.getModulesFromDefinition(inputexDef);
         modules.push(cb);
-		I.use.apply( Y, modules);
+		//I.use.apply( Y, modules);
      },
      
      /**
@@ -379,6 +376,4 @@ Gi.addModule("inputex", function(I){
 	  
      
   });
-}, '3.0.0a',{
-  requires: ['node','intl']
-});
+}, '3.0.0a');

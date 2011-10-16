@@ -23,7 +23,7 @@
 	<div class='demoContainer' id='container1'></div>
 	<div class='codeContainer'>
 <pre class="brush:js">
-		new Y.inputEx.StringField({parentEl: 'container1'});
+		new I.StringField({parentEl: 'container1'});
 </pre>
 	</div>
 </div>
@@ -36,7 +36,7 @@
 	<div class='demoContainer' id='container2'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-			new Y.inputEx.StringField({value: 'inputEx rocks', parentEl: 'container2'});
+			new I.StringField({value: 'inputEx rocks', parentEl: 'container2'});
 		</pre>
 	</div>
 </div>
@@ -49,7 +49,7 @@
 	<div class='demoContainer' id='container3'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-		new Y.inputEx.StringField({size: 40, value: 'size is set to 40 (default is 20)', parentEl: 'container3'});
+		new I.StringField({size: 40, value: 'size is set to 40 (default is 20)', parentEl: 'container3'});
 		</pre>
 	</div>
 </div>
@@ -62,7 +62,7 @@
 	<div class='demoContainer' id='container4'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-			new Y.inputEx.StringField({value: '0123456789', showMsg: true, minLength: 3, maxLength: 10, parentEl: 'container4'});
+			new I.StringField({value: '0123456789', showMsg: true, minLength: 3, maxLength: 10, parentEl: 'container4'});
 		</pre>
 	</div>
 </div>
@@ -75,7 +75,7 @@
 	<div class='demoContainer' id='container5'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-			new Y.inputEx.StringField({required: true, showMsg: true, parentEl: 'container5'});
+			new I.StringField({required: true, showMsg: true, parentEl: 'container5'});
 		</pre>
 	</div>
 </div>
@@ -88,7 +88,7 @@
 	<div class='demoContainer' id='container6'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-			new Y.inputEx.StringField({label: 'Enter your age', regexp: /^[0-9]*$/, parentEl: 'container6'});
+			new I.StringField({label: 'Enter your age', regexp: /^[0-9]*$/, parentEl: 'container6'});
 		</pre>
 	</div>
 </div>
@@ -102,7 +102,7 @@
 	<div class='demoContainer' id='container7'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-		new Y.inputEx.StringField({showMsg: true,regexp: inputEx.regexps.email, value: 'wrong@email', parentEl: 'container7'});
+		new I.StringField({showMsg: true,regexp: I.regexps.email, value: 'wrong@email', parentEl: 'container7'});
 		</pre>
 	</div>
 </div>
@@ -116,7 +116,7 @@
 	<div class='demoContainer' id='container8'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-			var field = new Y.inputEx.StringField({value: 'This field is disabled', parentEl: 'container8'});
+			var field = new I.StringField({value: 'This field is disabled', parentEl: 'container8'});
 			field.disable();
 		</pre>
 	</div>
@@ -130,9 +130,9 @@
 	<div class='demoContainer' id='container9'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-					var el = Y.one('#container9');
-					var field = new Y.inputEx.StringField({parentEl: el });
-					var logDiv = Y.inputEx.cn('div', null, null, "Log :");
+					var el = document.getElementById('container9');
+					var field = new I.StringField({parentEl: el });
+					var logDiv = I.cn('div', null, null, "Log :");
 					el.appendChild(logDiv);
 					field.on("updated",function(val) {
 						logDiv.innerHTML += "Updated at "+(new Date())+" with value: "+val;
@@ -150,7 +150,7 @@
 	<div class='demoContainer' id='container10'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-		new Y.inputEx.StringField({parentEl: 'container10', typeInvite: 'lastname', description: 'Enter your lastname'});
+		new I.StringField({parentEl: 'container10', typeInvite: 'lastname', description: 'Enter your lastname'});
 		</pre>
 	</div>
 </div>
@@ -164,7 +164,7 @@
 	<div class='demoContainer' id='container11'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-			var field1 = new Y.inputEx.StringField({
+			var field1 = new I.StringField({
 				parentEl: 'container11', 
 				typeInvite: 'lastname', 
 				description: 'Enter your lastname', 
@@ -174,17 +174,17 @@
 				showMsg:true
 			});
 
-			var exampleDiv = Y.one('#container11');
+			var exampleDiv = document.getElementById('container11');
 
-			var button1 = Y.inputEx.cn('button', null, null, 'setValue()');
+			var button1 = I.cn('button', null, null, 'setValue()');
 			exampleDiv.appendChild(button1); 
-			Y.on('click', function() { 
+			I.on('click', function() { 
 				field1.setValue("I've been set by setValue"); 
 			}, button1);
 
-			var button2 = Y.inputEx.cn('button', null, null, 'getValue()');
+			var button2 = I.cn('button', null, null, 'getValue()');
 			exampleDiv.appendChild(button2); 
-			Y.on( 'click', function() { 
+			I.on( 'click', function() { 
 				alert(field1.getValue()); 
 			},button2);
 		</pre>
@@ -199,22 +199,25 @@
 	<div class='demoContainer' id='container12'></div>
 	<div class='codeContainer'>
 		<pre class="brush:js">
-			var field12 = new Y.inputEx.StringField({parentEl: 'container12'});
+			var field12 = new I.StringField({parentEl: 'container12'});
 
-			var exampleDiv = Y.one('#container12');
+			var exampleDiv = document.getElementById("container12");
 
-			var button3 = Y.inputEx.cn('button', null, null, 'focus()');
+			var button3 = I.cn('button', null, null, 'focus()');
 			exampleDiv.appendChild(button3); 
-			Y.on('click', function() { field12.focus(); }, button3);
+			I.on('click', function() { field12.focus(); }, button3);
 		</pre>
 	</div>
 </div>
+<script src="../src/inputex-yui3/inputex-yui3.js"  type='text/javascript'></script>
+<script src="../src/inputex/inputex.js"  type='text/javascript'></script>
+<script src="../src/inputex-field/inputex-field.js"  type='text/javascript'></script>
+<script src="../src/inputex-string/inputex-string.js"  type='text/javascript'></script>
+<script src="../src/inputex/lang/inputex_fr.js"  type='text/javascript'></script>
 
-<script src="../src/loader.js"  type='text/javascript'></script>
 <script src="../res/inputex-examples.js"  type='text/javascript'></script>
 <script>
-YUI_config.groups.inputex.base = '../src/';
-YUI({filter: 'raw'}).use('inputex-string','inputex-examples');
+Gi.use("inputex-yui3","lang/inputex_fr",'inputex-string','inputex-examples');
 </script>
  </body>
 </html>

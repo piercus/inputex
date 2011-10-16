@@ -2,10 +2,9 @@
  * Provides the base "field" abstract class
  * @module inputex-field
  */
-gIE.addModule("inputex-field",function(I) {
+Gi.addModule("inputex-field",function(I) {
  
-     var lang = I.Lang,
-          inputEx = I.inputEx;
+     var lang = I.Lang;
 
   /** 
    * An abstract class (never instantiated) that contains the shared features for all fields.
@@ -20,7 +19,7 @@ gIE.addModule("inputex-field",function(I) {
    *   <li>parentEl: HTMLElement or String id, append the field to this DOM element</li>
    * </ul>
    */
-  inputEx.Field = function(options) {
+  I.Field = function(options) {
 	
 	  // Set the default values of the options
 	  this.setOptions(options || {});
@@ -49,7 +48,7 @@ gIE.addModule("inputex-field",function(I) {
 	  if(options.parentEl) {
 	     if( lang.isString(options.parentEl) ) {
 	       // searching for the id
-	       Y.one("#"+options.parentEl).appendChild(this.getEl());  
+	       document.getElementById(options.parentEl).appendChild(this.getEl()); 
 	     }
 	     else {
 	        options.parentEl.appendChild(this.getEl());
@@ -57,7 +56,7 @@ gIE.addModule("inputex-field",function(I) {
 	  }
   };
 
-  inputEx.Field.prototype = {
+  I.Field.prototype = {
     
      /**
       * Set the default values of the options
@@ -73,15 +72,15 @@ gIE.addModule("inputex-field",function(I) {
      	// Basic options
      	this.options.name = options.name;
      	this.options.value = options.value;
-     	this.options.id = options.id || Y.guid();
+     	this.options.id = options.id || I.guid();
      	this.options.label = options.label;
      	this.options.description = options.description;
       this.options.wrapperClassName = options.wrapperClassName;
       
      // Define default messages
 	     this.options.messages = {};
-	     this.options.messages.required = (options.messages && options.messages.required) ? options.messages.required : inputEx.messages.required;
-	     this.options.messages.invalid = (options.messages && options.messages.invalid) ? options.messages.invalid : inputEx.messages.invalid;
+	     this.options.messages.required = (options.messages && options.messages.required) ? options.messages.required : I.messages.required;
+	     this.options.messages.invalid = (options.messages && options.messages.invalid) ? options.messages.invalid : I.messages.invalid;
 	     //this.options.messages.valid = (options.messages && options.messages.valid) ? options.messages.valid : inputEx.messages.valid;
 	
 	     // Other options
@@ -103,7 +102,7 @@ gIE.addModule("inputex-field",function(I) {
 	  render: function() {
 	
 	     // Create a DIV element to wrap the editing el and the image
-	     this.divEl = inputEx.cn('div', {className: this.options.wrapperClassName || 'inputEx-fieldWrapper'});
+	     this.divEl = I.cn('div', {className: this.options.wrapperClassName || 'inputEx-fieldWrapper'});
 	     if(this.options.id) {
 	        this.divEl.id = this.options.id;
 	     }
@@ -113,26 +112,26 @@ gIE.addModule("inputex-field",function(I) {
 	     
 	     // Label element
 	     if (lang.isString(this.options.label)) {
-	        this.labelDiv = inputEx.cn('div', {id: this.divEl.id+'-label', className: 'inputEx-label', 'for': this.divEl.id+'-field'});
-	        this.labelEl = inputEx.cn('label', null, null, this.options.label === "" ? "&nbsp;" : this.options.label);
+	        this.labelDiv = I.cn('div', {id: this.divEl.id+'-label', className: 'inputEx-label', 'for': this.divEl.id+'-field'});
+	        this.labelEl = I.cn('label', null, null, this.options.label === "" ? "&nbsp;" : this.options.label);
 	        this.labelDiv.appendChild(this.labelEl);
 	        this.divEl.appendChild(this.labelDiv);
         }
         
-        this.fieldContainer = inputEx.cn('div', {className: this.options.className}); // for wrapping the field and description
+        this.fieldContainer = I.cn('div', {className: this.options.className}); // for wrapping the field and description
 	
         // Render the component directly
         this.renderComponent();
         
         // Description
         if(this.options.description) {
-           this.fieldContainer.appendChild(inputEx.cn('div', {id: this.divEl.id+'-desc', className: 'inputEx-description'}, null, this.options.description));
+           this.fieldContainer.appendChild(I.cn('div', {id: this.divEl.id+'-desc', className: 'inputEx-description'}, null, this.options.description));
         }
         
      	this.divEl.appendChild(this.fieldContainer);
         
 	     // Insert a float breaker
-	     this.divEl.appendChild( inputEx.cn('div',null, {clear: 'both'}," ") );
+	     this.divEl.appendChild( I.cn('div',null, {clear: 'both'}," ") );
 	
 	  },
 	
@@ -204,17 +203,17 @@ gIE.addModule("inputex-field",function(I) {
 	     // remove previous class
 	     if( this.previousState ) {
 	        // remove invalid className for both required and invalid fields
-	        className = 'inputEx-'+((this.previousState == inputEx.stateRequired) ? inputEx.stateInvalid : this.previousState);
+	        className = 'inputEx-'+((this.previousState == I.stateRequired) ? I.stateInvalid : this.previousState);
 	         I.removeClass(el,className);
 	     }
 	     
 	     // add new class
 	     state = state || this.getState();
-	     if( !(state == inputEx.stateEmpty && I.hasClass(this.divEl,'inputEx-focused') ) {
+	     //if( !(state == I.stateEmpty && I.hasClass(this.divEl,'inputEx-focused') ) {
 	        // add invalid className for both required and invalid fields
-	        className = 'inputEx-'+((state == inputEx.stateRequired) ? inputEx.stateInvalid : state);
-	        I.addClass(this.divEl,className);
-        }
+	       // className = 'inputEx-';//+((state == I.stateRequired) ? I.stateInvalid : state);
+	        //I.addClass(this.divEl,className);
+        //}
 	
 	     if(this.options.showMsg) {
 	        this.displayMessage( this.getStateString(state) );
@@ -227,10 +226,10 @@ gIE.addModule("inputex-field",function(I) {
       * Get the string for the given state
       */
 	  getStateString: function(state) {
-        if(state == inputEx.stateRequired) {
+        if(state == I.stateRequired) {
            return this.options.messages.required;
         }
-        else if(state == inputEx.stateInvalid) {
+        else if(state == I.stateInvalid) {
            return this.options.messages.invalid;
         }
         else {
@@ -245,9 +244,9 @@ gIE.addModule("inputex-field",function(I) {
 	  getState: function() { 
 	     // if the field is empty :
 	     if( this.isEmpty() ) {
-	        return this.options.required ? inputEx.stateRequired : inputEx.stateEmpty;
+	        return this.options.required ? I.stateRequired : I.stateEmpty;
 	     }
-	     return this.validate() ? inputEx.stateValid : inputEx.stateInvalid;
+	     return this.validate() ? I.stateValid : I.stateInvalid;
 	  },
 
      /**
@@ -346,7 +345,7 @@ gIE.addModule("inputex-field",function(I) {
      displayMessage: function(msg) {
         if(!this.fieldContainer) { return; }
         if(!this.msgEl) {
-           this.msgEl = inputEx.cn('div', {className: 'inputEx-message'});
+           this.msgEl = I.cn('div', {className: 'inputEx-message'});
             try{
                var divElements = this.divEl.getElementsByTagName('div');
                this.divEl.insertBefore(this.msgEl, divElements[(divElements.length-1>=0)?divElements.length-1:0]); //insertBefore the clear:both div
@@ -403,9 +402,9 @@ gIE.addModule("inputex-field",function(I) {
      
   };
 
-  I.augment(inputEx.Field, I.EventTarget, null, null, {});
+  I.augment(I.Field, I.EventTarget, null, null, {});
 
-  inputEx.Field.groupOptions = [
+  I.Field.groupOptions = [
 	  { type: "string", label: "Name", name: "name", value: '', required: true },
      { type: "string", label: "Label", name: "label", value: '' },
      { type: "string", label: "Description",name: "description", value: '' },
@@ -414,5 +413,5 @@ gIE.addModule("inputex-field",function(I) {
   ];
 
 }, '3.0.0a',{
-  requires: ["inputex","inputex-event-custom"]
+  requires: ["inputex"]
 });
