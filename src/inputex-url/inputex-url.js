@@ -1,10 +1,9 @@
 /**
  * @module inputex-url
  */
-YUI.add("inputex-url",function(Y){
+Gi.addModule("inputex-url",function(I){
 
-   var lang = Y.Lang,
-       inputEx = Y.inputEx;
+   var lang = I.Lang;
 
 /**
  * Adds an url regexp, and display the favicon at this url
@@ -16,65 +15,65 @@ YUI.add("inputex-url",function(Y){
  *   <li>favicon: boolean whether the domain favicon.ico should be displayed or not (default is true, except for https)</li>
  * </ul>
  */
-inputEx.UrlField = function(options) {
-   inputEx.UrlField.superclass.constructor.call(this,options);
+I.UrlField = function(options) {
+   I.UrlField.superclass.constructor.call(this,options);
 };
 
-Y.extend(inputEx.UrlField, inputEx.StringField, {
+I.extend(I.UrlField, I.StringField, {
 
    /**
     * Adds the invalid Url message
     * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
-      inputEx.UrlField.superclass.setOptions.call(this, options);
+      I.UrlField.superclass.setOptions.call(this, options);
 
       this.options.className = options.className ? options.className : "inputEx-Field inputEx-UrlField";
-      this.options.messages.invalid = inputEx.messages.invalidUrl;
+      this.options.messages.invalid = I.messages.invalidUrl;
       this.options.favicon = lang.isUndefined(options.favicon) ? (("https:" == document.location.protocol) ? false : true) : options.favicon;
       this.options.size = options.size || 50;
 
       // validate with url regexp
-      this.options.regexp = inputEx.regexps.url;
+      this.options.regexp = I.regexps.url;
    },
 
    /**
     * Adds a img tag before the field to display the favicon
     */
    render: function() {
-      inputEx.UrlField.superclass.render.call(this);
+      I.UrlField.superclass.render.call(this);
       this.el.size = this.options.size;
 
       if(!this.options.favicon) {
-         Y.one(this.el).addClass( 'nofavicon');
+         I.addClass(this.el, 'nofavicon');
       }
 
       // Create the favicon image tag
       if(this.options.favicon) {
-         this.favicon = inputEx.cn('img', {src: inputEx.spacerUrl});
+         this.favicon = I.cn('img', {src: I.spacerUrl});
          this.fieldContainer.insertBefore(this.favicon,this.fieldContainer.childNodes[0]);
 
          // focus field when clicking on favicon
-         Y.on("click",function(){this.focus();},this.favicon,this)
+         I.on("click",function(){this.focus();},this.favicon,this)
       }
    },
 
    setClassFromState: function() {
-      inputEx.UrlField.superclass.setClassFromState.call(this);
+      I.UrlField.superclass.setClassFromState.call(this);
 
       if(this.options.favicon) {
          // try to update with url only if valid url (else pass null to display inputEx.spacerUrl)
-         this.updateFavicon((this.previousState == inputEx.stateValid) ? this.getValue() : null);
+         this.updateFavicon((this.previousState == I.stateValid) ? this.getValue() : null);
       }
    },
 
 
    updateFavicon: function(url) {
-      var newSrc = url ? url.match(/https?:\/\/[^\/]*/)+'/favicon.ico' : inputEx.spacerUrl;
+      var newSrc = url ? url.match(/https?:\/\/[^\/]*/)+'/favicon.ico' : I.spacerUrl;
       if(newSrc != this.favicon.src) {
 
          // Hide the favicon
-         inputEx.sn(this.favicon, null, {visibility: 'hidden'});
+         I.sn(this.favicon, null, {visibility: 'hidden'});
 
          // Change the src
          this.favicon.src = newSrc;
@@ -90,14 +89,14 @@ Y.extend(inputEx.UrlField, inputEx.StringField, {
     * Display the favicon if the icon was found (use of the naturalWidth property)
     */
    displayFavicon: function() {
-      inputEx.sn(this.favicon, null, {visibility: (this.favicon.naturalWidth!=0) ? 'visible' : 'hidden'});
+      I.sn(this.favicon, null, {visibility: (this.favicon.naturalWidth!=0) ? 'visible' : 'hidden'});
    }
 
 
 });
 
 // Register this class as "url" type
-inputEx.registerType("url", inputEx.UrlField, [
+I.registerType("url", I.UrlField, [
    { type: 'boolean', label: 'Display favicon', name:'favicon', value: true}
 ]);
 

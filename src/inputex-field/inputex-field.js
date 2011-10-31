@@ -199,9 +199,10 @@ Gi.addModule("inputex-field",function(I) {
       * @param {String} One of the following states: 'empty', 'required', 'valid' or 'invalid'
       */
 	  setClassFromState: function(state) {
-		  var className;
+		  var className, el = this.getEl();
 	     // remove previous class
 	     if( this.previousState ) {
+	         
 	        // remove invalid className for both required and invalid fields
 	        className = 'inputEx-'+((this.previousState == I.stateRequired) ? I.stateInvalid : this.previousState);
 	         I.removeClass(el,className);

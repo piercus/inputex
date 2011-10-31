@@ -1,11 +1,9 @@
 /**
  * @module inputex-select
  */
-YUI.add("inputex-select",function(Y){
+Gi.addModule("inputex-select",function(I){
 
-	var lang = Y.Lang,
-	    inputEx = Y.inputEx;
-
+	var lang = I.Lang;
 	/**
 	 * Create a select field
 	 * @class inputEx.SelectField
@@ -16,11 +14,11 @@ YUI.add("inputex-select",function(Y){
 	 *    <li>choices: contains the list of choices configs ([{value:'usa'}, {value:'fr', label:'France'}]) OR a function function(opts,cb)</li>
 	 * </ul>
 	 */
-	inputEx.SelectField = function (options) {
-		inputEx.SelectField.superclass.constructor.call(this, options);
+	I.SelectField = function (options) {
+		I.SelectField.superclass.constructor.call(this, options);
 	};
 
-	Y.extend(inputEx.SelectField, inputEx.Field, {
+	I.extend(I.SelectField, I.Field, {
 		
 		/**
 		 * Set the default values of the options
@@ -30,7 +28,7 @@ YUI.add("inputex-select",function(Y){
 		
 			var i, length;
 		
-			inputEx.SelectField.superclass.setOptions.call(this, options);
+			I.SelectField.superclass.setOptions.call(this, options);
 			
 			if(lang.isArray(options.choices)){
 			    this.options.choices = options.choices;
@@ -83,9 +81,9 @@ YUI.add("inputex-select",function(Y){
 			var i, length;
 		
 			// create DOM <select> node
-			this.el = inputEx.cn('select', {
+			this.el = I.cn('select', {
 			
-				id: this.divEl.id ? this.divEl.id + '-field' : Y.guid(),
+				id: this.divEl.id ? this.divEl.id + '-field' : I.guid(),
 				name: this.options.name || ''
 			
 			});
@@ -106,9 +104,9 @@ YUI.add("inputex-select",function(Y){
 		 * Register the "change" event
 		 */
 		initEvents: function () {
-			Y.on("change", this.onChange, this.el, this);
-			Y.on("focus", this.onFocus, this.el,this);
-			Y.on("blur", this.onBlur, this.el,this);
+			I.on("change", this.onChange, this.el, this);
+			I.on("focus", this.onFocus, this.el,this);
+			I.on("blur", this.onBlur, this.el,this);
 		},
 	
 		/**
@@ -154,7 +152,7 @@ YUI.add("inputex-select",function(Y){
 			}
 			
 			// Call Field.setValue to set class and fire updated event
-			inputEx.SelectField.superclass.setValue.call(this, value, sendUpdatedEvt);
+			I.SelectField.superclass.setValue.call(this, value, sendUpdatedEvt);
 		},
 	
 		/**
@@ -167,7 +165,7 @@ YUI.add("inputex-select",function(Y){
 			var choiceIndex;
 			if (this.el.selectedIndex >= 0) {
 				
-				choiceIndex = inputEx.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
+				choiceIndex = I.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
 					return node === choice.node;
 				});
 			
@@ -196,7 +194,7 @@ YUI.add("inputex-select",function(Y){
 		
 		createChoiceNode: function (choice) {
 			
-			return inputEx.cn('option', {value: choice.value}, null, choice.label);
+			return I.cn('option', {value: choice.value}, null, choice.label);
 			
 		},
 		
@@ -247,7 +245,7 @@ YUI.add("inputex-select",function(Y){
 			
 			// Insert in DOM
 			if (domPosition < this.el.childNodes.length) {
-				Y.one(this.el).insert(node,domPosition)
+				I.one(this.el).insert(node,domPosition)
 			} else {
 				
 				this.el.appendChild(node);
@@ -262,11 +260,11 @@ YUI.add("inputex-select",function(Y){
 	});
 	
 	// Augment prototype with choice mixin (functions : addChoice, removeChoice, etc.)
-	Y.mix(inputEx.SelectField.prototype, inputEx.mixin.choice);
+	I.mix(I.SelectField.prototype, I.mixin.choice);
 	
 	
 	// Register this class as "select" type
-	inputEx.registerType("select", inputEx.SelectField, [
+	I.registerType("select", I.SelectField, [
 		{
 			type: 'list',
 			name: 'choices',

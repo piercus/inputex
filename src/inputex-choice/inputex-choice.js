@@ -1,10 +1,9 @@
 /**
  * @module inputex-choice
  */
-YUI.add("inputex-choice", function(Y){
+Gi.addModule("inputex-choice", function(I){
 	
-	var lang = Y.Lang,
-	    inputEx = Y.inputEx;
+	var lang = I.Lang;
 	
 	/**
 	 * This static class is used to provide basic choices functionnalities such as in "select" and "radio" fields
@@ -13,7 +12,7 @@ YUI.add("inputex-choice", function(Y){
 	 * It provides the following methods : addChoice, removeChoice, hideChoice, showChoice, disableChoice, enableChoice, and getChoicePosition
 	 * @class inputEx.mixin.choice
 	 */
-	inputEx.mixin.choice = {
+	I.mixin.choice = {
 		
 		/**
 		 * Add a choice
@@ -231,14 +230,14 @@ YUI.add("inputex-choice", function(Y){
 			} else if (!lang.isUndefined(config.value)) {
 				
 				// get position of choice with value === config.value
-				position = inputEx.indexOf(config.value, this.choicesList, function (value, opt) {
+				position = I.indexOf(config.value, this.choicesList, function (value, opt) {
 					return opt.value === value;
 				});
 				
 			} else if (lang.isString(config.label)) {
 				
 				// get position of choice with label === config.label
-				position = inputEx.indexOf(config.label, this.choicesList, function (label, opt) {
+				position = I.indexOf(config.label, this.choicesList, function (label, opt) {
 					return opt.label === label;
 				});
 				

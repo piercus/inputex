@@ -1,9 +1,9 @@
 /**
  * @module inputex-email
  */
-YUI.add("inputex-email",function(Y){
+Gi.addModule("inputex-email",function(I){
    
-  var inputEx = Y.inputEx;
+  var inputEx = I.inputEx;
 /**
  * Field that adds the email regexp for validation. Result is always lower case.
  * @class inputEx.EmailField
@@ -11,24 +11,24 @@ YUI.add("inputex-email",function(Y){
  * @constructor
  * @param {Object} options inputEx.Field options object
  */
-inputEx.EmailField = function(options) {
-   inputEx.EmailField.superclass.constructor.call(this,options);
+I.EmailField = function(options) {
+   I.EmailField.superclass.constructor.call(this,options);
 };
-Y.extend(inputEx.EmailField, inputEx.StringField, {
+I.extend(I.EmailField, I.StringField, {
    
    /**
     * Set the email regexp and invalid message
     * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
-      inputEx.EmailField.superclass.setOptions.call(this, options);
+      I.EmailField.superclass.setOptions.call(this, options);
 
       // Overwrite options
-      this.options.messages.invalid = inputEx.messages.invalidEmail;
-      this.options.regexp = inputEx.regexps.email;
+      this.options.messages.invalid = I.messages.invalidEmail;
+      this.options.regexp = I.regexps.email;
 		
 		// Validate the domain name ( false by default )
-		this.options.fixdomain = (Y.Lang.isUndefined(options.fixdomain) ? false : !!options.fixdomain);
+		this.options.fixdomain = (I.Lang.isUndefined(options.fixdomain) ? false : !!options.fixdomain);
    },
    
 	validateDomain : function() {
@@ -91,11 +91,11 @@ Y.extend(inputEx.EmailField, inputEx.StringField, {
 					}
 				}
 				else if ( domain === groupDomain[j] ) {
-					var linkId = Y.guid();
+					var linkId = I.guid();
 					var that = this;
 					
 					// Add a listener to the link to allow the user to replace his bad email by clicking the link
-					Y.on("click",  function(e){
+					I.on("click",  function(e){
 						e.handle();
 						var reg = new RegExp(domain, "i");
 						var fixedVal = val.replace(reg, groupDomain[0]);
@@ -103,7 +103,7 @@ Y.extend(inputEx.EmailField, inputEx.StringField, {
 					},this);
 					
 					// Display the message with the link
-					this.options.messages.invalid = inputEx.messages.didYouMeant+"<a href='' id='"+linkId+"' style='color:blue;'>@"+groupDomain[0]+" ?</a>";
+					this.options.messages.invalid = I.messages.didYouMeant+"<a href='' id='"+linkId+"' style='color:blue;'>@"+groupDomain[0]+" ?</a>";
 					
 					// field isnt valid
 					return false;
@@ -116,11 +116,11 @@ Y.extend(inputEx.EmailField, inputEx.StringField, {
 	},
 	
    validate: function() {
-	   var result = inputEx.EmailField.superclass.validate.call(this);
+	   var result = I.EmailField.superclass.validate.call(this);
 		
 		// If we want the domain validation
 		if ( !!this.options.fixdomain ) {
-	   	this.options.messages.invalid = inputEx.messages.invalidEmail;
+	   	this.options.messages.invalid = I.messages.invalidEmail;
 			return result && this.validateDomain();
 		} else {
 			return result;
@@ -135,15 +135,15 @@ Y.extend(inputEx.EmailField, inputEx.StringField, {
       
       var value;
       
-      value = inputEx.EmailField.superclass.getValue.call(this);
+      value = I.EmailField.superclass.getValue.call(this);
       
-      return inputEx.removeAccents(value.toLowerCase());
+      return I.removeAccents(value.toLowerCase());
    }
 
 });
    
 // Register this class as "email" type
-inputEx.registerType("email", inputEx.EmailField, []);
+I.registerType("email", I.EmailField, []);
 
 }, '3.0.0a',{
   requires: ["inputex-string"]

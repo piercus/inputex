@@ -27,14 +27,14 @@ Gi.addModule("inputex", function(I){
          inputInstance;
          
     if(fieldOptions.type) {
-       fieldClass = inputEx.getFieldClass(fieldOptions.type);
+       fieldClass = I.getFieldClass(fieldOptions.type);
        
         if( !lang.isFunction(fieldClass) ){
            I.error("Missing inputEx module for type: '"+fieldOptions.type+"' ?")
         }
     }
     else {
-       fieldClass = fieldOptions.fieldClass ? fieldOptions.fieldClass : inputEx.StringField;
+       fieldClass = fieldOptions.fieldClass ? fieldOptions.fieldClass : I.StringField;
     }
 
      // Instanciate the field

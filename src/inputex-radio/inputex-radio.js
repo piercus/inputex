@@ -1,10 +1,9 @@
 /**
  * @module inputex-radio
  */
-YUI.add("inputex-radio", function(Y){
+Gi.addModule("inputex-radio", function(I){
 
-   var lang = Y.Lang,
-       inputEx = Y.inputEx;
+   var lang = I.Lang;
 	
 	/**
 	 * Create a radio button. Here are the added options :
@@ -18,12 +17,12 @@ YUI.add("inputex-radio", function(Y){
 	 * @constructor
 	 * @param {Object} options inputEx.Field options object
 	 */
-	inputEx.RadioField = function (options) {
+	I.RadioField = function (options) {
 		
-		inputEx.RadioField.superclass.constructor.call(this,options);
+		I.RadioField.superclass.constructor.call(this,options);
 		
 		// IE BUG: doesn't want to set the value if the node is not in the DOM
-		if (Y.UA.ie && !lang.isUndefined(this.options.value)) {
+		if (I.UA.ie && !lang.isUndefined(this.options.value)) {
 			// Set the initial value, use setTimeout to escape the stack (for nested usage in Group or Form)
 			var that = this;
 			setTimeout(function () {
@@ -33,7 +32,7 @@ YUI.add("inputex-radio", function(Y){
 		
 	};
 		
-	Y.extend(inputEx.RadioField, inputEx.Field, {
+	I.extend(I.RadioField, I.Field, {
 		
 		/**
 		 * Adds the Radio button specific options
@@ -43,7 +42,7 @@ YUI.add("inputex-radio", function(Y){
 			
 			var i, length;
 			
-			inputEx.RadioField.superclass.setOptions.call(this, options);
+			I.RadioField.superclass.setOptions.call(this, options);
 			
 			// Display mode
 			this.options.display = options.display === "vertically" ? "vertically" : "inline"; // default "inline"
@@ -108,27 +107,27 @@ YUI.add("inputex-radio", function(Y){
 				
 				this.radioAny = this.allowAnyChoice.node.firstChild;
 				
-				this.anyField = new inputEx(this.options.allowAny.field);
+				this.anyField = new I.inputEx(this.options.allowAny.field);
 				this.anyField.disable();
 				
-				Y.one(this.radioAny).setStyle("float","left");
-				Y.one(this.anyField.getEl()).setStyle("float","left");
+				I.one(this.radioAny).setStyle("float","left");
+				I.one(this.anyField.getEl()).setStyle("float","left");
 				
 				// Hack for firefox 3.5+
-				if (Y.UA.gecko >= 1.91) { Y.one(this.radioAny).setStyle( "marginTop","0.2em"); }
+				if (I.UA.gecko >= 1.91) { I.one(this.radioAny).setStyle( "marginTop","0.2em"); }
 				
 				
 				if (this.options.allowAny.separators) {
-					sep = inputEx.cn("div",null,{marginRight:"3px"},this.options.allowAny.separators[0] || '');
-					Y.one(sep).setStyle( "float","left");
+					sep = I.cn("div",null,{marginRight:"3px"},this.options.allowAny.separators[0] || '');
+					I.one(sep).setStyle( "float","left");
 					this.allowAnyChoice.node.appendChild(sep);
 				}
 				
 				this.allowAnyChoice.node.appendChild(this.anyField.getEl());
 				
 				if (this.options.allowAny.separators) {
-					sep = inputEx.cn("div",null,{marginLeft:"3px"},this.options.allowAny.separators[1] || '');
-					Y.one(sep).setStyle( "float","left");
+					sep = I.cn("div",null,{marginLeft:"3px"},this.options.allowAny.separators[1] || '');
+					I.one(sep).setStyle( "float","left");
 					this.allowAnyChoice.node.appendChild(sep);
 				}
 				
@@ -140,45 +139,45 @@ YUI.add("inputex-radio", function(Y){
 		 * Listen for change events on all radios
 		 */
 		initEvents: function () {
-			
+			// TO DO
 			// Delegate event listening because list of choices is dynamic
 			// so we can't listen on each <input type="radio" class='inputEx-RadioField-radio' />
 			
-			var fieldContainer = Y.one(this.fieldContainer), that = this;
-			
-			// Change event (IE does not fire "change" event, so listen to click instead)
-			fieldContainer.delegate(Y.UA.ie ? "click" : "change", function(e, matchedEl, container) {
-				that.onChange(e);
-			}, ".inputEx-RadioField-radio", "input");
-			
-			// Focus / Blur events
-			fieldContainer.delegate("focusin", function(e, matchedEl, container) {
-				that.onFocus(e);
-			}, ".inputEx-RadioField-radio", "input");
-			
-			fieldContainer.delegate("focusout", function(e, matchedEl, container) {
-				that.onBlur(e);
-			}, ".inputEx-RadioField-radio", "input");
-			
-			// AnyField events
-			if (this.allowAnyChoice) {
-				
-				this.anyField.on('updated', function (e, params) {
-					
-					var value = params[0];
-					this.radioAny.value = value;
-					
-					this.setClassFromState();
-					
-					inputEx.RadioField.superclass.onChange.call(this,e);
-					
-				}, this, true);
-				
-				// Update radio field style after editing anyField content !
-            if(this.anyField.el) {
-               Y.one(this.anyField.el).on('blur', this.onBlur, this, true);
-            }
-			}
+            // var fieldContainer = this.fieldContainer, that = this;
+            // 
+            // // Change event (IE does not fire "change" event, so listen to click instead)
+            // fieldContainer.delegate(I.UA.ie ? "click" : "change", function(e, matchedEl, container) {
+            //  that.onChange(e);
+            // }, ".inputEx-RadioField-radio", "input");
+            // 
+            // // Focus / Blur events
+            // fieldContainer.delegate("focusin", function(e, matchedEl, container) {
+            //  that.onFocus(e);
+            // }, ".inputEx-RadioField-radio", "input");
+            // 
+            // fieldContainer.delegate("focusout", function(e, matchedEl, container) {
+            //  that.onBlur(e);
+            // }, ".inputEx-RadioField-radio", "input");
+            // 
+            // // AnyField events
+            // if (this.allowAnyChoice) {
+            //  
+            //  this.anyField.on('updated', function (e, params) {
+            //      
+            //      var value = params[0];
+            //      this.radioAny.value = value;
+            //      
+            //      this.setClassFromState();
+            //      
+            //      I.RadioField.superclass.onChange.call(this,e);
+            //      
+            //  }, this, true);
+            //  
+            //  // Update radio field style after editing anyField content !
+            //             if(this.anyField.el) {
+            //                I.one(this.anyField.el).on('blur', this.onBlur, this, true);
+            //             }
+            // }
 		},
 		
 		/**
@@ -191,9 +190,9 @@ YUI.add("inputex-radio", function(Y){
 			for (i = 0, length = this.choicesList.length ; i < length ; i += 1) {
 				
 				if (this.choicesList[i].node.firstChild.checked) {
-					Y.one(this.choicesList[i].node).addClass("inputEx-selected");
+					I.one(this.choicesList[i].node).addClass("inputEx-selected");
 				} else {
-					Y.one(this.choicesList[i].node).removeClass("inputEx-selected");
+					I.one(this.choicesList[i].node).removeClass("inputEx-selected");
 				}
 				
 			}
@@ -202,7 +201,7 @@ YUI.add("inputex-radio", function(Y){
 		setClassFromState: function () {
 			
 			// call superclass method (will fire updated event)
-			inputEx.RadioField.superclass.setClassFromState.call(this);
+			I.RadioField.superclass.setClassFromState.call(this);
 			
 			this.setSelectedClass();
 			
@@ -218,7 +217,7 @@ YUI.add("inputex-radio", function(Y){
 			// Enable/disable the "any" field
 			if (this.allowAnyChoice) {
 				
-				var clickedOnAllowAnyChoice = inputEx.indexOf(target, this.choicesList, function(el,arrEl) { return el === arrEl.node.firstChild; }) !== -1 && this.radioAny === target;
+				var clickedOnAllowAnyChoice = I.indexOf(target, this.choicesList, function(el,arrEl) { return el === arrEl.node.firstChild; }) !== -1 && this.radioAny === target;
 				
 				// if clicked another choice than allowAnyChoice
 				if (!clickedOnAllowAnyChoice) {
@@ -233,7 +232,7 @@ YUI.add("inputex-radio", function(Y){
 			this.setSelectedClass();
 			
 			// call superclass method (will fire updated event)
-			inputEx.RadioField.superclass.onChange.call(this,e);
+			I.RadioField.superclass.onChange.call(this,e);
 		},
 		
 		/**
@@ -303,7 +302,7 @@ YUI.add("inputex-radio", function(Y){
 			}
 			
 			// call parent class method to set style and fire updated event
-			inputEx.RadioField.superclass.setValue.call(this, value, sendUpdatedEvt);
+			I.RadioField.superclass.setValue.call(this, value, sendUpdatedEvt);
 		},
 		
 		/**
@@ -316,7 +315,7 @@ YUI.add("inputex-radio", function(Y){
 				this.anyField.setValue(this.options.allowAny.value, false);
 			}
 		
-			inputEx.RadioField.superclass.clear.call(this, sendUpdatedEvt);
+			I.RadioField.superclass.clear.call(this, sendUpdatedEvt);
 		},
 		
 		/**
@@ -403,20 +402,20 @@ YUI.add("inputex-radio", function(Y){
 			
 			var div, radioId, radioNode, labelNode;
 			
-			div = inputEx.cn('div', {className: 'inputEx-RadioField-choice'});
+			div = I.cn('div', {className: 'inputEx-RadioField-choice'});
 			
 			// radioId MUST be different for each option, to allow click on label (with for:id trick)
-			if(!inputEx.RadioField._idCounter) {
-			   inputEx.RadioField._idCounter = 0;
+			if(!I.RadioField._idCounter) {
+			   I.RadioField._idCounter = 0;
 			}
-			radioId = "_inputex_radioId"+inputEx.RadioField._idCounter;
-			inputEx.RadioField._idCounter++;
+			radioId = "_inputex_radioId"+I.RadioField._idCounter;
+			I.RadioField._idCounter++;
 			
-			radioNode = inputEx.cn('input', { id: radioId, type: 'radio', name: this.options.name, value: choice.value, className: 'inputEx-RadioField-radio' });
+			radioNode = I.cn('input', { id: radioId, type: 'radio', name: this.options.name, value: choice.value, className: 'inputEx-RadioField-radio' });
 			div.appendChild(radioNode);
 			
 			if (choice.label.length > 0) {
-				labelNode = inputEx.cn('label', {"for": radioId, className: 'inputEx-RadioField-rightLabel'}, null, ""+choice.label);
+				labelNode = I.cn('label', {"for": radioId, className: 'inputEx-RadioField-rightLabel'}, null, ""+choice.label);
 				div.appendChild(labelNode);
 			}
 			
@@ -472,7 +471,7 @@ YUI.add("inputex-radio", function(Y){
 			
 			// Insert in DOM
 			if (domPosition < this.fieldContainer.childNodes.length) {
-				Y.one(this.fieldContainer).insertBefore(node, this.fieldContainer.childNodes[domPosition]);
+				I.one(this.fieldContainer).insertBefore(node, this.fieldContainer.childNodes[domPosition]);
 			} else {
 				
 				this.fieldContainer.appendChild(node);
@@ -483,11 +482,11 @@ YUI.add("inputex-radio", function(Y){
 	});
 	
 	// Augment prototype with choice mixin (functions : addChoice, removeChoice, etc.)
-	Y.mix(inputEx.RadioField.prototype, inputEx.mixin.choice);
+	I.mix(I.RadioField.prototype, I.mixin.choice);
 	
 	
 	// Register this class as "radio" type
-	inputEx.registerType("radio", inputEx.RadioField, [
+	I.registerType("radio", I.RadioField, [
 		{
 			type: 'list',
 			name: 'choices',
@@ -506,6 +505,6 @@ YUI.add("inputex-radio", function(Y){
 	]);
 	
 }, '3.0.0a',{
-  requires: ['selector','event-delegate','inputex-field','inputex-choice','inputex-string']
+  requires: ['inputex-field','inputex-choice','inputex-string']
 });
 	

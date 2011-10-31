@@ -1,10 +1,9 @@
 /**
  * @module inputex-checkbox
  */
-YUI.add("inputex-checkbox",function(Y){
+Gi.addModule("inputex-checkbox",function(I){
 
-   var lang = Y.Lang,
-       inputEx = Y.inputEx;
+   var lang = I.Lang;
 
 /**
  * Create a checkbox.
@@ -16,18 +15,18 @@ YUI.add("inputex-checkbox",function(Y){
  *   <li>sentValues: 2D vector of values for checked/unchecked states (default is [true, false])</li>
  * </ul>
  */
-inputEx.CheckBox = function(options) {
-	inputEx.CheckBox.superclass.constructor.call(this,options);
+I.CheckBox = function(options) {
+	I.CheckBox.superclass.constructor.call(this,options);
 };
 	
-Y.extend(inputEx.CheckBox, inputEx.Field, {
+I.extend(I.CheckBox, I.Field, {
 	   
 	/**
 	 * Adds the CheckBox specific options
 	 * @param {Object} options Options object as passed to the constructor
 	 */
 	setOptions: function(options) {
-	   inputEx.CheckBox.superclass.setOptions.call(this, options);
+	   I.CheckBox.superclass.setOptions.call(this, options);
 	   
 	   // Overwrite options:
 	   this.options.className = options.className ? options.className : 'inputEx-Field inputEx-CheckBox';
@@ -46,17 +45,17 @@ Y.extend(inputEx.CheckBox, inputEx.Field, {
 	 */
 	renderComponent: function() {
 	
-   	var checkBoxId = this.divEl.id?this.divEl.id+'-field':Y.guid();
-	   this.el = inputEx.cn('input', { id: checkBoxId, type: 'checkbox' });
+   	var checkBoxId = this.divEl.id?this.divEl.id+'-field':I.guid();
+	   this.el = I.cn('input', { id: checkBoxId, type: 'checkbox' });
 
 	   this.fieldContainer.appendChild(this.el);
 	
-	   this.rightLabelEl = inputEx.cn('label', {"for": checkBoxId, className: 'inputEx-CheckBox-rightLabel'}, null, this.options.rightLabel);
+	   this.rightLabelEl = I.cn('label', {"for": checkBoxId, className: 'inputEx-CheckBox-rightLabel'}, null, this.options.rightLabel);
 	   this.fieldContainer.appendChild(this.rightLabelEl);
 	
 	   // Keep state of checkbox in a hidden field (format : this.checkedValue or this.uncheckedValue)
 	   // This is useful for non-javascript form submit (it allows custom checked/unchecked values to be submitted)
-	   this.hiddenEl = inputEx.cn('input', {type: 'hidden', name: this.options.name || '', value: this.uncheckedValue});
+	   this.hiddenEl = I.cn('input', {type: 'hidden', name: this.options.name || '', value: this.uncheckedValue});
 	   this.fieldContainer.appendChild(this.hiddenEl);
 	},
 	   
@@ -70,14 +69,17 @@ Y.extend(inputEx.CheckBox, inputEx.Field, {
 	   /*if( YAHOO.env.ua.ie && parseInt(YAHOO.env.ua.ie,10) != 7 ) {
 	      Event.addListener(this.el, "click", function() { this.fireUpdatedEvt(); }, this, true);	
 	   }*/
-	   if( Y.UA.ie ) {
-	      Y.one(this.el).on("click", function(e) { Y.later(10,this,function(){this.onChange(e);}); }, this);	
+	   if( I.UA.ie ) {
+	       // to do : wrapper branch
+          // I.on("click", function(e) {
+          //      I.later(10,this,function(){this.onChange(e);}); 
+          // },this.el, this);  
 	   } else {
-	     Y.one(this.el).on("change", this.onChange, this, true);
+	     I.on("change", this.onChange,this.el, this);
 	   }
 	   
-	   Y.one(this.el).on("focus", this.onFocus, this, true);
-	   Y.one(this.el).on("blur", this.onBlur, this, true);
+	   I.on("focus", this.onFocus,this.el , this);
+	   I.on("blur", this.onBlur, this.el, this);
 	},
 	   
 	/**
@@ -87,7 +89,7 @@ Y.extend(inputEx.CheckBox, inputEx.Field, {
 	onChange: function(e) {
 	   this.hiddenEl.value = this.el.checked ? this.checkedValue : this.uncheckedValue;
 	
-	   inputEx.CheckBox.superclass.onChange.call(this,e);
+	   I.CheckBox.superclass.onChange.call(this,e);
 	},
 	
 	/**
@@ -114,7 +116,7 @@ Y.extend(inputEx.CheckBox, inputEx.Field, {
 			// hacks for IE6, because input is not operational at init, 
 			// so "this.el.checked = true" would work for default values !
 			// (but still work for later setValue calls)
-			if (Y.UA.ie === 6) {
+			if (I.UA.ie === 6) {
 			   this.el.setAttribute("defaultChecked","checked"); // for IE6
 		   }
 		}
@@ -131,13 +133,13 @@ Y.extend(inputEx.CheckBox, inputEx.Field, {
 			// hacks for IE6, because input is not operational at init, 
 			// so "this.el.checked = false" would work for default values !
 			// (but still work for later setValue calls)
-			if (Y.UA.ie === 6) {
+			if (I.UA.ie === 6) {
 			   this.el.removeAttribute("defaultChecked"); // for IE6
 		   }
 		}
 		
 		// Call Field.setValue to set class and fire updated event
-		inputEx.CheckBox.superclass.setValue.call(this,value, sendUpdatedEvt);
+		I.CheckBox.superclass.setValue.call(this,value, sendUpdatedEvt);
 	},
 	
 	/**
@@ -157,7 +159,7 @@ Y.extend(inputEx.CheckBox, inputEx.Field, {
 });   
 	
 // Register this class as "boolean" type
-inputEx.registerType("boolean", inputEx.CheckBox, [ 
+I.registerType("boolean", I.CheckBox, [ 
    {type: 'string', label: 'Right Label', name: 'rightLabel'}
 ]);
 	

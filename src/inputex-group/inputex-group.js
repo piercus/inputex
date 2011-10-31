@@ -1,10 +1,9 @@
 /**
  * @module inputex-group
  */
-YUI.add("inputex-group", function(Y){
+Gi.addModule("inputex-group", function(I){
    
-   var lang = Y.Lang;//, Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
-   var inputEx = Y.inputEx;
+   var lang = I.Lang;
 /**
  * Handle a group of fields
  * @class inputEx.Group
@@ -19,15 +18,15 @@ YUI.add("inputex-group", function(Y){
  *   <li>flatten:</li>
  * </ul>
  */
-inputEx.Group = function(options) {
-   inputEx.Group.superclass.constructor.call(this,options);
+I.Group = function(options) {
+   I.Group.superclass.constructor.call(this,options);
    
    // Run default field interactions (if setValue has not been called before)
    if(!this.options.value) {
       this.runFieldsInteractions();
    }
 };
-Y.extend(inputEx.Group, inputEx.Field, {
+I.extend(I.Group, I.Field, {
    
    /**
     * Adds some options: legend, collapsible, fields...
@@ -35,7 +34,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
     */
    setOptions: function(options) {
       
-      inputEx.Group.superclass.setOptions.call(this, options);
+      I.Group.superclass.setOptions.call(this, options);
          	
    	this.options.className = options.className || 'inputEx-Group';
    	
@@ -63,7 +62,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
    render: function() {
    
       // Create the div wrapper for this group
-	   this.divEl = inputEx.cn('div', {className: this.options.className});
+	   this.divEl = I.cn('div', {className: this.options.className});
 	   if(this.options.id) {
    	   this.divEl.id = this.options.id;
    	}
@@ -81,18 +80,18 @@ Y.extend(inputEx.Group, inputEx.Field, {
     */
    renderFields: function(parentEl) {
       
-      this.fieldset = inputEx.cn('fieldset');
-      this.legend = inputEx.cn('legend', {className: 'inputEx-Group-legend'});
+      this.fieldset = I.cn('fieldset');
+      this.legend = I.cn('legend', {className: 'inputEx-Group-legend'});
    
       // Option Collapsible
       if(this.options.collapsible) {
-         var collapseImg = inputEx.cn('div', {className: 'inputEx-Group-collapseImg'}, null, ' ');
+         var collapseImg = I.cn('div', {className: 'inputEx-Group-collapseImg'}, null, ' ');
          this.legend.appendChild(collapseImg);
-         inputEx.sn(this.fieldset,{className:'inputEx-Expanded'});
+         I.sn(this.fieldset,{className:'inputEx-Expanded'});
       }
    
       if(!lang.isUndefined(this.options.legend) && this.options.legend !== ''){
-         this.legend.appendChild( inputEx.cn("span", null, null, " "+this.options.legend) );
+         this.legend.appendChild( I.cn("span", null, null, " "+this.options.legend) );
       }
    
       if( this.options.collapsible || (!lang.isUndefined(this.options.legend) && this.options.legend !== '') ) {
@@ -138,7 +137,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
    renderField: function(fieldOptions) {
 
       // Instanciate the field
-      var fieldInstance = inputEx(fieldOptions,this);
+      var fieldInstance = I.inputEx(fieldOptions,this);
       
 	   this.inputs.push(fieldInstance);
       
@@ -148,7 +147,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
       } 
       // when the instance is a flatten group, we consider his fields as our fields
       if(fieldInstance.options.flatten && lang.isObject(fieldInstance.inputsNames)){
-        Y.mix(this.inputsNames,fieldInstance.inputsNames)
+        I.mix(this.inputsNames,fieldInstance.inputsNames)
         this.inputs = this.inputs.concat(fieldInstance.inputs)
       }
       
@@ -168,9 +167,9 @@ Y.extend(inputEx.Group, inputEx.Field, {
 	 */
    removeField: function(name) {
 		var field = this.getFieldByName(name),
-		    index = inputEx.indexOf(field,this.inputs);
+		    index = I.indexOf(field,this.inputs);
 		this.inputs[index] = null;
-		this.inputs = inputEx.compactArray(this.inputs);
+		this.inputs = I.compactArray(this.inputs);
 		delete this.inputsNames.name;
 		field.detach("updated",this.onChange, this);
         this.fieldset.removeChild(field.getEl());
@@ -181,7 +180,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
     */
    initEvents: function() {
       if(this.options.collapsible) {
-         Y.on("click", this.toggleCollapse,this.legend, this);
+         I.on("click", this.toggleCollapse,this.legend, this);
       }
    },
 
@@ -189,11 +188,11 @@ Y.extend(inputEx.Group, inputEx.Field, {
     * Toggle the collapse state
     */
    toggleCollapse: function() {
-      if(Y.one(this.fieldset).hasClass( 'inputEx-Expanded')) {
-        Y.one(this.fieldset).replaceClass('inputEx-Expanded', 'inputEx-Collapsed');
+      if(I.hasClass(this.fieldset,'inputEx-Expanded')) {
+        I.replaceClass(this.fieldset,'inputEx-Expanded', 'inputEx-Collapsed');
       }
       else {
-         Y.one(this.fieldset).replaceClass( 'inputEx-Collapsed','inputEx-Expanded');
+         I.replaceClass(this.fieldset, 'inputEx-Collapsed','inputEx-Expanded');
       }
    },
    
@@ -210,7 +209,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
          if (!input.isDisabled()) {
             var state = input.getState();
             input.setClassFromState(state); // update field classes (mark invalid fields...)
-            if (state == inputEx.stateRequired || state == inputEx.stateInvalid) {
+            if (state == I.stateRequired || state == I.stateInvalid) {
                response = false; // but keep looping on fields to set classes
             }
          }
@@ -240,7 +239,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
 			returnedObj.fields[inputName].message = message;
 			
 			// check if subfield validates
-   	   if( state == inputEx.stateRequired || state == inputEx.stateInvalid ) {
+   	   if( state == I.stateRequired || state == I.stateInvalid ) {
 				returnedObj.fields[inputName].valid = false;
 				returnedObj.validate = false;
    	   }
@@ -305,7 +304,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
 	      var v = this.inputs[i].getValue();
 	      if(this.inputs[i].options.name) {
 	         if(this.inputs[i].options.flatten && lang.isObject(v) ) {
-	            Y.mix( o, v);
+	            I.mix( o, v);
 	         }
 	         else {
 		         o[this.inputs[i].options.name] = v;
@@ -418,7 +417,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
     */
    runInteractions: function(fieldInstance,fieldValue) {
       
-      var index = inputEx.indexOf(fieldInstance, this.inputs);
+      var index = I.indexOf(fieldInstance, this.inputs);
       var fieldConfig = this.options.fields[index];
       if(lang.isUndefined(fieldConfig.interactions) ) return;
       
@@ -473,7 +472,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
 				if(this.inputsNames[k]) {
 					if(this.inputsNames[k].options.showMsg) {
 						this.inputsNames[k].displayMessage(value);
-						Y.one(this.inputsNames[k].divEl).replaceClass("inputEx-valid", "inputEx-invalid" );
+						I.replaceClass(this.inputsNames[k].divEl,"inputEx-valid", "inputEx-invalid" );
 					}
 				}
 			}
@@ -484,7 +483,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
 					if(this.inputsNames[k]) {
 						if(this.inputsNames[k].options.showMsg) {
 							this.inputsNames[k].displayMessage(errors[k]);
-							Y.one(this.inputsNames[k].divEl).replaceClass("inputEx-valid", "inputEx-invalid" );
+							I.replaceClass(this.inputsNames[k].divEl,"inputEx-valid", "inputEx-invalid" );
 						}
 					}
 				}
@@ -515,7 +514,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
       }
       
       // Destroy group itself
-      inputEx.Group.superclass.destroy.call(this);
+      I.Group.superclass.destroy.call(this);
       
    }
    
@@ -524,7 +523,7 @@ Y.extend(inputEx.Group, inputEx.Field, {
 
    
 // Register this class as "group" type
-inputEx.registerType("group", inputEx.Group, [
+I.registerType("group", I.Group, [
    { type: "string", label: "Name", name: "name", value: '' },
    { type: 'string', label: 'Legend', name:'legend'},
    { type: 'boolean', label: 'Collapsible', name:'collapsible', value: false},
