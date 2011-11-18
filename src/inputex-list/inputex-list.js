@@ -64,6 +64,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	   
 	   this.options.maxItems = options.maxItems;
 	   this.options.minItems = options.minItems;
+	   
 	},
 	   
 	/**
@@ -84,6 +85,17 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	   this.childContainer = inputEx.cn('div', {className: 'inputEx-ListField-childContainer'});
 	   this.fieldContainer.appendChild(this.childContainer);
 	   
+	   // Create the hidden input
+	   // the hidden input is used when form is without ajax
+    var hiddenAttrs = {
+         type: 'hidden',
+         value: ''
+    };
+    
+    if(this.options.name) hiddenAttrs.name = this.options.name;
+    this.hiddenEl = Y.inputEx.cn('input', hiddenAttrs);
+    this.fieldContainer.appendChild(this.hiddenEl);
+    
 	   // Add link
 	   if(!this.options.useButtons) {
 	      this.addButton = inputEx.cn('a', {className: 'inputEx-List-link'}, null, this.options.listAddLabel);
@@ -96,6 +108,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	 */
 	initEvents: function() {
 	   Y.one(this.addButton).on('click', this.onAddButton, this, true);
+	   this.on("updated",this.setHiddenValue,this);
 	},
 	
 	/**
@@ -166,6 +179,9 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	      }
 	   }
 	   
+	   // we set value of the hiddenEl
+	   
+
 	   inputEx.ListField.superclass.setValue.call(this, value, sendUpdatedEvt);
 	},
 	   
@@ -230,6 +246,7 @@ Y.extend(inputEx.ListField,inputEx.Field, {
 	   
 	   // Focus on this field
 	   subFieldEl.focus();
+	   
 	   
 	   // Fire updated !
 	   this.fireUpdatedEvt();
@@ -456,6 +473,14 @@ Y.extend(inputEx.ListField,inputEx.Field, {
     */
     clear: function(sendUpdatedEvt) {
         this.setValue(lang.isUndefined(this.options.value) ? [] : this.options.value, sendUpdatedEvt);
+    },
+    
+    stringifyValue: function(value){
+      return Y.JSON.stringify(this.getValue());
+    },
+    
+    setHiddenValue: function(){
+      this.hiddenEl.value = this.stringifyValue();
     }
 	
 });

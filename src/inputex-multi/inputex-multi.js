@@ -30,6 +30,16 @@ YUI().add("inputex-multi",function(Y){
 	   this.childContainer = Y.inputEx.cn('div', {className: 'inputEx-ListField-childContainer'});
 	   this.childContainer.appendChild(Y.inputEx.cn('div',null,{"clear":"both"}))
 	   this.fieldContainer.appendChild(this.childContainer);
+	   	   // Create the hidden input
+	   // the hidden input is used when form is without ajax
+    var hiddenAttrs = {
+         type: 'hidden',
+         value: ''
+    };
+    
+    if(this.options.name) hiddenAttrs.name = this.options.name;
+    this.hiddenEl = Y.inputEx.cn('input', hiddenAttrs);
+    this.fieldContainer.appendChild(this.hiddenEl);
 	   
 	},
 	renderAddComponent: function(){
@@ -37,6 +47,7 @@ YUI().add("inputex-multi",function(Y){
 	},
 	initEvents: function(){
 	    this.addField.on("updated", this.onAddFieldUpdate, this, true);
+	    this.on("updated",this.setHiddenValue,this);
 	},
 	/**
 	 * Add a new element to the list and fire updated event
@@ -73,6 +84,7 @@ YUI().add("inputex-multi",function(Y){
 
      	 // Focus on this field
      	 subFieldEl.focus();
+     	 this.stringifyValue();
 
      }
   });
