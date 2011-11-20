@@ -34,6 +34,15 @@ YUI().add("inputex-multi",function(Y){
 	},
 	renderAddComponent: function(){
 	    this.addField = Y.inputEx(Y.merge(this.options.addField,{parentEl : this.fieldContainer}));
+	    var self = this;
+	    
+	    //prevent from sending form from addField
+	    
+	    Y.on("key", function(e){
+	        e.halt();
+	        self.onAddFieldUpdate(self.addField.getValue());
+	        return false;
+        }, this.addField.el,'down:13', this);
 	},
 	initEvents: function(){
 	    this.addField.on("updated", this.onAddFieldUpdate, this, true);
