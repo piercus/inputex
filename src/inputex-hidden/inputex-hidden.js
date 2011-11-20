@@ -55,6 +55,12 @@ Y.extend(inputEx.HiddenField, inputEx.Field, {
     */
    getValue: function() {
       return this.rawValue;
+   },
+   /**
+    * Set the name of the field (useful for list or multi field)
+    */
+   setFieldName: function(name){
+       this.el.name = name;
    }
 
 });
