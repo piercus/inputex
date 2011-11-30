@@ -80,8 +80,8 @@ YUI.add("inputex-field",function(Y) {
       
      // Define default messages
 	     this.options.messages = {};
-	     this.options.messages.required = (options.messages && options.messages.required) ? options.messages.required : inputEx.messages.required;
-	     this.options.messages.invalid = (options.messages && options.messages.invalid) ? options.messages.invalid : inputEx.messages.invalid;
+	     this.options.messages.required = (options.messages && options.messages.required) ? options.messages.required : (inputEx.messages && inputEx.messages.required);
+	     this.options.messages.invalid = (options.messages && options.messages.invalid) ? options.messages.invalid : (inputEx.messages && inputEx.messages.required);
 	     //this.options.messages.valid = (options.messages && options.messages.valid) ? options.messages.valid : inputEx.messages.valid;
 	
 	     // Other options
@@ -186,8 +186,15 @@ YUI.add("inputex-field",function(Y) {
 	  setValue: function(value, sendUpdatedEvt) {
 	     // to be inherited
 	     
-	     // set corresponding style
-	     this.setClassFromState();
+
+	     if(sendUpdatedEvt){
+	       // 30/11/2011 : Piercus : Warning this if-block can create retrocompatibility issues, tell me and remove it if it's happen
+	       // I put it here because it was the most elegant way to set the partial-value of a group without changing field to invalid (user-non-friendly) css
+	       //  -> no initial value = no style (setClassFromState called by setValue)
+	       
+	     	 // set corresponding style, only when it calls update event
+	       this.setClassFromState();
+	     }
 	     
 	     if(sendUpdatedEvt !== false) {
 	        // fire update event

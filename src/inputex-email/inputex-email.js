@@ -24,7 +24,7 @@ Y.extend(inputEx.EmailField, inputEx.StringField, {
       inputEx.EmailField.superclass.setOptions.call(this, options);
 
       // Overwrite options
-      this.options.messages.invalid = inputEx.messages.invalidEmail;
+      this.options.messages.invalid = inputEx.messages && inputEx.messages.invalidEmail;
       this.options.regexp = inputEx.regexps.email;
 		
 		// Validate the domain name ( false by default )

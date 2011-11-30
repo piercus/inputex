@@ -13,7 +13,7 @@ YUI.add("lang/inputex_fr", function(Y) {
         invalidEmail: "Email non valide, ex: michel.dupont@fai.fr",
         didYouMeant: "Voulez-vous dire : ",
         selectColor: "S&eacute,lectionnez une couleur :",
-        invalidPassword: ["Le mot de passe doit contenir au moins ", " caract&egrave,res (lettres ou chiffres)"],
+        invalidPassword: ["Le mot de passe doit contenir au moins ", " caract&egrave;res (lettres ou chiffres)"],
         invalidPasswordConfirmation: "Les mots de passe entrés ne sont pas identiques !",
         passwordStrength: "Solidité du mot de passe",
         capslockWarning: "Attention: touche majuscule activée",
