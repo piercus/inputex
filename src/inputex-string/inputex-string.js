@@ -46,6 +46,8 @@ I.extend(I.StringField, I.Field, {
 	                                  I.browserAutocomplete :
 	                                  (options.autocomplete === false || options.autocomplete === "off") ? false : true;
 	   this.options.trim = (options.trim === true) ? true : false;
+	   this.options.setClassOnKeyUp = lang.isUndefined(options.setClassOnKeyUp) ? false : true;
+	   
    },
 
 
@@ -257,6 +259,9 @@ I.extend(I.StringField, I.Field, {
 	},
 
    onKeyUp: function(e) {
+      if(this.options.setClassOnKeyUp){
+        lang.later(0, this, this.setClassFromState);
+      }
       // override me
       //
       //   example :
