@@ -14,6 +14,8 @@ YUI.add("inputex-checkbox",function(Y){
  * @param {Object} options Added options for CheckBoxes:
  * <ul>
  *   <li>sentValues: 2D vector of values for checked/unchecked states (default is [true, false])</li>
+ *   <li>validValue: value that is valid </li> 
+ *   <li>rightLabel: label on the right </li>  
  * </ul>
  */
 inputEx.CheckBox = function(options) {
@@ -32,13 +34,17 @@ Y.extend(inputEx.CheckBox, inputEx.Field, {
 	   // Overwrite options:
 	   this.options.className = options.className ? options.className : 'inputEx-Field inputEx-CheckBox';
 	   
-	   this.options.rightLabel = options.rightLabel || '';
-	   
+
+
 	   // Added options
 	   this.sentValues = options.sentValues || [true, false];
 	   this.options.sentValues = this.sentValues; // for compatibility
 	   this.checkedValue = this.sentValues[0];
 	   this.uncheckedValue = this.sentValues[1];
+	   if(!lang.isUndefined(options.validValue)){
+	     this.options.validValue = options.validValue || false;
+	   }
+	   this.options.rightLabel = options.rightLabel || '';
 	},
 	   
 	/**
@@ -152,7 +158,17 @@ Y.extend(inputEx.CheckBox, inputEx.Field, {
     */
    enable: function() {
       this.el.disabled = false;
-   }
+   },
+   
+   /**
+     * Validation of the field
+      * @return {Boolean} field validation status (true/false)
+      */
+	  validate: function() {
+	     if(lang.isUndefined(this.options.validValue)) return true;
+	     
+	     return (this.options.validValue === this.getValue());
+     },
 	
 });   
 	
