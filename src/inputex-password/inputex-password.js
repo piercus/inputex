@@ -82,13 +82,13 @@ Y.extend(inputEx.PasswordField, inputEx.StringField, {
 		
 		// Caps lock warning
 		if(this.options.capsLockWarning) {
-		   this.capsLockWarning = inputEx.cn('div',{className: 'capsLockWarning'},{display: 'none'},inputEx.messages.capslockWarning);
+		   this.capsLockWarning = inputEx.cn('div',{className: 'capsLockWarning'},{display: 'none'},lang.isString(this.options.capsLockWarning) ?this.options.capsLockWarning : inputEx.messages && inputEx.messages.capslockWarning);
 		   this.wrapEl.appendChild(this.capsLockWarning);
 	   }
 	   
 	   // Password strength indicator
 		if(this.options.strengthIndicator) {
-		   this.strengthEl = inputEx.cn('div', {className: 'inputEx-Password-StrengthIndicator'}, null, inputEx.messages.passwordStrength);
+		   this.strengthEl = inputEx.cn('div', {className: 'inputEx-Password-StrengthIndicator'}, null, inputEx.messages && inputEx.messages.passwordStrength);
 		   this.strengthBlocks = [];
 		   for(var i = 0 ; i < 4 ; i++) {
 		      var lamp = inputEx.cn('div', {className: 'inputEx-Password-StrengthIndicatorBlock'});
@@ -105,7 +105,7 @@ Y.extend(inputEx.PasswordField, inputEx.StringField, {
 	 */
 	setConfirmationField: function(passwordField) {
 	   this.options.confirmPasswordField = passwordField;
-	   this.options.messages.invalid = inputEx.messages.invalidPasswordConfirmation;
+	   this.options.messages.invalid = inputEx.messages && inputEx.messages.invalidPasswordConfirmation;
 	   this.options.confirmPasswordField.options.confirmationPasswordField = this;
 	},
 	
