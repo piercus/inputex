@@ -1,7 +1,7 @@
 /**
  * @module inputex-url
  */
-Gi.addModule("inputex-url",function(I){
+gI.addModule("inputex-url",function(I){
 
    var lang = I.Lang;
 

@@ -1,4 +1,4 @@
-Gi.addModule("lang/inputex_fr", function(I) {
+gI.addModule("lang/inputex_fr", function(I) {
 
     // I.Intl.add(
     // 

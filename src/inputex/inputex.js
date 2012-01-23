@@ -3,7 +3,7 @@
  * @module inputex
  */
 /*global inputEx: false, YAHOO: false */
-Gi.addModule("inputex", function(I){
+gI.addModule("inputex", function(I){
     
   // I is a localInputEx instance that contains tools added requires modules or librairies
 

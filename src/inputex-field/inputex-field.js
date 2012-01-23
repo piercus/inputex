@@ -2,7 +2,7 @@
  * Provides the base "field" abstract class
  * @module inputex-field
  */
-Gi.addModule("inputex-field",function(I) {
+gI.addModule("inputex-field",function(I) {
  
      var lang = I.Lang;
 

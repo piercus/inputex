@@ -1,7 +1,7 @@
 /**
  * @module inputex-email
  */
-Gi.addModule("inputex-email",function(I){
+gI.addModule("inputex-email",function(I){
    
   var inputEx = I.inputEx;
 /**
