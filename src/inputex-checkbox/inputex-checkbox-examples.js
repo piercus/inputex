@@ -1,5 +1,6 @@
 gI.addExamples("inputex-checkbox", {
-              keyObject: "",list:[{
+              keyObject: "CheckBoxField",
+        list:[{
 		title:"Basic CheckBox creation",
 		description:"Use the following code to create a basic inputEx CheckBox.",
 		fn:function(parentEl,I){

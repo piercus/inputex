@@ -8,6 +8,7 @@ var LibManager = function(options){
     var that = this;
     
     var onReady= this.onReady(l2,function(){
+        that.globals
         that.addExampleFiles(that.fields,function(){
             options.callback();
         });
@@ -40,20 +41,26 @@ LibManager.prototype = {
         }
     },
     addLibFiles : function(i,cb){
-        console.log(i);
-          var li = this.libs[i].files;
+          var li = this.libs[i].files,fn=cb;
           li.push("../../src/inputex-"+i+"/inputex-"+i+".js");
           var el,l = li.length,l2=l,scope = this;
           
           var onReady = this.onReady(l2,function(){
               cb();
             },this);
-          
-
-          for(var i = 0; i < l; i++){
-              this.addScript(li[i],onReady)
+          var that = this;
+          var inc = function(s,cb){
+              console.log(s);
+              return function(){
+                  that.addScript(s,cb);
+              }
           }
+          for( var i = l; i--;){
+              fn = inc(li[i],fn);
+          }
+          this.addScript(li[0],fn);
     },
+    
     addScript: function(src,cb){
           var el = document.createElement("script");
           el.setAttribute("src",src);
@@ -215,11 +222,13 @@ var gI = new LibManager({
      fields: ["inputex-string","inputex-email","inputex-url"],
      callback: function(){
          window.onload = function(){
-             setTimeout(function(){
-                 gI.run();  
-                 //gI.buildExamples(gI.globals[0]);  
-                 gI.testExamples();               
-             },2000);
+                 setTimeout(function(){
+                     gI.run();  
+                     //gI.buildExamples(gI.globals[0]); 
+                     console.log(gI.globals)
+                     gI.testExamples();                    
+                 },2000)
+              
          };
      }
 	});

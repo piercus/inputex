@@ -226,6 +226,7 @@ if(typeof(gI) === "undefined"){
             
                 if(!gl.modules[arguments[i]]){
                     console.log(arguments[i]+" is not loaded");
+                    throw("error : "+arguments[i]+" is not loaded");
                     return;
                 } else {
                     loadModule(arguments[i]);
