@@ -1,7 +1,7 @@
 /**
  * @module inputex-radio
  */
-Gi.addModule("inputex-radio", function(I){
+gI.addModule("inputex-radio", function(I){
 
    var lang = I.Lang;
 	
@@ -190,9 +190,9 @@ Gi.addModule("inputex-radio", function(I){
 			for (i = 0, length = this.choicesList.length ; i < length ; i += 1) {
 				
 				if (this.choicesList[i].node.firstChild.checked) {
-					I.one(this.choicesList[i].node).addClass("inputEx-selected");
+					I.addClass(this.choicesList[i].node,"inputEx-selected");
 				} else {
-					I.one(this.choicesList[i].node).removeClass("inputEx-selected");
+					I.removeClass(this.choicesList[i].node,"inputEx-selected");
 				}
 				
 			}

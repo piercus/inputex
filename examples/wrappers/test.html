@@ -2,7 +2,7 @@
     <!DOCTYPE html>
     <html>
      <head>
-      <title>inputEx - StringField Usage</title>
+      <title>inputEx - Tests</title>
 
     <link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.4.0/build/cssreset/reset-min.css&3.4.0/build/cssfonts/fonts-min.css">
     <link rel="stylesheet" href="../../res/demo.css">
@@ -10,22 +10,36 @@
     <link rel="stylesheet" href="../../res/syntaxhighlighter/styles/shThemeDefault.css">
     <script src="../../res/syntaxhighlighter/scripts/shCore.js"  type='text/javascript'></script>
     <script src="../../res/syntaxhighlighter/scripts/shBrushJScript.js"  type='text/javascript'></script>
-
+	<style type="text/css">
+	table {
+		border-width: 1px;
+		border-spacing: 2px;
+		border-style: outset;
+		border-color: gray;
+		border-collapse: separate;
+		background-color: white;
+	}
+	table th {
+		border-width: 1px;
+		padding: 1px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: ;
+	}
+	table td {
+		border-width: 1px;
+		padding: 1px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: ;
+	}
+	</style>
      </head>
      <body>
-
+	<div id="logs"></div>
+	<script src="libManager.js"  type='text/javascript'></script>
     <script src="test.js"  type='text/javascript'></script>
-    <select name="librairy" id="librairy">
-        <option value="-1">--</option>
-        <option value="1">yui2</option> 
-        <option value="2">yui3</option>
-    </select>
-    <select name="field" id="field">
-        <option value="-1">--</option>
-        <option value="1">inputex-string</option> 
-        <option value="2">inputex-url</option>
-        <option value="3">inputex-email</option>
-    </select>
-    <div id="examples"></div>
      </body>
     </html>

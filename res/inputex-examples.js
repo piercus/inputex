@@ -7,7 +7,7 @@
  * 
  * @module inputex-examples
  */
-Gi.addModule('inputex-examples', function (I) {
+gI.addModule('inputex-examples', function (I) {
     window.I = I;	
 	I.on("domready",function() {
 		

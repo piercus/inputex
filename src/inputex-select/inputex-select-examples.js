@@ -5,7 +5,12 @@ gI.addExamples("inputex-select", {
 		fn:function(parentEl,I){
 			new I.SelectField({
 				name: 'country',
-				choices: [                                  // choices: [                      
+				choices: [                                     
+					{ value: 'United States of America' },  
+					{ value: 'France' }                     
+				],                                         
+				parentEl: parentEl
+			});                                    
 	}},{
 		title:"Differentiate choices' labels and values",
 		description:"Use the following code to create choices with labels different from values",
@@ -17,7 +22,7 @@ gI.addExamples("inputex-select", {
 					{ value: 'us', label: 'United States of America' },
 					{ value: 'fr', label: 'France' }
 				],
-				parentEl: 'container1bis'
+				parentEl: parentEl
 			});
 		}},{
 		title:"Updated event",
@@ -29,7 +34,7 @@ gI.addExamples("inputex-select", {
 		var button = I.cn('button', null, null, "SetValue with 'us'");
 		var val = 'us';
 		el.appendChild(button);
-		Y.on( "click" ,function() {
+		I.on( "click" ,function() {
 		   field2.setValue(val);
 		   val = (val == 'fr') ? 'us' : 'fr';
 		   button.innerHTML = "SetValue with '"+val+"'";
@@ -49,19 +54,19 @@ gI.addExamples("inputex-select", {
 			var field3 = new I.SelectField({name: 'country', choices: [{ value: 'United States of America' }, { value: 'France' }], parentEl: el});
 
 			var button1 = I.cn('button', null, null, "Add 'Spain' choice (and select 'Spain')");
-			Y.on("click" ,function() {
+			I.on("click" ,function() {
 			   field3.addChoice({value:"Spain",selected:true});
 			   button1.disabled = true;
 			},button1)
 
 			var button2 = I.cn('button', null, null, "Add 'United Kingdom' choice (value : 'uk'), in position 1");
-			Y.on("click" ,function() {
+			I.on("click" ,function() {
 			   field3.addChoice({value:"uk",label:"United Kingdom",position:1});
 			   button2.disabled = true;
 			},button2);
 
 			var button3 = I.cn('button', null, null, "Add 'Sweden' choice after 'France' choice");
-			Y.on("click" ,function() {
+			I.on("click" ,function() {
 			   field3.addChoice({value:"Sweden",after:"France"});
 			   button3.disabled = true;
 			},button3);
@@ -95,19 +100,19 @@ gI.addExamples("inputex-select", {
 			});
 			
 			var button4 = I.cn('button', null, null, "Remove 'Spain' choice (by label)");
-			Y.on("click" ,function() {
+			I.on("click" ,function() {
 			   field4.removeChoice({label:"Spain"});
 			   button4.disabled = true;
 			},button4);
 
 			var button5 = I.cn('button', null, null, "Remove 'United Kingdom' choice (by value)");
-			Y.on( "click" ,function() {
+			I.on( "click" ,function() {
 			   field4.removeChoice({value:"uk"});
 			   button5.disabled = true;
 			},button5);
 
 			var button6 = I.cn('button', null, null, "Remove 'Germany' choice (by position)");
-			Y.on("click" ,function() {
+			I.on("click" ,function() {
 			   field4.removeChoice({position:1});
 			   button6.disabled = true;
 			},button6) ;
@@ -146,7 +151,7 @@ gI.addExamples("inputex-select", {
 		});
 		
 		
-		Y.on("click" ,function() {
+		I.on("click" ,function() {
 			
 			field5.hideChoice({value:'fr'});
 			
@@ -154,7 +159,7 @@ gI.addExamples("inputex-select", {
 			logDiv5.appendChild(I.cn('br'));
 		},button7) ;
 		
-		Y.on("click" ,function() {
+		I.on("click" ,function() {
 			
 			field5.showChoice({value:'fr'});
 			
@@ -162,7 +167,7 @@ gI.addExamples("inputex-select", {
 			logDiv5.appendChild(I.cn('br'));
 		},button8);
 		
-		Y.on("click" ,function() {
+		I.on("click" ,function() {
 			
 			field5.disableChoice({label:'Spain'});
 			
@@ -170,7 +175,7 @@ gI.addExamples("inputex-select", {
 			logDiv5.appendChild(I.cn('br'));
 		},button9);
 		
-		Y.on("click" ,function() {
+		I.on("click" ,function() {
 			
 			field5.enableChoice({label:'Spain'});
 			

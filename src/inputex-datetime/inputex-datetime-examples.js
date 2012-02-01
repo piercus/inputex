@@ -6,9 +6,9 @@ gI.addExamples("inputex-datetime", {
 			// Example 1
 			field = new I.DateTimeField({parentEl: parentEl, value: new Date()});
 			var button = I.cn('button', null, null, 'getValue');
-			Y.one(button).on('click',function() {
+			I.on('click',function() {
 				alert(field.getValue());
-			});
+			},button)
 			document.getElementById(parentEl).appendChild(button);
 		}},{
 		title:"Date format",

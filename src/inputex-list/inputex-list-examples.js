@@ -1,5 +1,7 @@
 gI.addExamples("inputex-list", {
-              keyObject: "",list:[{
+              keyObject: "",
+              requires:["inputex-url","inputex-select"],
+              list:[{
 		title:"Basic ListField creation",
 		description:"Use the following code to create a basic inputEx ListField.",
 		fn:function(parentEl,I){
@@ -12,20 +14,20 @@ gI.addExamples("inputex-list", {
 		});
 		var button = I.cn('button', null, null, 'getValue()');
 		document.getElementById(parentEl).appendChild(button); 
-		Y.one(button).on('click', function() { alert( Y.JSON.stringify(field.getValue())); });  
+		I.on('click', function() { alert( Y.JSON.stringify(field.getValue())); },button)  
 		var button2 = I.cn('button', null, null, 'setValue()');
 		document.getElementById(parentEl).appendChild(button2); 
-		Y.one(button2).on('click', function() {
+		I.on('click', function() {
 			field.setValue(['http://www.sncf.com',
 											'http://www.clicrdv.com',
 											'http://www.neyric.com',
 											'http://javascript.neyric.com/wireit']);			
-		});
+		},button2)
 		var button3 = I.cn('button', null, null, 'Clear');
 		document.getElementById(parentEl).appendChild(button3); 
-		Y.one(button3).on('click', function() {
+		I.on('click', function() {
 			field.setValue([]);
-		});
+		},button3)
 	
   }},{
 		title:"Sortable list",
@@ -41,9 +43,9 @@ gI.addExamples("inputex-list", {
 		});
 		var buttonGetValue = I.cn('button', null, null, 'getValue()');
 		document.getElementById(parentEl).appendChild(buttonGetValue); 
-		Y.one(buttonGetValue).on('click', function() { 
+		I.on('click', function() { 
 			alert( Y.JSON.stringify(field2.getValue())); 
-		});
+		},buttonGetValue)
 	
   }},{
 		title:"Updated event",
@@ -85,7 +87,7 @@ gI.addExamples("inputex-list", {
 			parentEl: parentEl,
 			useButtons: true 
 		});
-  }},{
+  }}/*,{
 		title:"Field names",
 		description:"The names are automatically set on sub-fields, so that standard forms can work. Click the button and check the URL",
 		fn:function(parentEl,I){	
@@ -111,4 +113,4 @@ gI.addExamples("inputex-list", {
 			method: 'GET',
 			parentEl: parentEl
 		});
-  }}]});
+  }}*/]});

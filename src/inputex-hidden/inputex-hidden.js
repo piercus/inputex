@@ -1,10 +1,8 @@
 /**
  * @module inputex-hidden
  */
-YUI.add("inputex-hidden", function(Y){
+gI.addModule("inputex-hidden", function(I){
    
-  var inputEx = Y.inputEx;
-
 /**
  * Create a hidden input, inherits from inputEx.Field
  * @class inputEx.HiddenField
@@ -12,20 +10,20 @@ YUI.add("inputex-hidden", function(Y){
  * @constructor
  * @param {Object} options inputEx.Field options object
  */
-inputEx.HiddenField = function(options) {
-	inputEx.HiddenField.superclass.constructor.call(this,options);
+I.HiddenField = function(options) {
+	I.HiddenField.superclass.constructor.call(this,options);
 };
 
-Y.extend(inputEx.HiddenField, inputEx.Field, {
+I.extend(I.HiddenField, I.Field, {
    
    /**
     * Doesn't render much...
     */
    render: function() {
-      this.type = inputEx.HiddenField;
-	   this.divEl = inputEx.cn('div', null, {display: 'none'});
+      this.type = I.HiddenField;
+	   this.divEl = I.cn('div', null, {display: 'none'});
 	   
-	   this.el = inputEx.cn('input', {type: 'hidden'});
+	   this.el = I.cn('input', {type: 'hidden'});
 	   this.rawValue = ''; // initialize the rawValue with '' (default value of a hidden field)
 	
 	   if(this.options.name) this.el.name = this.options.name;
@@ -46,7 +44,7 @@ Y.extend(inputEx.HiddenField, inputEx.Field, {
       this.rawValue = val;
 
       // Call Field.setValue to set class and fire updated event
-		inputEx.HiddenField.superclass.setValue.call(this,val, sendUpdatedEvt);
+		I.HiddenField.superclass.setValue.call(this,val, sendUpdatedEvt);
    },
 
    /**
@@ -60,7 +58,7 @@ Y.extend(inputEx.HiddenField, inputEx.Field, {
 });
    
 // Register this class as "hidden" type
-inputEx.registerType("hidden", inputEx.HiddenField);
+I.registerType("hidden", I.HiddenField);
 
 }, '0.0.1',{
   requires:["inputex-field"]

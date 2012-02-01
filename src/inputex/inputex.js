@@ -135,6 +135,7 @@ gI.addModule("inputex", function(I){
 	   * @param {Boolean} dontInherit Won't inherhit the parent field properties if set to true
       */
      registerType: function(type, fieldClass, groupOptions, dontInherit) {
+        //console.log("register type",type, this.typeClasses);
         if(!lang.isString(type)) {
            throw new Error("inputEx.registerType: first argument must be a string");
         }
@@ -376,4 +377,6 @@ gI.addModule("inputex", function(I){
 	  
      
   });
-}, '3.0.0a');
+}, '3.0.0a',{
+    requires: [],
+});

@@ -14,5 +14,5 @@ gI.addExamples("inputex-hidden", {
 		});
 		var button=I.cn('button',null,null, 'Get Value'); 
 		exampleDiv.appendChild(button); 
-		Y.one(button).on('click', function(){ alert(Y.JSON.stringify(group.getValue()) ); });
+		I.on('click', function(){ alert(Y.JSON.stringify(group.getValue()) ); },button)
 		}}]});

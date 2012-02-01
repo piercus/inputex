@@ -2,7 +2,7 @@
 
 //gI means globalInputEx
 if(typeof(gI) === "undefined"){
-    var gI = {modules:[]};
+    var gI = {modules:{}};
 }
 
 /*
@@ -13,7 +13,7 @@ if(typeof(gI) === "undefined"){
  */
 (function(){
     var dom = YAHOO.util.Dom, evt = YAHOO.util.Event, CstEvt = YAHOO.util.CustomEvent;
-    var gl = (typeof(gI.length) !== "number") ? gI : (gI.push({modules:[]}) && gI.globals[gI.globals.length-1]);
+    var gl = (typeof(gI.length) !== "number") ? gI : gI.addLib("yui2",{modules:{}});
     
     
     gl.modulesKeys = [];
@@ -62,10 +62,30 @@ if(typeof(gI) === "undefined"){
           };
           this.removeClass = dom.removeClass;
           this.replaceClass= dom.replaceClass;
+          this.setStyle = dom.setStyle;
           this.EventTarget = function(){
             //should initialize an event  
             this.events = [];
           };
+          // I.io(uri,{
+          //         method:method,
+          //         data: postData,
+          //         headers: headers,
+          //         on : {
+          //           success: onSuccess,
+          //           failure: onFailure
+          //         },
+          //         context: this
+          //       });
+          this.io = function(sUrl,options){
+              YAHOO.util.Connect.asyncRequest(options.method || 'GET', sUrl, {
+                success: options.on.success,
+                failure: options.on.failure,
+                scope: options.context
+              }, (options.method === "POST" ? options.data : null ))
+          }
+          this.insert = dom.insertBefore;
+          this.purgeElement = function(){ return evt.purgeElement();};
           this.EventTarget.prototype = {
               publish: function(evtName){
                   if(typeof(this.events) === "undefined"){
@@ -74,14 +94,20 @@ if(typeof(gI) === "undefined"){
                   this.events[evtName] = new CstEvt("evtName");
               },
               on: function(evtName,fn,scope){
-                  console.log(evtName);
-                  this.events[evtName].subscribe(fn,true,scope);
+                  //console.log(evtName);
+                  var cb = function(type, args, obj){
+                      return fn.call(scope,args[0]);
+                  }
+                  this.events[evtName].subscribe(cb,true,scope);
+              },
+              detach: function(evtName){
+                  this.events[evtName].unsubscribe();
               },
               _initEventTarget: function(){
                   this.events = [];
               },
               fire: function(evtName,options,scope){
-                  this.events[evtName].fire(options,scope);
+                  return this.events[evtName].fire(options,scope);
               }
           }
           // Purge element (remove listeners on el and childNodes recursively)
@@ -118,10 +144,15 @@ if(typeof(gI) === "undefined"){
               }
           } 
         },
+        JSON: {
+          stringify: function(obj){
+             return YAHOO.lang.JSON.stringify(obj);
+          },  
+        },
         buildUA: function(){
             return YAHOO.env.ua;
         },
-        isInDoc: function(){
+        inDoc: function(o){
             // from http://stackoverflow.com/questions/384286/javascript-isdom-how-do-you-check-if-a-javascript-object-is-a-dom-object
             //
             //Returns true if it is a DOM element    
@@ -135,7 +166,8 @@ if(typeof(gI) === "undefined"){
                 if(obj2.hasOwnProperty(i)){
                     obj1[i] = obj2[i];
                 }
-            }
+            };
+            return obj1;
         },
         each: function(array,fn,scope){
             for (var i = 0; i< array.length; i++){
@@ -177,14 +209,29 @@ if(typeof(gI) === "undefined"){
                  fn = args[1],
                  el = args[2],
                  scope = args[3];
-            return evt.on( el, action, fn, true, scope);
+            var cb = function(e){
+                e.halt = function(){
+                    //console.log("halt")
+                    if(window.event){
+                             this.cancelBubble=true;//In IE
+                    }else{
+                             this.stopPropagation();//in Others
+                    }
+                    this.preventDefault()
+                }
+                fn.call(scope,e);
+            }
+            return evt.on( el, action, cb, true, scope);
           } 
       
         },
         extend: function(){
             YAHOO.extend.apply(this,arguments);
+        },
+        error: function(){
+            //console.log("InputEx Error : ",arguments);
+            throw(arguments[0]);            
         }
-    
     };
     gl.indexOf = function(array,el){
         return array.indexOf(el);

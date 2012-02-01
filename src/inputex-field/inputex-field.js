@@ -333,7 +333,7 @@ gI.addModule("inputex-field",function(I) {
         I.purgeElement(el)        
         
         // Remove from DOM
-        if(I.isInDoc(el)) {
+        if(I.inDoc(el)) {
            el.parentNode.removeChild(el);
         }
         

@@ -6,8 +6,15 @@ gI.addExamples("inputex-radio", {
 			new I.RadioField({
 				label: 'Where did you learn about I ?',
 				name: 'example1',
-				choices: [                    // choices: [       
-	}},{
+				choices: [                    // choices: [       <- alternative syntax (shorter)
+					{ value: 'Ajaxian' },     //    'Ajaxian',    <-
+					{ value: 'YUI blog' },    //    'YUI blog',   <-
+					{ value: 'Other' }        //    'Other'       <-
+				],                            // ],               <-
+				value:'Ajaxian',
+				parentEl: parentEl
+			});                   // choices: [       
+	}}/*,{
 		title:"Differentiate choices' labels and values",
 		description:"Use the following code to create choices with labels different from values",
 		fn:function(parentEl,I){
@@ -63,7 +70,9 @@ gI.addExamples("inputex-radio", {
 			//
 			// <style>
 			//   .I-RadioField .I-selected label { text-decoration: underline; }
-			// </style>}},{
+			// </style>
+		}
+		},{
 		title:"allowAny option",
 		description:"The 'allowAny' option adds a radio associated to a StringField to let the user enter any value.",
 		fn:function(parentEl,I){
@@ -79,19 +88,25 @@ gI.addExamples("inputex-radio", {
 			
 			el = document.getElementById(parentEl);
 			
-			field = new I.RadioField({
+			field = new Y.inputEx.RadioField({
 				label: 'Would you like to receive an email reminder ?',
 				name: 'example6',
 				display: 'vertically',
 				choices: [{ value: '0', label: 'No' }],
 				value: '0', // default value, also used by clear() method
-				parentEl: parentEl,
+				parentEl: 'container6',
 				allowAny: {
 					separators:['Yes, ',' hours before the event'],
 					value:'3', // default value for allowAny field, not for radioField
 					validator: function(val) {
 						var num = parseInt(val,10);
-						return (val === ""+num &amp;&amp; num &gt;= 1 &amp;&amp; num 
+						return (val === ""+num && num >= 1 && num <= 48);
+					}
+				},
+				messages: {invalid:"Hours should be between 1 and 48."},
+				showMsg:true,
+				required:true
+			});
 	}},{
 		title:"Advanced allowAny option 2",
 		description:"Use a custom field in allowAny",
@@ -100,7 +115,7 @@ gI.addExamples("inputex-radio", {
 			
 			el = document.getElementById(parentEl);
 			
-			field = new I.RadioField({
+			field = new Y.inputEx.RadioField({
 				label: 'Would you like to receive an email reminder ?',
 				name: 'example6bis',
 				display: 'vertically',
@@ -110,23 +125,29 @@ gI.addExamples("inputex-radio", {
 				allowAny: {
 					field: {
 						type: "timeinterval",
-						unit: I.TimeIntervalField.units.MINUTE, // return value in 'minutes'
+						unit: inputEx.TimeIntervalField.units.MINUTE, // return value in 'minutes'
 						value: 7*24*60, // 1 week = 7 days,
 						fields: [
 							{type:'integer', value:1, required:true},
 							{
 								type: 'select',
 								choices: [
-									{ value: I.TimeIntervalField.units.HOUR, label: I.messages.timeUnits.HOUR },
-									{ value: I.TimeIntervalField.units.DAY, label: I.messages.timeUnits.DAY },
-									{ value: I.TimeIntervalField.units.MONTH, label: I.messages.timeUnits.MONTH }
+									{ value: inputEx.TimeIntervalField.units.HOUR, label: inputEx.messages.timeUnits.HOUR },
+									{ value: inputEx.TimeIntervalField.units.DAY, label: inputEx.messages.timeUnits.DAY },
+									{ value: inputEx.TimeIntervalField.units.MONTH, label: inputEx.messages.timeUnits.MONTH }
 								]
 							}
 						],
 						separators:['Yes, ',false, ' before the event']
 					},
 					validator: function(val) {
-						return (val &gt;= 120 &amp;&amp; val 
+						return (val >= 120 && val <= 43200);
+					}
+				},
+				required:true,
+				messages: {invalid:"Reminder can be set between 2 hours and 1 month before the event"},
+				showMsg:true
+			});
 	}},{
 		title:"Disable RadioField",
 		description:"Disable the field (to disable radio inputs individually, see another example below)",
@@ -138,11 +159,11 @@ gI.addExamples("inputex-radio", {
 			
 			button1 = I.cn('button', null, null, 'disable()');
 			el.appendChild(button1); 
-			Y.one(button1).on('click', function() { field.disable(); });
+			I.on(button1,'click', function() { field.disable(); });
 
 			button2 = I.cn('button', null, null, 'enable()');
 			el.appendChild(button2); 
-			Y.one(button2).on('click', function() { field.enable(); });
+			I.on(button2,'click', function() { field.enable(); });
 			
 		}},{
 		title:"addChoice",
@@ -203,20 +224,20 @@ gI.addExamples("inputex-radio", {
 			});
 			
 			button1 = I.cn('button', null, null, "Remove 'Spain' choice (by label)");
-			Y.one(button1).on('click', function() {
-			   field.removeChoice({label:"Spain"});
+			I.on('click', function() {
+			   field.removeChoice({label:"Spain"},button1)
 			   button1.disabled = true;
 			});
 			
 			button2 = I.cn('button', null, null, "Remove 'United Kingdom' choice (by value)");
-			Y.one(button2).on('click', function() {
-			   field.removeChoice({value:"uk"});
+			I.on('click', function() {
+			   field.removeChoice({value:"uk"},button2)
 			   button2.disabled = true;
 			});
 			
 			button3 = I.cn('button', null, null, "Remove 'Germany' choice (by position)");
-			Y.one(button3).on('click', function() {
-			   field.removeChoice({position:1});
+			I.on('click', function() {
+			   field.removeChoice({position:1},button3)
 			   button3.disabled = true;
 			});
 			
@@ -286,4 +307,4 @@ gI.addExamples("inputex-radio", {
 			logDiv.appendChild(I.cn('br'));
 		});
 		
-		}}]});
+		}}*/]});

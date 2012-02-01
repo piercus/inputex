@@ -1,5 +1,8 @@
 gI.addExamples("inputex-form", {
-              keyObject: "",list:[{
+              keyObject: "",
+              requires:["inputex-select","inputex-email","inputex-checkbox","inputex-radio","inputex-url","inputex-list"],
+              
+              list:[{
 		title:"Basic Form creation",
 		description:"Use the following code to create a basic inputEx Form.",
 		fn:function(parentEl,I){
@@ -57,7 +60,7 @@ gI.addExamples("inputex-form", {
             parentEl: parentEl,
             ajax: {
                method: 'POST',
-               uri: 'default.php',
+               uri: '../echo.php',
                callback: {
                   success: function(o) { alert("success", o); },
                   failure: function(o) { alert("failure", o); }
@@ -79,7 +82,7 @@ gI.addExamples("inputex-form", {
             parentEl: parentEl,
             ajax: {
                method: 'POST',
-               uri: 'default.php',
+               uri: '../echo.php',
                contentType: "application/x-www-form-urlencoded",
                callback: {
                   success: function(o) { alert("success", o); },
@@ -102,7 +105,7 @@ gI.addExamples("inputex-form", {
             parentEl: parentEl,
             ajax: {
                method: 'POST',
-               uri: 'default.php',
+               uri: '../echo.php',
                contentType: "application/x-www-form-urlencoded",
                wrapObject: "person",
                callback: {
@@ -165,7 +168,7 @@ gI.addExamples("inputex-form", {
                   onClick:function(e) { // e === clickEvent (I.widget.Button custom event)
                      
                      var valueAsJsObject = form6.getValue();
-                     var valueAsJsonString = Y.JSON.stringify(valueAsJsObject);
+                     var valueAsJsonString = I.JSON.stringify(valueAsJsObject);
                      
                      alert(valueAsJsonString);
                      

@@ -1,12 +1,12 @@
-YUI().add("inputex-multi",function(Y){
+gI.addModule("inputex-multi",function(I){
 
-  Y.inputEx.MultiField = function(options){
-    Y.inputEx.MultiField.superclass.constructor.call(this,options);
+  I.MultiField = function(options){
+    I.MultiField.superclass.constructor.call(this,options);
   };
   
-  Y.extend( Y.inputEx.MultiField,Y.inputEx.ListField,{
+  I.extend( I.MultiField,I.ListField,{
     setOptions: function(options){
-        Y.inputEx.MultiField.superclass.setOptions.call(this, options);
+        I.MultiField.superclass.setOptions.call(this, options);
         // override basic value
         this.options.elementType = options.elementType || {type: 'label'};
         if(typeof(options.addField.description) == "undefined" && options.description){
@@ -27,13 +27,13 @@ YUI().add("inputex-multi",function(Y){
 	    this.renderAddComponent();
 	      
 	   // Div element to contain the children
-	   this.childContainer = Y.inputEx.cn('div', {className: 'inputEx-ListField-childContainer'});
-	   this.childContainer.appendChild(Y.inputEx.cn('div',null,{"clear":"both"}))
+	   this.childContainer = I.cn('div', {className: 'inputEx-ListField-childContainer'});
+	   this.childContainer.appendChild(I.cn('div',null,{"clear":"both"}))
 	   this.fieldContainer.appendChild(this.childContainer);
 	   
 	},
 	renderAddComponent: function(){
-	    this.addField = Y.inputEx(Y.merge(this.options.addField,{parentEl : this.fieldContainer}));
+	    this.addField = I.inputEx(I.mix(this.options.addField,{parentEl : this.fieldContainer}));
 	},
 	initEvents: function(){
 	    this.addField.on("updated", this.onAddFieldUpdate, this, true);
@@ -47,7 +47,7 @@ YUI().add("inputex-multi",function(Y){
 	    //Prevent a loop between addField and this
  	   
 	   // Prevent adding a new field if already at maxItems
-	   if( Y.Lang.isNumber(this.options.maxItems) && this.subFields.length >= this.options.maxItems ) {
+	   if( I.Lang.isNumber(this.options.maxItems) && this.subFields.length >= this.options.maxItems ) {
 	      return;
 	   }
 	   
@@ -79,7 +79,7 @@ YUI().add("inputex-multi",function(Y){
 
 
   // Register this class as "multi" type
-  Y.inputEx.registerType("multi", Y.inputEx.MultiField);
+  I.registerType("multi", I.MultiField);
 
 }, '3.0.0a',{
   requires: ["inputex-list"]

@@ -1,10 +1,10 @@
 /**
  * @module inputex-form
  */
-YUI.add("inputex-form", function(Y){
+gI.addModule("inputex-form", function(I){
 
-  var lang = Y.Lang,
-      inputEx = Y.inputEx;
+  var lang = I.Lang,
+      inputEx = I;
 
 /**
  * Create a group of fields within a FORM tag and adds buttons
@@ -22,7 +22,7 @@ inputEx.Form = function(options) {
    inputEx.Form.superclass.constructor.call(this, options);
 };
 
-Y.extend(inputEx.Form, inputEx.Group, {
+I.extend(inputEx.Form, inputEx.Group, {
 
    /**
     * Adds buttons and set ajax default parameters
@@ -150,9 +150,8 @@ Y.extend(inputEx.Form, inputEx.Group, {
       //
       // 1. catch a 'submit' event on form (say a user pressed <Enter> in a field)
       //
-      Y.on("submit",function(e) {
+      I.on("submit",function(e) {
          
-            // always stop event
             e.halt();
          
             // replace with custom event
@@ -206,7 +205,7 @@ Y.extend(inputEx.Form, inputEx.Group, {
       if(this.options.ajax.showMask) { this.showMask(); }
 
     var formValue = this.getValue();
-
+    var headers;
       // options.ajax.uri and options.ajax.method can also be functions that return a the uri/method depending of the value of the form
       var uri = lang.isFunction(this.options.ajax.uri) ? this.options.ajax.uri(formValue) : this.options.ajax.uri;
       var method = lang.isFunction(this.options.ajax.method) ? this.options.ajax.method(formValue) : this.options.ajax.method;
@@ -226,7 +225,7 @@ Y.extend(inputEx.Form, inputEx.Group, {
       }
       // The only other contentType available is "application/json"
       else {
-        Y.io.header('Content-Type', 'application/json');
+        headers = {'Content-Type': 'application/json'};
 
         // method PUT don't send as x-www-form-urlencoded but in JSON
         if(method == "PUT") {
@@ -239,12 +238,12 @@ Y.extend(inputEx.Form, inputEx.Group, {
           else {
             p = formVal;
           }
-          postData = Y.JSON.stringify(p);
+          postData = I.JSON.stringify(p);
         }
         else {
           // We keep this case for backward compatibility, but should not be used
           // Used when we send in JSON in POST or GET
-          postData = "value="+window.encodeURIComponent(Y.JSON.stringify(this.getValue()));
+          postData = "value="+window.encodeURIComponent(I.JSON.stringify(this.getValue()));
         }
       }
       var onSuccess = function(o) {
@@ -259,9 +258,10 @@ Y.extend(inputEx.Form, inputEx.Group, {
                this.options.ajax.callback.failure.call(this.options.ajax.callback.scope,o);
             }
       };
-      Y.io(uri,{
+      I.io(uri,{
         method:method,
         data: postData,
+        headers: headers,
         on : {
           success: onSuccess,
           failure: onFailure
@@ -277,10 +277,10 @@ Y.extend(inputEx.Form, inputEx.Group, {
       if(this.maskRendered) return;
 
       // position as "relative" to position formMask inside as "absolute"
-      Y.one(this.divEl).setStyle( "position", "relative");
+      I.setStyle(this.divEl, "position", "relative");
 
       // set zoom = 1 to fix hasLayout issue with IE6/7
-      if (Y.UA.ie > 0) { Y.one(this.divEl).setStyle("zoom", 1); }
+      if (I.UA.ie > 0) {  I.setStyle(this.divEl, "zoom", 1); }
 
       // Render mask over the divEl
       this.formMask = inputEx.cn('div', {className: 'inputEx-Form-Mask'},
@@ -324,12 +324,13 @@ Y.extend(inputEx.Form, inputEx.Group, {
    */
    toggleSelectsInIE: function(show) {
       // IE 6 only
-      if (!!Y.UA.ie && Y.UA.ie < 7) {
+      if (!!I.UA.ie && I.UA.ie < 7) {
          var methodName = !!show ? "removeClass" : "addClass";
          var that = this;
-         Y.one(this.divEl).all("select").each(function(e){
-           e[methodName]("inputEx-hidden")
-         });
+         // May Cause bugs
+         //I.one(this.divEl).all("select").each(function(e){
+         //  e[methodName]("inputEx-hidden")
+         //});
       }
    },
 
@@ -365,7 +366,7 @@ Y.extend(inputEx.Form, inputEx.Group, {
       var i, length, button;
       
       // Unsubscribe all listeners to submit event
-      Y.Event.purgeElement(this.form);
+      I.purgeElement(this.form);
       
       // Recursively destroy buttons
       for (i = 0, length = this.buttons.length ; i < length ; i++) {
@@ -398,5 +399,5 @@ inputEx.registerType("form", inputEx.Form, [
 
 
 },'3.0.0a',{
-  requires: ['io-base','inputex-group','json','inputex-button']
+  requires: ['inputex-group','inputex-button']
 });

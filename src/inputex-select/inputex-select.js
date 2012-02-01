@@ -1,7 +1,7 @@
 /**
  * @module inputex-select
  */
-Gi.addModule("inputex-select",function(I){
+gI.addModule("inputex-select",function(I){
 
 	var lang = I.Lang;
 	/**
@@ -245,7 +245,7 @@ Gi.addModule("inputex-select",function(I){
 			
 			// Insert in DOM
 			if (domPosition < this.el.childNodes.length) {
-				I.one(this.el).insert(node,domPosition)
+				I.insert(this.el,node,domPosition)
 			} else {
 				
 				this.el.appendChild(node);

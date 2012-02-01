@@ -1,10 +1,10 @@
 /**
  * @module inputex-button
  */
-YUI.add("inputex-button",function(Y){
+gI.addModule("inputex-button",function(I){
    
-   var lang = Y.Lang,
-       inputEx = Y.inputEx;
+   var lang = I.Lang,
+       inputEx = I;
 
 /**
  * Create a button
@@ -32,7 +32,7 @@ inputEx.widget.Button = function(options) {
 };
 
 
-Y.mix(inputEx.widget.Button.prototype,{
+I.mix(inputEx.widget.Button.prototype,{
    
    /**
  	 * set the default options
@@ -40,9 +40,9 @@ Y.mix(inputEx.widget.Button.prototype,{
    setOptions: function(options) {
       
       this.options = {};
-      this.options.id = lang.isString(options.id) ? options.id  : Y.guid();
+      this.options.id = lang.isString(options.id) ? options.id  : I.guid();
       this.options.className = options.className || "inputEx-Button";
-      this.options.parentEl = lang.isString(options.parentEl) ? Y.one("#"+options.parentEl) : options.parentEl;
+      this.options.parentEl = lang.isString(options.parentEl) ? document.getElementById(options.parentEl) : options.parentEl;
       
       // default type === "submit"
       this.options.type = (options.type === "link" || options.type === "submit-link") ? options.type : "submit";
@@ -73,7 +73,7 @@ Y.mix(inputEx.widget.Button.prototype,{
       if (this.options.type === "link" || this.options.type === "submit-link") {
          
          this.el = inputEx.cn('a', {className: this.options.className, id:this.options.id, href:"#"});
-         Y.one(this.el).addClass(this.options.type === "link" ? "inputEx-Button-Link" : "inputEx-Button-Submit-Link");
+         I.addClass(this.el,this.options.type === "link" ? "inputEx-Button-Link" : "inputEx-Button-Submit-Link");
          
          innerSpan = inputEx.cn('span', null, null, this.options.value);
          
@@ -83,7 +83,7 @@ Y.mix(inputEx.widget.Button.prototype,{
       } else {
          
          this.el = inputEx.cn('input', {type: "submit", value: this.options.value, className: this.options.className, id:this.options.id});
-         Y.one(this.el).addClass("inputEx-Button-Submit");
+         I.addClass(this.el,"inputEx-Button-Submit");
       }
       
       parentEl.appendChild(this.el);
@@ -114,7 +114,7 @@ Y.mix(inputEx.widget.Button.prototype,{
 		 */
 		 this.publish("submit")
       
-      Y.on("click",function(e) {
+      I.on("click",function(e) {
          
          var fireSubmitEvent;
          
@@ -123,6 +123,7 @@ Y.mix(inputEx.widget.Button.prototype,{
          //  1. buttons of 'link' or 'submit-link' type don't link to any url
          //  2. buttons of 'submit' type (<input type="submit" />) don't fire a 'submit' event
          e.halt();
+         //e.preventDefault();
          
          // button disabled : don't fire clickEvent, and stop here
          if (this.disabled) {
@@ -159,7 +160,7 @@ Y.mix(inputEx.widget.Button.prototype,{
       
       this.disabled = true;
       
-      Y.one(this.el).addClass("inputEx-Button-disabled");
+      I.addClass(this.el,"inputEx-Button-disabled");
       
       if (this.options.type === "submit") {
          this.el.disabled = true;
@@ -173,7 +174,7 @@ Y.mix(inputEx.widget.Button.prototype,{
       
       this.disabled = false;
       
-      Y.one(this.el).removeClass("inputEx-Button-disabled");
+      I.removeClass(this.el,"inputEx-Button-disabled");
       
       if (this.options.type === "submit") {
          this.el.disabled = false;
@@ -191,10 +192,10 @@ Y.mix(inputEx.widget.Button.prototype,{
       this.detach("click");
       
       // Purge element (remove listeners on el and childNodes recursively)
-      Y.Event.purgeElement(this.el);
+      I.purgeElement(this.el);
       
       // Remove from DOM
-      if(Y.one(this.el).inDoc()) {
+      if(I.inDoc(this.el)) {
          this.el.parentNode.removeChild(this.el);
       }
       
@@ -202,7 +203,7 @@ Y.mix(inputEx.widget.Button.prototype,{
    
    
 });
-  Y.augment(inputEx.widget.Button, Y.EventTarget, null, null, {});
+  I.augment(inputEx.widget.Button, I.EventTarget, null, null, {});
 },'3.0.0a',{
   requires:["inputex"]
 });

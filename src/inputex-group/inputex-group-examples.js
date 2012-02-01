@@ -1,5 +1,7 @@
 gI.addExamples("inputex-group", {
-              keyObject: "",list:[{
+              keyObject: "",
+              requires:["inputex-select","inputex-email","inputex-checkbox","inputex-radio","inputex-url","inputex-list"],
+              list:[{
 		title:"Basic Group creation",
 		description:"Use the following code to create a basic inputEx group.",
 		fn:function(parentEl,I){
@@ -44,7 +46,7 @@ gI.addExamples("inputex-group", {
 			});
 
 			var setValueButton = I.cn('button', null, null, "SetValue");
-			Y.one(setValueButton).on('click', function() {
+			I.on('click', function() {
 				group3.setValue({
 					title: 'Mme',
 					firstname: 'Eric',
@@ -53,7 +55,7 @@ gI.addExamples("inputex-group", {
 					email: 'something@email.com',
 					website: 'http://neyric.github.com/inputex',
 					yellow: true
-				});
+				},setValueButton);
 				// when you don't pass all values, default values are applied
 				// to missing fields (e.g. : 'blue' and 'red' fields)
 				
@@ -93,11 +95,11 @@ gI.addExamples("inputex-group", {
 					var field5 = new I.Group({parentEl: parentEl, fields: contactFormFields2});
 					var button5 = I.cn('button', null, null, 'Get value');
 					document.getElementById(parentEl).appendChild(button5);
-					Y.one(button5).on('click', function() {
+					I.on('click', function() {
 						alert( Y.JSON.stringify(field5.getValue()) );
-					});
+					},button5);
 					var setValueButton = I.cn('button', null, null, "SetValue");
-					Y.one(setValueButton).on('click', function() {
+					I.on('click', function() {
 						field5.setValue({
 							title: 'Mme',
 							firstname: 'Eric',
@@ -110,14 +112,14 @@ gI.addExamples("inputex-group", {
 							   fax:"911"
 							}
 						});
-					});
+					},setValueButton);
 					var el = document.getElementById(parentEl);
 					el.appendChild(setValueButton);
 					var validButton = I.cn('button', null, null, 'Validate');
 					document.getElementById(parentEl).appendChild(validButton);
-					Y.one(validButton).on("click", function() {
+					I.on("click", function() {
 						alert( field5.validate() );
-					});
+					},validButton);
 		}},{
 		title:"Field descriptions",
 		description:"Specify field descriptions",

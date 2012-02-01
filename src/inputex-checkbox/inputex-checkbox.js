@@ -1,7 +1,7 @@
 /**
  * @module inputex-checkbox
  */
-Gi.addModule("inputex-checkbox",function(I){
+gI.addModule("inputex-checkbox",function(I){
 
    var lang = I.Lang;
 

@@ -1,7 +1,7 @@
 /**
  * @module inputex-list
  */
-Gi.addModule("inputex-list",function(I){
+gI.addModule("inputex-list",function(I){
 	
    var lang = I.Lang;
 	
@@ -413,8 +413,14 @@ I.extend(I.ListField,I.Field, {
 	      return;
 	   }
 	      
+	   var bool =true,el = e.target;
 	   // Get the wrapping div element
-	   var elementDiv = e.target.ancestor(".inputEx-List-child")._node;
+	   while(el && bool){
+	       el = el.parentNode;
+	       el && (bool = !I.hasClass(el,"inputEx-List-child"));
+	   }
+	   
+	   var elementDiv = el;
 	   
 	   // Get the index of the subField
 	   var index = -1;

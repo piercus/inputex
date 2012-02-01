@@ -1,7 +1,7 @@
 /**
  * @module inputex-choice
  */
-Gi.addModule("inputex-choice", function(I){
+gI.addModule("inputex-choice", function(I){
 	
 	var lang = I.Lang;
 	

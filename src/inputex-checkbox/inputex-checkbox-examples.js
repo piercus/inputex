@@ -15,10 +15,12 @@ gI.addExamples("inputex-checkbox", {
 		description:"In its simplest form, the CheckBox returns <i>true</i> if checked, <i>false</i> otherwise.",
 		fn:function(parentEl,I){			
 			var field1 = new I.CheckBox({rightLabel: 'I return true/false', parentEl: parentEl});
-			
-			Y.Node.create("<button>getValue()</button>").appendTo('#container3').on('click', function() {
+			var b = document.createElement("button");
+			b.innerHTML = "getValue";
+			document.getElementById(parentEl).appendChild(b);
+			b.onclick = function(){
 				alert( field1.getValue() );
-			});
+			};
 		}},{
 		title:"Changing the returned values",
 		description:"You can return different values if needed.",
@@ -27,17 +29,26 @@ gI.addExamples("inputex-checkbox", {
 var field2 = new I.CheckBox({sentValues: ['Yes', 'No'], rightLabel: 'Do you agree ?', parentEl: parentEl, value: 'Yes'});
 
 
-Y.Node.create("<button>getValue()</button>").appendTo('#container4').on('click', function() {
-  alert( field2.getValue() );
-});
+var b1 = document.createElement("button");
+b1.innerHTML = "getValue";
+document.getElementById(parentEl).appendChild(b1);
+b1.onclick = function(){
+	alert( field2.getValue() );
+};
 
-Y.Node.create("<button>setValue('No')</button>").appendTo('#container4').on('click', function() {
-  field2.setValue('No');
-});
+var b2 = document.createElement("button");
+b2.innerHTML = "setValue('No')";
+document.getElementById(parentEl).appendChild(b2);
+b2.onclick = function(){
+	field2.setValue('No');
+};
 
-Y.Node.create("<button>setValue('Yes')</button>").appendTo('#container4').on('click', function() {
-  field2.setValue('Yes');
-});
+var b3 = document.createElement("button");
+b3.innerHTML = "setValue('Yes')";
+document.getElementById(parentEl).appendChild(b3);
+b3.onclick = function(){
+	field2.setValue('Yes');
+};
 
 		}},{
 		title:"Updated event",

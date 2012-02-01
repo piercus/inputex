@@ -1,9 +1,10 @@
 gI.addExamples("inputex-multi", {
-              keyObject: "",list:[{
+              keyObject: "MultiField",
+              requires : ["inputex-url","inputex-select","inputex-label"],
+              list:[{
 		title:"Basic MultiField creation (With Label Field)",
 		description:"Use the following code to create a basic inputEx MultiField.",
-		fn:function(parentEl,I){
-		var field = new I.MultiField({
+		config: {
 			name: 'websiteUrl', 
 			listLabel: 'Websites',
 			addField: {'type':"select", choices: [
@@ -12,30 +13,36 @@ gI.addExamples("inputex-multi", {
 			    'http://www.google.com', 
 			    'http://www.yahoo.com',
 			    'http://www.sncf.com',
-				'http://www.clicrdv.com',
+				'http://www.clicrdv.com',   
 				'http://www.neyric.com',
 				'http://javascript.neyric.com/wireit'
-			]},
-			parentEl: parentEl
-		});
+			]}
+		},
+		test: function(I,field,errCb){
+		  if( !(field.addField&&I.inDoc(field.addField.divEl))){
+		     errCb("no add field");   
+		  }
+		},
+		/*
 		var button = I.cn('button', null, null, 'getValue()');
 		document.getElementById(parentEl).appendChild(button); 
-		Y.one(button).on('click', function() { alert( Y.JSON.stringify(field.getValue())); });  
+		I.on('click', function() { alert( Y.JSON.stringify(field.getValue())); },button)  
 		var button2 = I.cn('button', null, null, 'setValue()');
 		document.getElementById(parentEl).appendChild(button2); 
-		Y.one(button2).on('click', function() {
+		I.on('click', function() {
 			field.setValue(['http://www.sncf.com',
 											'http://www.clicrdv.com',
 											'http://www.neyric.com',
 											'http://javascript.neyric.com/wireit']);			
-		});
+		},button2)
 		var button3 = I.cn('button', null, null, 'Clear');
 		document.getElementById(parentEl).appendChild(button3); 
-		Y.one(button3).on('click', function() {
+		I.on('click', function() {
 			field.setValue([]);
-		});
+		},button3)*/
 	
-  }},{
+ // }
+  },{
 		title:"MultiField creation with url Field",
 		description:"Use the following code to create a basic inputEx Multi with an url element field.",
 		fn:function(parentEl,I){
@@ -57,15 +64,15 @@ gI.addExamples("inputex-multi", {
 		});
 		var button = I.cn('button', null, null, 'getValue()');
 		document.getElementById(parentEl).appendChild(button); 
-		Y.one(button).on('click', function() { alert( Y.JSON.stringify(field.getValue())); });  
+		I.on('click', function() { alert( I.JSON.stringify(field.getValue())); },button)  
 
 		var button3 = I.cn('button', null, null, 'Clear');
 		document.getElementById(parentEl).appendChild(button3); 
-		Y.one(button3).on('click', function() {
+		I.on('click', function() {
 			field.setValue([]);
-		});
+		},button3)
 	
-  }},{
+  }}/*,{
 		title:"Basic MultiField With elementType as a function",
 		description:"Use the following code to create a basic inputEx MultiField, the element is function of the value selected.",
 		fn:function(parentEl,I){
@@ -101,13 +108,13 @@ gI.addExamples("inputex-multi", {
 		});
 		var button = I.cn('button', null, null, 'getValue()');
 		document.getElementById(parentEl).appendChild(button); 
-		Y.one(button).on('click', function() { alert( Y.JSON.stringify(field.getValue())); });  
+		I.on('click', function() { alert( Y.JSON.stringify(field.getValue())); },button)  
 
 		var button3 = I.cn('button', null, null, 'Clear');
 		document.getElementById(parentEl).appendChild(button3); 
-		Y.one(button3).on('click', function() {
+		I.on('click', function() {
 			field.setValue([]);
-		});
+		},button3)
 	
   }},{
 		title:"Basic MultiField With Autocomplete",
@@ -206,4 +213,4 @@ gI.addExamples("inputex-multi", {
 			addField: addField,
 			parentEl: parentEl
 		});
-  }}]});
+  }}*/]});

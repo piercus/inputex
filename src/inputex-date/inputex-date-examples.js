@@ -21,11 +21,11 @@ gI.addExamples("inputex-date", {
 
 			var button1 = I.cn('button', null, null, 'setValue()');
 			exampleDiv.appendChild(button1); 
-			Y.one(button1).on('click', function() { dateField.setValue("11/26/1980"); });
+			I.on('click', function() { dateField.setValue("11/26/1980"); },button1)
 
 			var button2 = I.cn('button', null, null, 'getValue()');
 			exampleDiv.appendChild(button2); 
-			Y.one(button2).on('click', function() { alert(dateField.getValue()); });
+			I.on('click', function() { alert(dateField.getValue()); },button2)
 		}},{
 		title:"Use a string input/output formatting",
 		description:"The setValue/getValue methods will parse/format the dates to the <i>valueFormat</i> option.",
@@ -43,10 +43,10 @@ gI.addExamples("inputex-date", {
 			// Set the value according to the valueFormat
 			var button1 = I.cn('button', null, null, 'setValue()');
 			exampleDiv.appendChild(button1); 
-			Y.one(button1).on('click', function() { stringdateField.setValue("1980-11-16"); });
+			I.on('click', function() { stringdateField.setValue("1980-11-16"); },button1)
 
 			// The returned value will use the valueFormat too
 			var button2 = I.cn('button', null, null, 'getValue()');
 			exampleDiv.appendChild(button2); 
-			Y.one(button2).on('click', function() { alert(stringdateField.getValue()); });
+			I.on('click', function() { alert(stringdateField.getValue()); },button2)
 		}}]});
