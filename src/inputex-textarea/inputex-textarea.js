@@ -1,9 +1,9 @@
 /**
  * @module inputex-textarea
  */
-YUI.add("inputex-textarea",function(Y){
+gI.addModule("inputex-textarea",function(I){
 
-   var inputEx = Y.inputEx;
+   var inputEx = I;
 /**
  * Create a textarea input
  * @class inputEx.Textarea
@@ -18,7 +18,7 @@ YUI.add("inputex-textarea",function(Y){
 inputEx.Textarea = function(options) {
 	inputEx.Textarea.superclass.constructor.call(this,options);
 };
-Y.extend(inputEx.Textarea, inputEx.StringField, {
+I.extend(inputEx.Textarea, inputEx.StringField, {
 
    /**
     * Set the specific options (rows and cols)
@@ -43,10 +43,10 @@ Y.extend(inputEx.Textarea, inputEx.StringField, {
       
       // Attributes of the input field
       var attributes = {};
-      attributes.id = this.divEl.id?this.divEl.id+'-field':YAHOO.util.Dom.generateId();
+      attributes.id = this.divEl.id?this.divEl.id+'-field':I.guid();
       // firefox bug (reported since year 2000 !): one extra row is always added by browser
 		//                                           (see : https://bugzilla.mozilla.org/show_bug.cgi?id=33654)
-      attributes.rows = !!Y.UA.gecko ? this.options.rows - 1 : this.options.rows;
+      attributes.rows = !!I.UA.gecko ? this.options.rows - 1 : this.options.rows;
       attributes.cols = this.options.cols;
       if(this.options.name) { attributes.name = this.options.name; }
       if(this.options.readonly) { attributes.readonly = 'readonly'; }

@@ -210,11 +210,11 @@ gI.addModule("inputex-field",function(I) {
 	     
 	     // add new class
 	     state = state || this.getState();
-	     //if( !(state == I.stateEmpty && I.hasClass(this.divEl,'inputEx-focused') ) {
+	     if( !(state == I.stateEmpty && I.hasClass(this.divEl,'inputEx-focused') ) ) {
 	        // add invalid className for both required and invalid fields
-	       // className = 'inputEx-';//+((state == I.stateRequired) ? I.stateInvalid : state);
-	        //I.addClass(this.divEl,className);
-        //}
+	        className = 'inputEx-'+((state == I.stateRequired) ? I.stateInvalid : state);
+	        I.addClass(this.divEl,className);
+        }
 	
 	     if(this.options.showMsg) {
 	        this.displayMessage( this.getStateString(state) );
