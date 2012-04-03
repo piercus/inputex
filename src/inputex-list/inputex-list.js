@@ -293,7 +293,7 @@ I.extend(I.ListField,I.Field, {
 	   newDiv.appendChild( I.cn('div', null, {clear: "both"}) );
 	   
 	   if(this.options.appendFirst){
-	        //this.childContainer.insert(newDiv,0);
+	        I.insert(newDiv,this.childContainer.children[0])
 	   } else {
 	       this.childContainer.appendChild(newDiv);
 	   }

@@ -101,8 +101,8 @@ I.extend(I.StringField, I.Field, {
      I.on("blur", this.onBlur,this.el, this);
      // bug to scope event handlers in this context
      var that = this;
-     I.on("key", function(e,scope){ that.onKeyPress.call(that,e); },this.el, "press",this);
-     I.on("key", function(e,scope){ that.onKeyUp.call(that,e); },this.el, 'up',this);
+     I.on("key", function(e,scope){ return that.onKeyPress.call(that,e); },this.el, "press",this);
+     I.on("key", function(e,scope){ return that.onKeyUp.call(that,e); },this.el, 'up',this);
    },
 
    /**

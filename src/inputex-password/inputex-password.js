@@ -1,9 +1,9 @@
 /**
  * @module inputex-password
  */
-YUI.add("inputex-password", function(Y){
+gI.addModule("inputex-password", function(I){
 
-   var inputEx = Y.inputEx,lang=Y.Lang;
+   var inputEx = I,lang=I.Lang;
 	
 /**
  * Create a password field.
@@ -27,7 +27,7 @@ inputEx.PasswordField = function(options) {
  */
 inputEx.PasswordField.byId = {}; 
 
-Y.extend(inputEx.PasswordField, inputEx.StringField, {
+I.extend(inputEx.PasswordField, inputEx.StringField, {
    
 	/**
 	 * Add the password regexp, strengthIndicator, capsLockWarning
@@ -93,7 +93,7 @@ Y.extend(inputEx.PasswordField, inputEx.StringField, {
 		   for(var i = 0 ; i < 4 ; i++) {
 		      var lamp = inputEx.cn('div', {className: 'inputEx-Password-StrengthIndicatorBlock'});
 		      this.strengthEl.appendChild( lamp );
-		      this.strengthBlocks[i] = Y.one(lamp);
+		      this.strengthBlocks[i] = lamp;
 		   }
 		   this.wrapEl.appendChild(this.strengthEl);
 		}
@@ -201,7 +201,7 @@ Y.extend(inputEx.PasswordField, inputEx.StringField, {
         for(i = 0 ; i < 4 ; i++) {
            on = (strength >= i*25) && (strength>0);
            bgColor = on ? "#4AE817" : "#FFFFFF";
-           this.strengthBlocks[i].setStyle("backgroundColor", bgColor);
+           I.setStyle(this.strengthBlocks[i],"backgroundColor", bgColor);
 		  }
      }
    

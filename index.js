@@ -9,10 +9,13 @@
 //= require ./src/inputex/inputex
 //= require ./src/inputex/lang/inputex_fr
 //= require ./src/inputex-field/inputex-field
+//= require ./src/inputex-checkbox/inputex-checkbox
+//= require ./src/inputex-radio/inputex-radio
 //= require ./src/inputex-label/inputex-label
 //= require ./src/inputex-multi/inputex-multi
 //= require ./src/inputex-textarea/inputex-textarea
 //= require ./src/inputex-string/inputex-string
+//= require ./src/inputex-password/inputex-password
 //= require ./src/inputex-choice/inputex-choice
 //= require ./src/inputex-button/inputex-button
 //= require ./src/inputex-group/inputex-group

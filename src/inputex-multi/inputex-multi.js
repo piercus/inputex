@@ -34,6 +34,13 @@ gI.addModule("inputex-multi",function(I){
 	},
 	renderAddComponent: function(){
 	    this.addField = I.inputEx(I.mix(this.options.addField,{parentEl : this.fieldContainer}));
+	    
+	    this.addField.onKeyPress = function(e){
+	      if (e.keyCode == 13) {
+	        this.fireUpdatedEvt();
+	        return false;
+	      }
+	    }
 	},
 	initEvents: function(){
 	    this.addField.on("updated", this.onAddFieldUpdate, this, true);

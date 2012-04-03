@@ -203,7 +203,30 @@ if(typeof(gI) === "undefined"){
           if(args[0] == "domready"){
               jQ(window).ready(args[1]);
               return;
-          } else {
+          } else if(args[0] === "key"){
+            var fn = args[1],
+                 el = args[2],
+                 type = args[3],
+                 scope = args[4];
+           
+            var cb = function(e){
+              e.halt = function(){
+                //console.log("halt")
+                if(window.event){
+                         this.cancelBubble=true;//In IE
+                }else{
+                         this.stopPropagation();//in Others
+                }
+                this.preventDefault();
+              }
+              return fn.call(scope,e);
+             }
+             if(type === "press"){
+               return jQ(el).keypress(cb);
+             } else if(type === "up"){
+               return jQ(el).keyup(cb);
+             }
+          }else {
              var action = args[0],
                  fn = args[1],
                  el = args[2],
