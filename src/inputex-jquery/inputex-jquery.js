@@ -148,6 +148,11 @@ if(typeof(gI) === "undefined"){
               },
               trim : function(obj){
                   return jQ.trim(obj);
+              },
+              later: function(time,scope,fn){
+                setTimeout(function(){
+                  fn.call(scope);
+                },time)
               }
           } 
         },
