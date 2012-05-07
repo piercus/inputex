@@ -1,5 +1,3 @@
-
-
 //gI means globalInputEx
 if(typeof(gI) === "undefined"){
     var gI = {modules:{}};
