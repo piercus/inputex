@@ -176,7 +176,7 @@ if(typeof(gI) === "undefined"){
           };
 
           // to do
-          //this.purgeElement = function(){ return evt.purgeElement();};
+          this.purgeElement = function(el){ return r.jQ(el).off();};
           
           this.EventTarget.prototype = {
               publish: function(evtName){
