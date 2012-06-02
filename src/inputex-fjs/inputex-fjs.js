@@ -175,10 +175,7 @@ if(typeof(gI) === "undefined"){
               arguments[0].superclass = jQ.extend(arguments[1].prototype,{ constructor : arguments[1]});
           };
 
-          // to do
-          this.purgeElement = function(el){
-            return jQ(el).die();
-          };
+          this.purgeElement = function(el){ return r.jQ(el).off();};
           
           this.EventTarget.prototype = {
               publish: function(evtName){
