@@ -36,8 +36,10 @@ if(typeof(gI) === "undefined"){
                   requires.push(arguments[i].requires[j]); 
                 }
               }
+              if(name!=="inputex"){
+                requires.push("lang/inputex_fr");
+              }
               requires.push("inputex/fjs->lI");
-              requires.push("lang/inputex_fr");
               args[1] = requires;
           } else if(i === 0){
             name = arguments[i];
@@ -107,7 +109,7 @@ if(typeof(gI) === "undefined"){
           //       });
           this.io = function(sUrl,options){
               jQ.ajax({
-                method: options.method || "GET",
+                type: options.method || "GET",
                 success: options.on.success,
                 failure: options.on.failure,
                 context: options.context,
