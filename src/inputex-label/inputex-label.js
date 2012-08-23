@@ -6,10 +6,12 @@ gI.addModule("inputex-label",function(I){
   
   I.extend( I.LabelField,I.HiddenField,{
     setOptions: function(options) {
-      if( !options.label){
-          options.label = options.value || "";
+
+      if(!options.label){
+          options.label = options.getLabel ? options.getLabel(options.value) : "";
       }
-  	   I.LabelField.superclass.setOptions.call(this, options);
+  	  I.LabelField.superclass.setOptions.call(this, options);
+  	  this.options.getLabel = options.getLabel || function(a){return a};
     },
     /**
     * Override hiddenField render with field render
@@ -30,7 +32,7 @@ gI.addModule("inputex-label",function(I){
       this.fieldContainer.appendChild(this.el);
     },
     setValue: function(value){
-        this.labelEl.innerHTML = value;
+        this.labelEl.innerHTML = this.options.getLabel(value);
         I.LabelField.superclass.setValue.call(this, value);
     }
 });

@@ -256,6 +256,16 @@ gI.addModule("inputex-select",function(I){
 		setFieldName: function(name) {
 			this.el.name = name;
     },
+    
+    // used in multi field, when select is the addField
+    getLabel : function(v){
+      for(var i = 0; i < this.choicesList.length; i++){
+        if(this.choicesList[i].value === v){
+          return this.choicesList[i].label;
+        }
+      }
+      return v;
+    }
 		
 	});
 	

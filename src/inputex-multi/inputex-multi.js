@@ -8,7 +8,16 @@ gI.addModule("inputex-multi",function(I){
     setOptions: function(options){
         I.MultiField.superclass.setOptions.call(this, options);
         // override basic value
-        this.options.elementType = options.elementType || {type: 'label'};
+        var that = this;
+        
+        
+        this.options.elementType = options.elementType || function(v){
+          return {type: 'label', getLabel: function(v){
+              return that.addField.getLabel(v);
+            }, value: v};
+        };
+        
+        
         if(typeof(options.addField.description) == "undefined" && options.description){
             options.addField.description = options.description;
             this.options.description = false;

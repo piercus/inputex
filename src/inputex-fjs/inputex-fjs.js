@@ -22,7 +22,7 @@ if(typeof(gI) === "undefined"){
                   var key = name.split("-")[1] ? capitalize(name.split("-")[1]) : name;
                   
                   fnI(r.lI);
-                  this.exports = r.lI[key];
+                  this.exports = r.lI[key] || (r.lI.widget && r.lI.widget[key]);
               };
           } else if(typeof(arguments[i]) === "object" && typeof(arguments[i].requires) === "object") {
               //console.log("in requires");
@@ -177,7 +177,6 @@ if(typeof(gI) === "undefined"){
               arguments[0].superclass = jQ.extend(arguments[1].prototype,{ constructor : arguments[1]});
           };
 
-          // to do
           this.purgeElement = function(el){ return r.jQ(el).off();};
           
           this.EventTarget.prototype = {
@@ -217,7 +216,7 @@ if(typeof(gI) === "undefined"){
                   return typeof(obj) === "function";              
               },
               isArray: function(obj){
-                  return typeof(obj) === "object" && typeof(obj.length) === "number";  
+                  return typeof(obj) === "object" && !!obj && typeof(obj.length) === "number";  
               },
               isUndefined: function(obj){
                   return typeof(obj) === "undefined";
