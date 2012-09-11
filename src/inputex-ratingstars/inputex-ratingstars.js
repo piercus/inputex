@@ -76,7 +76,7 @@ Y.extend(inputEx.RatingStars, inputEx.Field,{
    */
   renderComponent: function(){
     this.starsEls = [];
-    this.el = inputEx.cn('div');
+    this.fieldEl = inputEx.cn('div');
     for (var i = 0 ; i < this.options.nStars; i++) {
       // first, make a div and then an a-element in it
       var star = inputEx.cn('div',{id:'star-' + i, className: "inputEx-star"});
@@ -92,14 +92,14 @@ Y.extend(inputEx.RatingStars, inputEx.Field,{
       this.starsEls.push(star);
       var a = inputEx.cn('a',{href:'#' + i},null,i);
       star.appendChild(a);
-      this.el.appendChild(star);
+      this.fieldEl.appendChild(star);
 
       // add needed listeners to every star
       Y.one(star).on('mouseover', star.onHover, star, true);
       Y.one(star).on('click', star.onClick, star, true);
     } 
-    Y.one(this.el).on('mouseout', this.resetStars, this, true);
-    this.fieldContainer.appendChild(this.el);
+    Y.one(this.fieldEl).on('mouseout', this.resetStars, this, true);
+    this.fieldContainer.appendChild(this.fieldEl);
     this.divMess = this.fieldContainer.appendChild(inputEx.cn('div', {id: this.divEl.id+'-mess', className: 'inputEx-message'}, null, this.options.message ));
 
   },

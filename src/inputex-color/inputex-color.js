@@ -90,7 +90,7 @@ I.extend(inputEx.ColorField, inputEx.Field, {
 	renderComponent: function() {
 	   
 	   // A hidden input field to store the color code 
-	   this.el = inputEx.cn('input', {
+	   this.fieldEl = inputEx.cn('input', {
 	      type: 'hidden', 
 	      name: this.options.name || '', 
 	      value: this.options.value || '#FFFFFF' });
@@ -100,16 +100,16 @@ I.extend(inputEx.ColorField, inputEx.Field, {
 	
       // This element wraps the input node in a float: none div
       this.wrapEl = inputEx.cn('div', {className: 'inputEx-PickerField-wrapper'});
-	   this.wrapEl.appendChild(this.el);
+	   this.wrapEl.appendChild(this.fieldEl);
 	   
-	   //this.colorEl = inputEx.cn('div', {className: 'inputEx-ColorField-button'}, {backgroundColor: this.el.value});	   
+	   //this.colorEl = inputEx.cn('div', {className: 'inputEx-ColorField-button'}, {backgroundColor: this.fieldEl.value});	   
 	   //this.wrapEl.appendChild(this.colorEl);
 	   
 	   var colorEl,arrowUp,that = this;;
 	   this.colors = this.options.colors || this.setDefaultColors(1);
 	   // Create a colored areas
 	   for(var i = 0; i < this.colors.length; i ++){
-	     if(this.el.value === this.colors[i]){
+	     if(this.fieldEl.value === this.colors[i]){
 	       colorEl = inputEx.cn('div', {className: 'inputEx-ColorField-button selected'}, {backgroundColor: this.colors[i]});
 	       this.colorEl = colorEl;
 	     } else {
@@ -255,7 +255,7 @@ I.extend(inputEx.ColorField, inputEx.Field, {
 	 */
 	setValue: function(value, sendUpdatedEvt) {
 		
-	  this.el.value = value;
+	  this.fieldEl.value = value;
 	
 		this.markSelectedColor(value);
 
@@ -268,7 +268,7 @@ I.extend(inputEx.ColorField, inputEx.Field, {
 	 * @return {String} Color value
 	 */
 	getValue: function() {
-	   return this.el.value;
+	   return this.fieldEl.value;
 	},
 	
 	/**
@@ -320,7 +320,7 @@ I.extend(inputEx.ColorField, inputEx.Field, {
 		}
 		
 		// set background color on colorEl
-		//Y.one(this.colorEl).setStyle('backgroundColor', this.el.value);
+		//Y.one(this.colorEl).setStyle('backgroundColor', this.fieldEl.value);
 		
 	}
 	  

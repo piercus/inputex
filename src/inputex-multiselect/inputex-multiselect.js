@@ -36,7 +36,7 @@ YUI.add("inputex-multiselect", function(Y) {
 		 * Register the "change" event
 		 */
 		initEvents: function() {
-			Y.on("change", this.onAddNewItem, this.el, this);
+			Y.on("change", this.onAddNewItem, this.fieldEl, this);
 			this.ddlist.on("itemRemoved",this.onItemRemoved, this);
 			this.ddlist.on("listReordered",this.fireUpdatedEvt, this);
 		},
@@ -47,7 +47,7 @@ YUI.add("inputex-multiselect", function(Y) {
 		onItemRemoved: function(params) {
 			
 			this.showChoice({ value : params });
-			this.el.selectedIndex = 0;
+			this.fieldEl.selectedIndex = 0;
 			
 			this.fireUpdatedEvt();
 			
@@ -60,7 +60,7 @@ YUI.add("inputex-multiselect", function(Y) {
 			
 			var value, position, choice;
 			
-			if (this.el.selectedIndex !== 0) {
+			if (this.fieldEl.selectedIndex !== 0) {
 				
 				// Get the selector value
 				value = inputEx.MultiSelectField.superclass.getValue.call(this);
@@ -72,7 +72,7 @@ YUI.add("inputex-multiselect", function(Y) {
 				
 				// hide choice that has just been selected (+ select first choice)
 				this.hideChoice({ position : position });
-				this.el.selectedIndex = 0;
+				this.fieldEl.selectedIndex = 0;
 				
 				this.fireUpdatedEvt();
 				
@@ -112,7 +112,7 @@ YUI.add("inputex-multiselect", function(Y) {
 			this.ddlist.setValue(ddlistValue);
 			
 			// reset select to first choice
-			this.el.selectedIndex = 0;
+			this.fieldEl.selectedIndex = 0;
 			
 			if (sendUpdatedEvt !== false) {
 				// fire update event

@@ -44,7 +44,7 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
    /**
     * Custom event init
     * <ul>
-    *   <li>listen to autocompleter textboxBlurEvent instead of this.el "blur" event</li>
+    *   <li>listen to autocompleter textboxBlurEvent instead of this.fieldEl "blur" event</li>
     *   <li>listener to autocompleter textboxBlurEvent added in buildAutocomplete method</li>
     * </ul>
     */
@@ -73,7 +73,7 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
       if(this.options.maxLength) attributes.maxLength = this.options.maxLength;
 
       // Create the node
-      this.el = inputEx.cn('input', attributes);
+      this.fieldEl = inputEx.cn('input', attributes);
       
       // Create the hidden input
       var hiddenAttrs = {
@@ -84,7 +84,7 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
       this.hiddenEl = inputEx.cn('input', hiddenAttrs);
       
       // Append it to the main element
-      this.wrapEl.appendChild(this.el);
+      this.wrapEl.appendChild(this.fieldEl);
       this.wrapEl.appendChild(this.hiddenEl);
       this.fieldContainer.appendChild(this.wrapEl);
    
@@ -102,12 +102,12 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
     * Build the YUI autocompleter
     */
    buildAutocomplete: function() {
-      // Call this function only when this.el AND this.listEl are available
+      // Call this function only when this.fieldEl AND this.listEl are available
       if(!this._nElementsReady) { this._nElementsReady = 0; }
       this._nElementsReady++;
       if(this._nElementsReady != 2) return;
     
-      this.yEl = Y.one(this.el)
+      this.yEl = Y.one(this.fieldEl)
       this.yEl.plug(Y.Plugin.AutoComplete, this.options.autoComp);
 
       // Instantiate AutoComplete
@@ -126,9 +126,9 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
    },
 
    onBlur: function(e){
-     if(this.el.value == '' && this.options.typeInvite) {
+     if(this.fieldEl.value == '' && this.options.typeInvite) {
        Y.one(this.divEl).addClass("inputEx-typeInvite")
-       if (this.el.value == '') this.el.value = this.options.typeInvite;
+       if (this.fieldEl.value == '') this.fieldEl.value = this.options.typeInvite;
      }
   },
 
@@ -140,9 +140,9 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
     */
    setValue: function(value, sendUpdatedEvt) {
       this.hiddenEl.value = value || "";
-      this.el.value  =  value || "";
+      this.fieldEl.value  =  value || "";
       // "inherited" from inputex.Field :
-      //    (can't inherit of inputex.StringField because would set this.el.value...)
+      //    (can't inherit of inputex.StringField because would set this.fieldEl.value...)
       //
       // set corresponding style
       this.setClassFromState();
@@ -158,8 +158,8 @@ Y.extend(inputEx.AutoComplete, inputEx.StringField, {
     */
    getValue: function() {
       if(this.options.acceptOutsideValues){
-          if(this.hiddenEl.value == "" && this.el.value != ""){
-              this.setValue(this.el.value,false)
+          if(this.hiddenEl.value == "" && this.fieldEl.value != ""){
+              this.setValue(this.fieldEl.value,false)
           }
       } 
           

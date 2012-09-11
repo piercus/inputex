@@ -23,11 +23,11 @@ I.extend(I.HiddenField, I.Field, {
       this.type = I.HiddenField;
 	   this.divEl = I.cn('div', null, {display: 'none'});
 	   
-	   this.el = I.cn('input', {type: 'hidden'});
+	   this.fieldEl = I.cn('input', {type: 'hidden'});
 	   this.rawValue = ''; // initialize the rawValue with '' (default value of a hidden field)
 	
-	   if(this.options.name) this.el.name = this.options.name;
-	   this.divEl.appendChild(this.el);
+	   if(this.options.name) this.fieldEl.name = this.options.name;
+	   this.divEl.appendChild(this.fieldEl);
    },
 
    /**
@@ -38,7 +38,7 @@ I.extend(I.HiddenField, I.Field, {
    setValue: function(val, sendUpdatedEvt) {
 	
 	   // store in the hidden input (so the value is sent as "string" if HTML form submit)
-      this.el.value = val;
+      this.fieldEl.value = val;
 
       // store the value in a variable, so getValue can return it without type casting
       this.rawValue = val;

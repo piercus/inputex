@@ -81,7 +81,7 @@ gI.addModule("inputex-select",function(I){
 			var i, length;
 		
 			// create DOM <select> node
-			this.el = I.cn('select', {
+			this.fieldEl = I.cn('select', {
 			
 				id: this.divEl.id ? this.divEl.id + '-field' : I.guid(),
 				name: this.options.name || ''
@@ -97,16 +97,16 @@ gI.addModule("inputex-select",function(I){
 			}
 		
 			// append <select> to DOM tree
-			this.fieldContainer.appendChild(this.el);
+			this.fieldContainer.appendChild(this.fieldEl);
 		},
 	
 		/**
 		 * Register the "change" event
 		 */
 		initEvents: function () {
-			I.on("change", this.onChange, this.el, this);
-			I.on("focus", this.onFocus, this.el,this);
-			I.on("blur", this.onBlur, this.el,this);
+			I.on("change", this.onChange, this.fieldEl, this);
+			I.on("focus", this.onFocus, this.fieldEl,this);
+			I.on("blur", this.onBlur, this.fieldEl,this);
 		},
 	
 		/**
@@ -163,9 +163,9 @@ gI.addModule("inputex-select",function(I){
 			if(!this.choicesReady){ return ""; }
 		
 			var choiceIndex;
-			if (this.el.selectedIndex >= 0) {
+			if (this.fieldEl.selectedIndex >= 0) {
 				
-				choiceIndex = I.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
+				choiceIndex = I.indexOf(this.fieldEl.childNodes[this.fieldEl.selectedIndex], this.choicesList, function (node, choice) {
 					return node === choice.node;
 				});
 			
@@ -182,14 +182,14 @@ gI.addModule("inputex-select",function(I){
 		 * Disable the field
 		 */
 		disable: function () {
-			this.el.disabled = true;
+			this.fieldEl.disabled = true;
 		},
 
 		/**
 		 * Enable the field
 		 */
 		enable: function () {
-			this.el.disabled = false;
+			this.fieldEl.disabled = false;
 		},
 		
 		createChoiceNode: function (choice) {
@@ -205,7 +205,7 @@ gI.addModule("inputex-select",function(I){
 			//   -> style.display = 'none' would work only on FF (when node is an <option>)
 			//   -> other browsers (IE, Chrome...) require to remove <option> node from DOM
 			//
-			this.el.removeChild(node);
+			this.fieldEl.removeChild(node);
 			
 		},
 		
@@ -244,17 +244,17 @@ gI.addModule("inputex-select",function(I){
 			}
 			
 			// Insert in DOM
-			if (domPosition < this.el.childNodes.length) {
-				I.insert(this.el,node,domPosition)
+			if (domPosition < this.fieldEl.childNodes.length) {
+				I.insert(this.fieldEl,node,domPosition)
 			} else {
 				
-				this.el.appendChild(node);
+				this.fieldEl.appendChild(node);
 				
 			}
 		},	
 		// Add stringField setFieldName for classic form in group in listField
 		setFieldName: function(name) {
-			this.el.name = name;
+			this.fieldEl.name = name;
     },
     
     // used in multi field, when select is the addField

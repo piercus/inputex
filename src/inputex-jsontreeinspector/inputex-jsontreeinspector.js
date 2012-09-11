@@ -24,16 +24,16 @@ inputEx.widget.JsonTreeInspector = function(parentEl, object, cfg) {
    /**
     * Main div element
     */
-   this.el = inputEx.cn('div');
+   this.fieldEl = inputEx.cn('div');
    
    this.cfg = Y.mix({},cfg);
    this.cfg.showEmptyObjects = lang.isUndefined(this.cfg.showEmptyObjects) ? true : this.cfg.showEmptyObjects;
 
    var branch = lang.isString(this.cfg.jsonPath) ? inputEx.widget.JsonTreeInspector.jsonPath(object,this.cfg.jsonPath) : object;
    
-   this.buildBranch( branch, this.el);
+   this.buildBranch( branch, this.fieldEl);
    
-   (lang.isString(parentEl) ? document.getElementById(parentEl) : parentEl).appendChild(this.el);
+   (lang.isString(parentEl) ? document.getElementById(parentEl) : parentEl).appendChild(this.fieldEl);
 };
 
 inputEx.widget.JsonTreeInspector.prototype = {
@@ -44,12 +44,12 @@ inputEx.widget.JsonTreeInspector.prototype = {
    destroy: function() {
       
       // Remove from DOM
-      if(Y.one(this.el).inDoc()) {
-         this.el.parentNode.removeChild(this.el);
+      if(Y.one(this.fieldEl).inDoc()) {
+         this.fieldEl.parentNode.removeChild(this.fieldEl);
       }
       
       // recursively purge element
-      Y.Event.purgeElement(this.el,true);
+      Y.Event.purgeElement(this.fieldEl,true);
    },
    
    /**
@@ -174,7 +174,7 @@ inputEx.widget.JsonTreeInspector.prototype = {
     * @param {Integer} maxLevel
     */
    expandAll: function(maxLevel) {
-      var ul = this.el.childNodes[0];
+      var ul = this.fieldEl.childNodes[0];
       var liEls = ul.childNodes;
       for(var i = 0 ; i < liEls.length ; i++) {
          var li = liEls[i];

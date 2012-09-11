@@ -43,10 +43,10 @@ Y.extend(inputEx.RTEField, inputEx.Field, {
 	   var attributes = {id:id};
       if(this.options.name) { attributes.name = this.options.name; }
       
-	   this.el = inputEx.cn('textarea', attributes);
+	   this.fieldEl = inputEx.cn('textarea', attributes);
 	   
 	   inputEx.RTEfieldsNumber += 1;
-	   this.fieldContainer.appendChild(this.el);
+	   this.fieldContainer.appendChild(this.fieldEl);
 	
 	   //This is the default config
 	   var _def = {
@@ -108,12 +108,12 @@ Y.extend(inputEx.RTEField, inputEx.Field, {
 	 */
 	setValue: function(value, sendUpdatedEvt) {
 	   if(this.editor) {
-	      var iframeId = this.el.id+"_editor";
+	      var iframeId = this.fieldEl.id+"_editor";
 	      
 	      // if editor iframe not rendered
 	      if (!YAHOO.util.Dom.get(iframeId)) {
 	         // put value in textarea : will be processed by this.editor._setInitialContent (clean html, etc...)
-	         this.el.value = value;
+	         this.fieldEl.value = value;
 	         
 	      } else {
 	         this.editor.setEditorHTML(value);

@@ -42,7 +42,7 @@ I.extend(I.DateField, I.StringField, {
 	 * Specific Date validation depending of the 'format' option
 	 */
 	validate: function() {
-	   var value = this.el.value;
+	   var value = this.fieldEl.value;
 	
 		var separator = this.options.dateFormat.match(/[^Ymd ]/g)[0];
 	   var ladate = value.split(separator);

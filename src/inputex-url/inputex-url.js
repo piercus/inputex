@@ -42,10 +42,10 @@ I.extend(I.UrlField, I.StringField, {
     */
    render: function() {
       I.UrlField.superclass.render.call(this);
-      this.el.size = this.options.size;
+      this.fieldEl.size = this.options.size;
 
       if(!this.options.favicon) {
-         I.addClass(this.el, 'nofavicon');
+         I.addClass(this.fieldEl, 'nofavicon');
       }
 
       // Create the favicon image tag

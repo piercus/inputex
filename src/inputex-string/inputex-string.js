@@ -71,10 +71,10 @@ I.extend(I.StringField, I.Field, {
       attributes.autocomplete = this.options.autocomplete ? 'on' : 'off';
 
       // Create the node
-      this.el = I.cn('input', attributes);
+      this.fieldEl = I.cn('input', attributes);
 
       // Append it to the main element
-      this.wrapEl.appendChild(this.el);
+      this.wrapEl.appendChild(this.fieldEl);
       this.fieldContainer.appendChild(this.wrapEl);
    },
 
@@ -82,29 +82,29 @@ I.extend(I.StringField, I.Field, {
 	 * Set the name of the field (or hidden field)
 	 */
 	setFieldName: function(name) {
-		this.el.name = name;
+		this.fieldEl.name = name;
 	},
 
    /**
     * Register the change, focus and blur events
     */
    initEvents: function() {
-     I.on("change", this.onChange,this.el, this);
+     I.on("change", this.onChange,this.fieldEl, this);
 
        if (I.UA.ie > 0){ // refer to inputEx-95
-            var field = this.el;
+            var field = this.fieldEl;
             I.on("key", function(e){
               field.blur();
               field.focus();
-            }, this.el,'down:13', this);
+            }, this.fieldEl,'down:13', this);
        }
 
-     I.on("focus", this.onFocus,this.el, this);
-     I.on("blur", this.onBlur,this.el, this);
+     I.on("focus", this.onFocus,this.fieldEl, this);
+     I.on("blur", this.onBlur,this.fieldEl, this);
      // bug to scope event handlers in this context
      var that = this;
-     I.on("key", function(e,scope){ return that.onKeyPress.call(that,e); },this.el, "press",this);
-     I.on("key", function(e,scope){ return that.onKeyUp.call(that,e); },this.el, 'up',this);
+     I.on("key", function(e,scope){ return that.onKeyPress.call(that,e); },this.fieldEl, "press",this);
+     I.on("key", function(e,scope){ return that.onKeyUp.call(that,e); },this.fieldEl, 'up',this);
    },
 
    /**
@@ -115,7 +115,7 @@ I.extend(I.StringField, I.Field, {
       
       var value;
       
-      value = (this.options.typeInvite && this.el.value == this.options.typeInvite) ? '' : this.el.value;
+      value = (this.options.typeInvite && this.fieldEl.value == this.options.typeInvite) ? '' : this.fieldEl.value;
       
       if (this.options.trim) {
          value = lang.trim(value);
@@ -131,7 +131,7 @@ I.extend(I.StringField, I.Field, {
     */
    setValue: function(value, sendUpdatedEvt) {
 		// + check : if Null or Undefined we put '' in the stringField
-		this.el.value = ( lang.isNull(value) || lang.isUndefined(value) ) ? '' : value;
+		this.fieldEl.value = ( lang.isNull(value) || lang.isUndefined(value) ) ? '' : value;
 
       // call parent class method to set style and fire "updated" event
       I.StringField.superclass.setValue.call(this, value, sendUpdatedEvt);
@@ -166,21 +166,21 @@ I.extend(I.StringField, I.Field, {
     * Disable the field
     */
    disable: function() {
-      this.el.disabled = true;
+      this.fieldEl.disabled = true;
    },
 
    /**
     * Enable the field
     */
    enable: function() {
-      this.el.disabled = false;
+      this.fieldEl.disabled = false;
    },
 
    /**
     * Check if the field is disabled
     */
    isDisabled: function() {
-      return this.el.disabled;
+      return this.fieldEl.disabled;
    },
 
    /**
@@ -188,8 +188,8 @@ I.extend(I.StringField, I.Field, {
     */
    focus: function() {
       // Can't use lang.isFunction because IE >= 6 would say focus is not a function (IE says it's an object) !!
-      if(!!this.el && !lang.isUndefined(this.el.focus) ) {
-         this.el.focus();
+      if(!!this.fieldEl && !lang.isUndefined(this.fieldEl.focus) ) {
+         this.fieldEl.focus();
       }
    },
 
@@ -197,7 +197,7 @@ I.extend(I.StringField, I.Field, {
     * Add the minLength string message handling
     */
 	getStateString: function(state) {
-	   if(state == I.stateInvalid && this.options.minLength && this.el.value.length < this.options.minLength) {
+	   if(state == I.stateInvalid && this.options.minLength && this.fieldEl.value.length < this.options.minLength) {
 	      return I.messages.stringTooShort[0]+this.options.minLength+I.messages.stringTooShort[1];
       }
 	   return I.StringField.superclass.getStateString.call(this, state);
@@ -223,7 +223,7 @@ I.extend(I.StringField, I.Field, {
          // show type invite if field is empty
          if(this.isEmpty()) {
 	         I.addClass(this.divEl, "inputEx-typeInvite");
-	         this.el.value = this.options.typeInvite;
+	         this.fieldEl.value = this.options.typeInvite;
 
 	      // important for setValue to work with typeInvite
          } else {
@@ -234,7 +234,7 @@ I.extend(I.StringField, I.Field, {
       } else {
 	      if(I.hasClass(this.divEl, "inputEx-typeInvite")) {
 	         // remove text
-	         this.el.value = "";
+	         this.fieldEl.value = "";
 
 	         // remove the "empty" state and class
 	         this.previousState = null;

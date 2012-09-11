@@ -46,9 +46,9 @@ I.extend(I.CheckBox, I.Field, {
 	renderComponent: function() {
 	
    	var checkBoxId = this.divEl.id?this.divEl.id+'-field':I.guid();
-	   this.el = I.cn('input', { id: checkBoxId, type: 'checkbox' });
+	   this.fieldEl = I.cn('input', { id: checkBoxId, type: 'checkbox' });
 
-	   this.fieldContainer.appendChild(this.el);
+	   this.fieldContainer.appendChild(this.fieldEl);
 	
 	   this.rightLabelEl = I.cn('label', {"for": checkBoxId, className: 'inputEx-CheckBox-rightLabel'}, null, this.options.rightLabel);
 	   this.fieldContainer.appendChild(this.rightLabelEl);
@@ -67,19 +67,19 @@ I.extend(I.CheckBox, I.Field, {
 	   // Awful Hack to work in IE6 and below (the checkbox doesn't fire the change event)
 	   // It seems IE 8 removed this behavior from IE7 so it only works with IE 7 ??
 	   /*if( YAHOO.env.ua.ie && parseInt(YAHOO.env.ua.ie,10) != 7 ) {
-	      Event.addListener(this.el, "click", function() { this.fireUpdatedEvt(); }, this, true);	
+	      Event.addListener(this.fieldEl, "click", function() { this.fireUpdatedEvt(); }, this, true);	
 	   }*/
 	   if( I.UA.ie ) {
 	       // to do : wrapper branch
           // I.on("click", function(e) {
           //      I.later(10,this,function(){this.onChange(e);}); 
-          // },this.el, this);  
+          // },this.fieldEl, this);  
 	   } else {
-	     I.on("change", this.onChange,this.el, this);
+	     I.on("change", this.onChange,this.fieldEl, this);
 	   }
 	   
-	   I.on("focus", this.onFocus,this.el , this);
-	   I.on("blur", this.onBlur, this.el, this);
+	   I.on("focus", this.onFocus,this.fieldEl , this);
+	   I.on("blur", this.onBlur, this.fieldEl, this);
 	},
 	   
 	/**
@@ -87,7 +87,7 @@ I.extend(I.CheckBox, I.Field, {
 	 * @param {Event} e The original 'change' event
 	 */
 	onChange: function(e) {
-	   this.hiddenEl.value = this.el.checked ? this.checkedValue : this.uncheckedValue;
+	   this.hiddenEl.value = this.fieldEl.checked ? this.checkedValue : this.uncheckedValue;
 	
 	   I.CheckBox.superclass.onChange.call(this,e);
 	},
@@ -97,7 +97,7 @@ I.extend(I.CheckBox, I.Field, {
 	 * @return {Any} one of [checkedValue,uncheckedValue]
 	 */
 	getValue: function() {
-	      return this.el.checked ? this.checkedValue : this.uncheckedValue;
+	      return this.fieldEl.checked ? this.checkedValue : this.uncheckedValue;
 	},
 	
 	/**
@@ -111,13 +111,13 @@ I.extend(I.CheckBox, I.Field, {
 			this.hiddenEl.value = this.checkedValue;
 			
 			// check checkbox (all browsers)
-			this.el.checked = true;
+			this.fieldEl.checked = true;
 			
 			// hacks for IE6, because input is not operational at init, 
-			// so "this.el.checked = true" would work for default values !
+			// so "this.fieldEl.checked = true" would work for default values !
 			// (but still work for later setValue calls)
 			if (I.UA.ie === 6) {
-			   this.el.setAttribute("defaultChecked","checked"); // for IE6
+			   this.fieldEl.setAttribute("defaultChecked","checked"); // for IE6
 		   }
 		}
 	   else {
@@ -128,13 +128,13 @@ I.extend(I.CheckBox, I.Field, {
 			this.hiddenEl.value = this.uncheckedValue;
 			
 			// uncheck checkbox (all browsers)
-		   this.el.checked = false;
+		   this.fieldEl.checked = false;
 		   
 			// hacks for IE6, because input is not operational at init, 
-			// so "this.el.checked = false" would work for default values !
+			// so "this.fieldEl.checked = false" would work for default values !
 			// (but still work for later setValue calls)
 			if (I.UA.ie === 6) {
-			   this.el.removeAttribute("defaultChecked"); // for IE6
+			   this.fieldEl.removeAttribute("defaultChecked"); // for IE6
 		   }
 		}
 		
@@ -146,14 +146,14 @@ I.extend(I.CheckBox, I.Field, {
     * Disable the field
     */
    disable: function() {
-      this.el.disabled = true;
+      this.fieldEl.disabled = true;
    },
 
    /**
     * Enable the field
     */
    enable: function() {
-      this.el.disabled = false;
+      this.fieldEl.disabled = false;
    }
 	
 });   

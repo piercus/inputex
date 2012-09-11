@@ -44,7 +44,7 @@ YUI.add("inputex-multiautocompletecustom",function(Y){
       inputEx.MultiAutoComplete.superclass.renderComponent.call(this);
       this.buttonAdd = inputEx.cn('div',{className: "addButton"},{},this.labelAddButton);
       Y.on('click',this.onAdd, this.buttonAdd,this)
-      this.el.parentNode.appendChild(this.buttonAdd);
+      this.fieldEl.parentNode.appendChild(this.buttonAdd);
 
       this.ddlist = new inputEx.widget.ListCustom({
          parentEl: this.fieldContainer,
@@ -66,23 +66,23 @@ YUI.add("inputex-multiautocompletecustom",function(Y){
     * </ul>
     */
     onAdd:function(e,a){
-      if (this.el.value == "") return;
-      if (this.el.value.split(",").length != 1){
-        var values =  this.el.value.split(",");
+      if (this.fieldEl.value == "") return;
+      if (this.fieldEl.value.split(",").length != 1){
+        var values =  this.fieldEl.value.split(",");
         for( var i = 0 ; i< values.length; i++){
           this.ddlist.addItem({label: values[i], value: values[i]});
         }
       } else {
-        this.ddlist.addItem({label: this.el.value, value: this.el.value});
+        this.ddlist.addItem({label: this.fieldEl.value, value: this.fieldEl.value});
       }
-      this.el.value = "";
+      this.fieldEl.value = "";
       this.lastElemValue = "";
       this.hiddenEl.value = this.stringifyValue();
       this.fireUpdatedEvt();
     },
     clear: function(){
       this.lastElemValue = "";
-      this.el.value = "";
+      this.fieldEl.value = "";
       this.setValue([]);
     },
       /**
@@ -94,7 +94,7 @@ YUI.add("inputex-multiautocompletecustom",function(Y){
     onChange: function(e) {
       this.setClassFromState();
       // Clear the field when no value 
-      if (this.lastElemValue != this.el.value) this.lastElemValue = this.el.value;
+      if (this.lastElemValue != this.fieldEl.value) this.lastElemValue = this.fieldEl.value;
       this.hiddenEl.value = this.stringifyValue();
     },
       /**
@@ -102,14 +102,14 @@ YUI.add("inputex-multiautocompletecustom",function(Y){
     */   
     onBlur: function(e){
      //the onBlur from an old version of inputex took in the AutoComplete.js file
-     if (this.lastElemValue != this.el.value && this.el.value != this.options.typeInvite) this.el.value = this.lastElemValue;
+     if (this.lastElemValue != this.fieldEl.value && this.fieldEl.value != this.options.typeInvite) this.fieldEl.value = this.lastElemValue;
      
-     if(this.el.value == '' && this.options.typeInvite) {
+     if(this.fieldEl.value == '' && this.options.typeInvite) {
         Y.one(this.divEl).addClass( "inputEx-typeInvite");
-        this.el.value = this.options.typeInvite;
+        this.fieldEl.value = this.options.typeInvite;
      }  else if (e.target.ac){ 
              return; //do nothing
-     } else if(this.el.value !== ''){
+     } else if(this.fieldEl.value !== ''){
        this.onAdd();
      }
     },

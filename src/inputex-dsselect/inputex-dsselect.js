@@ -78,8 +78,8 @@ YUI.add("inputex-dsselect", function(Y) {
 			var i, length;
 		
 			// remove previous <option>s nodes
-			while (this.el.childNodes.length > 0) {
-				this.el.removeChild(this.el.childNodes[0]);
+			while (this.fieldEl.childNodes.length > 0) {
+				this.fieldEl.removeChild(this.fieldEl.childNodes[0]);
 			}
 		
 			// add new options
@@ -100,7 +100,7 @@ YUI.add("inputex-dsselect", function(Y) {
 		 */
 		onDatasourceFailure: function (e) { 
 			// TODO
-			this.el.innerHTML = "<option>error</option>";
+			this.fieldEl.innerHTML = "<option>error</option>";
 		}
 		
 	});

@@ -54,10 +54,10 @@ I.extend(inputEx.Textarea, inputEx.StringField, {
       //if(this.options.maxLength) attributes.maxLength = this.options.maxLength;
    
       // Create the node
-      this.el = inputEx.cn('textarea', attributes, null, this.options.value);
+      this.fieldEl = inputEx.cn('textarea', attributes, null, this.options.value);
       
       // Append it to the main element
-      this.wrapEl.appendChild(this.el);
+      this.wrapEl.appendChild(this.fieldEl);
       this.fieldContainer.appendChild(this.wrapEl);
    },
    
@@ -80,11 +80,11 @@ I.extend(inputEx.Textarea, inputEx.StringField, {
     * Add the minLength string message handling
     */
     getStateString: function(state) {
-	   if(state == inputEx.stateInvalid && this.options.minLength && this.el.value.length < this.options.minLength) {  
+	   if(state == inputEx.stateInvalid && this.options.minLength && this.fieldEl.value.length < this.options.minLength) {  
 	      return inputEx.messages.stringTooShort[0]+this.options.minLength+inputEx.messages.stringTooShort[1];
 	   
 	   // Add message too long
-      } else if (state == inputEx.stateInvalid && this.options.maxLength && this.el.value.length > this.options.maxLength) {
+      } else if (state == inputEx.stateInvalid && this.options.maxLength && this.fieldEl.value.length > this.options.maxLength) {
          return inputEx.messages.stringTooLong[0]+this.options.maxLength+inputEx.messages.stringTooLong[1];
       }
 	   return inputEx.Textarea.superclass.getStateString.call(this, state);
@@ -101,18 +101,18 @@ I.extend(inputEx.Textarea, inputEx.StringField, {
 		
 		//IE support
 		if (document.selection) {
-			this.el.focus();
+			this.fieldEl.focus();
 			sel = document.selection.createRange();
 			sel.text = text;
 		}
 		//Mozilla/Firefox/Netscape 7+ support
-		else if (this.el.selectionStart || this.el.selectionStart == '0') {
-			startPos = this.el.selectionStart;
-			endPos = this.el.selectionEnd;
-			this.el.value = this.el.value.substring(0, startPos)+ text+ this.el.value.substring(endPos, this.el.value.length);
+		else if (this.fieldEl.selectionStart || this.fieldEl.selectionStart == '0') {
+			startPos = this.fieldEl.selectionStart;
+			endPos = this.fieldEl.selectionEnd;
+			this.fieldEl.value = this.fieldEl.value.substring(0, startPos)+ text+ this.fieldEl.value.substring(endPos, this.fieldEl.value.length);
 		} 
 		else {
-			this.el.value += text;
+			this.fieldEl.value += text;
 		}	
 	}
 

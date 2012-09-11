@@ -44,7 +44,7 @@ Y.extend(inputEx.MultiSelectCustomField, inputEx.MultiSelectField,{
       
       this.ddlist = new inputEx.widget.ListCustom({classRemoveButton: this.classRemoveButton,parentEl: this.fieldContainer,listSelectOptions: this.listSelectOptions, maxItems: this.maxItems, uniqueness: true, maxItemsAlert: this.maxItemsAlert});
       this.ddlist.on("listChanged",this.fireUpdatedEvt, this, true);
-      this.el.name = ""; // we re-route the html submit features 
+      this.fieldEl.name = ""; // we re-route the html submit features 
       var hiddenAttrs = {
          type: 'hidden',
          value: ''
@@ -99,7 +99,7 @@ Y.extend(inputEx.MultiSelectCustomField, inputEx.MultiSelectField,{
      // override to add sendUpdatedEvt option 
   onItemRemoved: function(v,sendUpdatedEvt) {
      this.showChoice({ value : v.value });
-     this.el.selectedIndex = 0;
+     this.fieldEl.selectedIndex = 0;
      if(!(sendUpdatedEvt == false)){
         this.fireUpdatedEvt();
      }  
