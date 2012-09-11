@@ -130,7 +130,42 @@ I.extend(inputEx.PasswordField, inputEx.StringField, {
       }
 	   return inputEx.StringField.superclass.getStateString.call(this, state);
 	},
-	
+  
+  // we ovverride updateInvite because type=password hide content of the field
+
+  updateTypeInvite: function() {
+
+	   // field not focused
+      if (!I.hasClass(this.divEl, "inputEx-focused")) {
+
+         // show type invite if field is empty
+         if(this.isEmpty()) {
+	         I.addClass(this.divEl, "inputEx-typeInvite");
+	         this.el.setAttribute("type","");
+
+	         this.el.value = this.options.typeInvite;
+
+	      // important for setValue to work with typeInvite
+         } else {
+         		this.el.setAttribute("type","password");
+            I.removeClass(this.divEl, "inputEx-typeInvite");
+         }
+
+      // field focused : remove type invite
+      } else {
+	      if(I.hasClass(this.divEl, "inputEx-typeInvite")) {
+	         // remove text
+	         this.el.value = "";
+
+	         // remove the "empty" state and class
+	         this.previousState = null;
+	         this.el.setAttribute("type","password");
+	         I.removeClass(this.divEl,"inputEx-typeInvite");
+         }
+      }
+	},
+
+
 	/**
 	 * Update the state of the confirmation field
 	 * @param {Event} e The original input event
