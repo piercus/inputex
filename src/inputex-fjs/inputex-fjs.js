@@ -22,7 +22,7 @@ if(typeof(gI) === "undefined"){
                   var key = name.split("-")[1] ? capitalize(name.split("-")[1]) : name;
                   
                   fnI(r.lI);
-                  this.exports = r.lI[key] || (r.lI.widget && r.lI.widget[key]);
+                  this.exports = r.lI[key] || r.lI[key+"Field"] || (r.lI.widget && r.lI.widget[key]);
               };
           } else if(typeof(arguments[i]) === "object" && typeof(arguments[i].requires) === "object") {
               //console.log("in requires");
