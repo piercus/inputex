@@ -206,8 +206,8 @@ I.extend(I.StringField, I.Field, {
    /**
     * Display the type invite after setting the class
     */
-   setClassFromState: function() {
-	   I.StringField.superclass.setClassFromState.call(this);
+   setClassFromState: function(state) {
+	   I.StringField.superclass.setClassFromState.call(this,state);
 
 	   // display/mask typeInvite
 	   if(this.options.typeInvite) {
@@ -262,6 +262,7 @@ I.extend(I.StringField, I.Field, {
       if(this.options.setClassOnKeyUp){
         lang.later(0, this, this.setClassFromState);
       }
+      
       // override me
       //
       //   example :
