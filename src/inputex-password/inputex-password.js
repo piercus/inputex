@@ -72,12 +72,12 @@ I.extend(inputEx.PasswordField, inputEx.StringField, {
 	   if(this.options.name) attributes.name = this.options.name;
 	
 	   // Create the node
-		this.el = inputEx.cn('input', attributes);
+		this.fieldEl = inputEx.cn('input', attributes);
 		
 		//inputEx.PasswordField.byId
 		
 		// Append it to the main element
-		this.wrapEl.appendChild(this.el);
+		this.wrapEl.appendChild(this.fieldEl);
       this.fieldContainer.appendChild(this.wrapEl);
 		
 		// Caps lock warning
@@ -125,12 +125,47 @@ I.extend(inputEx.PasswordField, inputEx.StringField, {
 	 * Change the state string
 	 */
 	getStateString: function(state) {
-	   if(state == inputEx.stateInvalid && this.options.minLength && this.el.value.length < this.options.minLength) {  
+	   if(state == inputEx.stateInvalid && this.options.minLength && this.fieldEl.value.length < this.options.minLength) {  
 	      return inputEx.messages.invalidPassword[0]+this.options.minLength+inputEx.messages.invalidPassword[1];
       }
 	   return inputEx.StringField.superclass.getStateString.call(this, state);
 	},
-	
+  
+  // we ovverride updateInvite because type=password hide content of the field
+
+  updateTypeInvite: function() {
+
+	   // field not focused
+      if (!I.hasClass(this.divEl, "inputEx-focused")) {
+
+         // show type invite if field is empty
+         if(this.isEmpty()) {
+	         I.addClass(this.divEl, "inputEx-typeInvite");
+	         this.fieldEl.setAttribute("type","");
+
+	         this.fieldEl.value = this.options.typeInvite;
+
+	      // important for setValue to work with typeInvite
+         } else {
+         		this.fieldEl.setAttribute("type","password");
+            I.removeClass(this.divEl, "inputEx-typeInvite");
+         }
+
+      // field focused : remove type invite
+      } else {
+	      if(I.hasClass(this.divEl, "inputEx-typeInvite")) {
+	         // remove text
+	         this.fieldEl.value = "";
+
+	         // remove the "empty" state and class
+	         this.previousState = null;
+	         this.fieldEl.setAttribute("type","password");
+	         I.removeClass(this.divEl,"inputEx-typeInvite");
+         }
+      }
+	},
+
+
 	/**
 	 * Update the state of the confirmation field
 	 * @param {Event} e The original input event

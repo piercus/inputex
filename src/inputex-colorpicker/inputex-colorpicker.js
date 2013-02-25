@@ -50,7 +50,7 @@ Y.extend(inputEx.ColorPickerField, inputEx.Field, {
 	renderComponent: function() {
 		
 	   // A hidden input field to store the color code 
-	   this.el = inputEx.cn('input', {
+	   this.fieldEl = inputEx.cn('input', {
 	      type: 'hidden', 
 	      name: this.options.name || '', 
 	      value: this.options.value || '#FFFFFF'
@@ -58,7 +58,7 @@ Y.extend(inputEx.ColorPickerField, inputEx.Field, {
 	   	   
       // This element wraps the input node in a float: none div
       this.wrapEl = inputEx.cn('div', {className: 'inputEx-ColorPickerField-wrapper'});
-	   this.wrapEl.appendChild(this.el);
+	   this.wrapEl.appendChild(this.fieldEl);
 
 		// Create a Menu instance to house the ColorPicker instance
 		this.menuElId = Dom.generateId();
@@ -121,7 +121,7 @@ Y.extend(inputEx.ColorPickerField, inputEx.Field, {
 		var el = Dom.get(this.labelElId);
 		Dom.setStyle(el, "backgroundColor", sColor);
 		el.innerHTML = "Current color is " + sColor;
-		this.el.value = sColor;
+		this.fieldEl.value = sColor;
 		
 		// timer to filter very close events ("updated" event is sent only 50ms after the onRgbChange event)
 		if(this.rgbChangeTimeout) {
@@ -143,7 +143,7 @@ Y.extend(inputEx.ColorPickerField, inputEx.Field, {
 	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the 'updated' event or not (default is true, pass false to NOT send the event)
 	 */
 	setValue: function(value, sendUpdatedEvt) {
-	   this.el.value = value;
+	   this.fieldEl.value = value;
 		
 		if(this.oButton) {
 			this.oButton.set("value", value);
@@ -173,7 +173,7 @@ Y.extend(inputEx.ColorPickerField, inputEx.Field, {
 	 * @return {String} Color value
 	 */
 	getValue: function() {
-	   return this.el.value;
+	   return this.fieldEl.value;
 	}
 	  
 }); 

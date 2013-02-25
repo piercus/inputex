@@ -12,13 +12,13 @@ YUI.add("inputex-smdtester", function(Y){
  */
 inputEx.RPC.SMDTester = function(parentEl, smdList) {
 	
-	this.el = document.getElementById(parentEl);
+	this.fieldEl = document.getElementById(parentEl);
 	
 	var selectStr = 'select smd';
 	inputEx({
 		type: 'select',
 		label: "SMD",
-		parentEl: this.el,
+		parentEl: this.fieldEl,
 		choices: [{ value: selectStr }].concat((function() {
 			var arr = [], i, length;
 			for (i = 0, length = smdList.length; i < length; i += 1) {
@@ -38,21 +38,21 @@ inputEx.RPC.SMDTester = function(parentEl, smdList) {
 	}, this, true);
 	
 	this.smdDescriptionEl = inputEx.cn('p');
-	this.el.appendChild( this.smdDescriptionEl );
+	this.fieldEl.appendChild( this.smdDescriptionEl );
 	
 	this.serviceMethodEl = inputEx.cn('div');
-	this.el.appendChild( this.serviceMethodEl );
+	this.fieldEl.appendChild( this.serviceMethodEl );
 	
 	this.methodDescriptionEl = inputEx.cn('p');
-	this.el.appendChild( this.methodDescriptionEl );
+	this.fieldEl.appendChild( this.methodDescriptionEl );
 	
 	this.formContainerEl = inputEx.cn('div');
-	this.el.appendChild( this.formContainerEl );
+	this.fieldEl.appendChild( this.formContainerEl );
 	
 	
 	this.treeContainerEl = inputEx.cn('div');
 	this.treeContainerEl.appendChild( inputEx.cn('p', null, null, 'Results :') );
-	this.el.appendChild( this.treeContainerEl );
+	this.fieldEl.appendChild( this.treeContainerEl );
 };
 	
 inputEx.RPC.SMDTester.prototype = {

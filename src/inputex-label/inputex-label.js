@@ -25,11 +25,11 @@ gI.addModule("inputex-label",function(I){
     renderComponent: function() {
 
       // Create the node
-      this.el = I.cn('input', {type: 'hidden'});
+      this.fieldEl = I.cn('input', {type: 'hidden'});
       this.rawValue = '';
-      if(this.options.name) this.el.name = this.options.name;
+      if(this.options.name) this.fieldEl.name = this.options.name;
       // Append it to the main element
-      this.fieldContainer.appendChild(this.el);
+      this.fieldContainer.appendChild(this.fieldEl);
     },
     setValue: function(value){
         this.labelEl.innerHTML = this.options.getLabel(value);

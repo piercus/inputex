@@ -1,6 +1,11 @@
 //gI means globalInputEx
 if(typeof(gI) === "undefined"){
-    var gI = {modules:{}};
+    if(typeof (GLOBAL) !== "undefined"){
+      GLOBAL.gI = {modules:{}};
+      var gI = GLOBAL.gI;
+    } else {
+      var gI = {modules:{}};
+    }
 }
 
 (function(){
@@ -12,7 +17,7 @@ if(typeof(gI) === "undefined"){
     };
     gl.addModule = function(){
       
-      var modules = [], fnI, fnY, afterModules,args = [null,null,null], requires = [],fjsName;
+      var modules = [], fnI, fnY, afterModules,args = [null,null,null], requires = [],sandName;
       for(var i = 0; i < arguments.length; i++){
           var name; 
           if(typeof(arguments[i]) == "function"){
@@ -22,7 +27,13 @@ if(typeof(gI) === "undefined"){
                   var key = name.split("-")[1] ? capitalize(name.split("-")[1]) : name;
                   
                   fnI(r.lI);
-                  this.exports = r.lI[key] || (r.lI.widget && r.lI.widget[key]);
+
+                  if(name == "inputex"){
+                    this.exports = r.lI;
+                  } else {
+                    this.exports = r.lI[key] || r.lI[key+"Field"] || (r.lI.widget && r.lI.widget[key]);
+                  }
+                  
               };
           } else if(typeof(arguments[i]) === "object" && typeof(arguments[i].requires) === "object") {
               //console.log("in requires");
@@ -36,20 +47,22 @@ if(typeof(gI) === "undefined"){
                   requires.push(arguments[i].requires[j]); 
                 }
               }
-              requires.push("inputex/fjs->lI");
-              requires.push("lang/inputex_fr");
+              if(name!=="inputex"){
+                requires.push("lang/inputex_en");
+              } 
+              requires.push("inputex/sand->lI");
               args[1] = requires;
           } else if(i === 0){
             name = arguments[i];
             if(arguments[i].split("-")[1]){
-              fjsName = "inputex/"+capitalize(arguments[i].split("-")[1]); 
+              sandName = "inputex/"+capitalize(arguments[i].split("-")[1]); 
             } else {
-              fjsName = arguments[i];
+              sandName = arguments[i];
             }
-            args[0] = fjsName;
+            args[0] = sandName;
           }  
       }
-      fjs.define.apply(this,args);
+      sand.define.apply(this,args);
     };
 
     gl.localInputEx = function(r){
@@ -107,7 +120,7 @@ if(typeof(gI) === "undefined"){
           //       });
           this.io = function(sUrl,options){
               jQ.ajax({
-                method: options.method || "GET",
+                type: options.method || "GET",
                 success: options.on.success,
                 failure: options.on.failure,
                 context: options.context,
@@ -250,10 +263,10 @@ if(typeof(gI) === "undefined"){
             // from http://stackoverflow.com/questions/384286/javascript-isdom-how-do-you-check-if-a-javascript-object-is-a-dom-object
             //
             //Returns true if it is a DOM element    
-              return (
+            return (
                 typeof HTMLElement === "object" ? o instanceof HTMLElement : //DOM2
                 typeof o === "object" && o.nodeType === 1 && typeof o.nodeName==="string"
-            );
+            ) && !!o.parentNode;
         },
         mix: function(obj1,obj2){
             for(var i in obj2){
@@ -290,10 +303,10 @@ if(typeof(gI) === "undefined"){
         return array.indexOf(el);
     };
     
-    fjs.define("inputex/fjs", ["jQuery->jQ"],function(r){
+    sand.define("inputex/sand", ["jQuery->jQ"],function(r){
        //lI means localInputEx
        this.exports = new gl.localInputEx(r);
     });
-    gl.use = fjs.use;
+    gl.use = sand.use;
 
 })();

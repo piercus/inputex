@@ -67,9 +67,9 @@ Y.extend(inputEx.MenuField, inputEx.Field, {
 	  if (!this.menuReady) { return this.buildMenu(); }
       
       // Div to display the invite, then the selected text
-      this.el = inputEx.cn('div', {className:'inputEx-Result'}, null, this.options.typeInvite);
-      YAHOO.util.Dom.addClass(this.el, (this.options.menuPosition[1] == "tr") ? "inputEx-RightArrow" : "inputEx-DownArrow");
-      this.fieldContainer.appendChild(this.el);
+      this.fieldEl = inputEx.cn('div', {className:'inputEx-Result'}, null, this.options.typeInvite);
+      YAHOO.util.Dom.addClass(this.fieldEl, (this.options.menuPosition[1] == "tr") ? "inputEx-RightArrow" : "inputEx-DownArrow");
+      this.fieldContainer.appendChild(this.fieldEl);
       
       // Keep selected value in a hidden field
 	   this.hiddenEl = inputEx.cn('input', {type: 'hidden', name: this.options.name || '', value: this.options.value || ''});
@@ -142,7 +142,7 @@ Y.extend(inputEx.MenuField, inputEx.Field, {
       this.menuContainer = inputEx.cn('div');
 	   this.fieldContainer.appendChild(this.menuContainer);
 	   
-	   var context = [this.el].concat(this.options.menuPosition);
+	   var context = [this.fieldEl].concat(this.options.menuPosition);
 	   
 	   // Add generated context to the menuConfig
 	   this.options.menuConfig.context = context;
@@ -173,7 +173,7 @@ Y.extend(inputEx.MenuField, inputEx.Field, {
       this.menu.subscribe("show", this.menu.focus);
       
       // Listener to show menu
-      YAHOO.util.Event.addListener(this.el, this.options.menuTrigger, function() {
+      YAHOO.util.Event.addListener(this.fieldEl, this.options.menuTrigger, function() {
          if (!this.menu.cfg.getProperty("visible")) {
             this.menu.align();
             this.menu.show();
@@ -195,7 +195,7 @@ Y.extend(inputEx.MenuField, inputEx.Field, {
    
    setValue: function(value, sendUpdatedEvt) {
       // update text
-      this.el.innerHTML = this._textFromValue[value] || this.options.typeInvite;
+      this.fieldEl.innerHTML = this._textFromValue[value] || this.options.typeInvite;
       
       // set value
       this.hiddenEl.value = (!!this._textFromValue[value]) ? value : '';

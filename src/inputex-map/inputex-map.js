@@ -120,31 +120,31 @@ Y.extend(inputEx.MapField, inputEx.Field, {
 		var idNZoom = "inputEx-MapFieldNZoom-"+inputEx.MapFieldsNumber;
 
 		// the wrapper is needed for Virtual Earth
-		this.elWrapper = inputEx.cn('div',
+		this.fieldElWrapper = inputEx.cn('div',
 			{ id: idWrapper, style: "width: " + this.options.width + "; height: " + this.options.height },
 			null,
 			null
 		);
-		this.fieldContainer.appendChild(this.elWrapper);
+		this.fieldContainer.appendChild(this.fieldElWrapper);
 
-		this.el = inputEx.cn('div',
+		this.fieldEl = inputEx.cn('div',
 			{ id: id, style: "position: relative; width: " + this.options.width + "; height: " + this.options.height },
 			null,
 			this.options.loading
 		);
-		this.elWrapper.appendChild(this.el);
+		this.fieldElWrapper.appendChild(this.fieldEl);
 
-		this.elLat = inputEx.cn('input', { id: idLat, type: "hidden", value: this.options.lat });
-		this.fieldContainer.appendChild(this.elLat);
+		this.fieldElLat = inputEx.cn('input', { id: idLat, type: "hidden", value: this.options.lat });
+		this.fieldContainer.appendChild(this.fieldElLat);
 
-		this.elLon = inputEx.cn('input', { id: idLon, type: "hidden", value: this.options.lon });
-		this.fieldContainer.appendChild(this.elLon);
+		this.fieldElLon = inputEx.cn('input', { id: idLon, type: "hidden", value: this.options.lon });
+		this.fieldContainer.appendChild(this.fieldElLon);
 
-		this.elUZoom = inputEx.cn('input', { id: idUZoom, type: "hidden", value: this.options.uzoom });
-		this.fieldContainer.appendChild(this.elUZoom);
+		this.fieldElUZoom = inputEx.cn('input', { id: idUZoom, type: "hidden", value: this.options.uzoom });
+		this.fieldContainer.appendChild(this.fieldElUZoom);
 
-		this.elNZoom = inputEx.cn('input', { id: idNZoom, type: "hidden", value: this.options.uzoom });
-		this.fieldContainer.appendChild(this.elNZoom);
+		this.fieldElNZoom = inputEx.cn('input', { id: idNZoom, type: "hidden", value: this.options.uzoom });
+		this.fieldContainer.appendChild(this.fieldElNZoom);
 
 		if (this.apid.preload(this)) {
 			return;
@@ -160,20 +160,20 @@ Y.extend(inputEx.MapField, inputEx.Field, {
 		var any = false;
 
 		if (value.uzoom != undefined) {
-			this.elUZoom.value = value.uzoom;
+			this.fieldElUZoom.value = value.uzoom;
 			any = true;
 		} else if (value.nzoom != undefined) {
-			this.elUZoom.value = this.apid.f_zoom.to_universal(value.uzoom);
+			this.fieldElUZoom.value = this.apid.f_zoom.to_universal(value.uzoom);
 			any = true;
 		}
 
 		if (value.lat != undefined) {
-			this.elLat.value = value.lat;
+			this.fieldElLat.value = value.lat;
 			any = true;
 		}
 
 		if (value.lon != undefined) {
-			this.elLon.value = value.lon;
+			this.fieldElLon.value = value.lon;
 			any = true;
 		}
 
@@ -186,12 +186,12 @@ Y.extend(inputEx.MapField, inputEx.Field, {
 	 * return the same structure as setValue
 	 */
 	getValue: function() {
-		if (!this.elLat) return {};
+		if (!this.fieldElLat) return {};
 		return {
-			lat : parseFloat(this.elLat.value),
-			lon : parseFloat(this.elLon.value),
-			uzoom : parseInt(this.elUZoom.value),
-			nzoom : parseInt(this.elNZoom.value)
+			lat : parseFloat(this.fieldElLat.value),
+			lon : parseFloat(this.fieldElLon.value),
+			uzoom : parseInt(this.fieldElUZoom.value),
+			nzoom : parseInt(this.fieldElNZoom.value)
 		};
 	},
 
@@ -204,7 +204,7 @@ Y.extend(inputEx.MapField, inputEx.Field, {
 			return;
 		}
 
-		if (document.getElementById(this.el.id)) {
+		if (document.getElementById(this.fieldEl.id)) {
 			this.apid.create(this);
 		} else {
 			window.setTimeout(this.wait_create, 0.1, this);

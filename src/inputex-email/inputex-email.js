@@ -26,7 +26,7 @@ I.extend(I.EmailField, I.StringField, {
       // Overwrite options
       this.options.messages.invalid = I.messages.invalidEmail;
       this.options.regexp = I.regexps.email;
-		
+      this.options.className = options.className ? options.className : "inputEx-Field inputEx-EmailField";
 		// Validate the domain name ( false by default )
 		this.options.fixdomain = (I.Lang.isUndefined(options.fixdomain) ? false : !!options.fixdomain);
    },

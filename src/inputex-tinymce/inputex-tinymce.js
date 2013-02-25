@@ -66,10 +66,10 @@ Y.extend(inputEx.TinyMCEField, inputEx.Field, {
 	   var attributes = {id:id, className: "mceAdvanced"};
       if(this.options.name) { attributes.name = this.options.name; }
 
-	   this.el = inputEx.cn('textarea', attributes);
+	   this.fieldEl = inputEx.cn('textarea', attributes);
 	   
 	   inputEx.TinyMCEfieldsNumber += 1;
-	   this.fieldContainer.appendChild(this.el);
+	   this.fieldContainer.appendChild(this.fieldEl);
 			
 		this.editor = new tinymce.Editor(this.id, this.options.opts);
 

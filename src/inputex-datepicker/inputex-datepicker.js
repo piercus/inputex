@@ -50,7 +50,7 @@ Y.extend(inputEx.DatePickerField, inputEx.DateField, {
       
       Y.one( Y.DOM._getWin().document ).on('click', function(e) {
          var n = e.target._node
-         if(n != this.button._node && n != this.el) {
+         if(n != this.button._node && n != this.fieldEl) {
             this.oOverlay.hide();
          }
       },this );
@@ -97,7 +97,7 @@ Y.extend(inputEx.DatePickerField, inputEx.DateField, {
             
       // Subscribe the click handler on the field only if readonly
 		if(this.options.readonly) {
-	      Y.one(this.el).on('click', this._toggleOverlay, this);
+	      Y.one(this.fieldEl).on('click', this._toggleOverlay, this);
       }      
       
       // Subscribe to the first click

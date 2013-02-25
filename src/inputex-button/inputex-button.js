@@ -72,21 +72,21 @@ I.mix(inputEx.widget.Button.prototype,{
       
       if (this.options.type === "link" || this.options.type === "submit-link") {
          
-         this.el = inputEx.cn('a', {className: this.options.className, id:this.options.id, href:"#"});
-         I.addClass(this.el,this.options.type === "link" ? "inputEx-Button-Link" : "inputEx-Button-Submit-Link");
+         this.fieldEl = inputEx.cn('a', {className: this.options.className, id:this.options.id, href:"#"});
+         I.addClass(this.fieldEl,this.options.type === "link" ? "inputEx-Button-Link" : "inputEx-Button-Submit-Link");
          
          innerSpan = inputEx.cn('span', null, null, this.options.value);
          
-         this.el.appendChild(innerSpan);
+         this.fieldEl.appendChild(innerSpan);
          
       // default type is "submit" input
       } else {
          
-         this.el = inputEx.cn('input', {type: "submit", value: this.options.value, className: this.options.className, id:this.options.id});
-         I.addClass(this.el,"inputEx-Button-Submit");
+         this.fieldEl = inputEx.cn('input', {type: "submit", value: this.options.value, className: this.options.className, id:this.options.id});
+         I.addClass(this.fieldEl,"inputEx-Button-Submit");
       }
       
-      parentEl.appendChild(this.el);
+      parentEl.appendChild(this.fieldEl);
       
       if (this.options.disabled) {
          this.disable();
@@ -94,7 +94,7 @@ I.mix(inputEx.widget.Button.prototype,{
       
       this.initEvents();
       
-      return this.el;
+      return this.fieldEl;
    },
    
    /**
@@ -144,7 +144,7 @@ I.mix(inputEx.widget.Button.prototype,{
             this.fire("submit");
          }
          
-      },this.el,this)
+      },this.fieldEl,this)
       
       // Subscribe onClick handler
       if (this.options.onClick) {
@@ -160,10 +160,10 @@ I.mix(inputEx.widget.Button.prototype,{
       
       this.disabled = true;
       
-      I.addClass(this.el,"inputEx-Button-disabled");
+      I.addClass(this.fieldEl,"inputEx-Button-disabled");
       
       if (this.options.type === "submit") {
-         this.el.disabled = true;
+         this.fieldEl.disabled = true;
       }
    },
    
@@ -174,10 +174,10 @@ I.mix(inputEx.widget.Button.prototype,{
       
       this.disabled = false;
       
-      I.removeClass(this.el,"inputEx-Button-disabled");
+      I.removeClass(this.fieldEl,"inputEx-Button-disabled");
       
       if (this.options.type === "submit") {
-         this.el.disabled = false;
+         this.fieldEl.disabled = false;
       }
    },
    
@@ -192,11 +192,11 @@ I.mix(inputEx.widget.Button.prototype,{
       this.detach("click");
       
       // Purge element (remove listeners on el and childNodes recursively)
-      I.purgeElement(this.el);
+      I.purgeElement(this.fieldEl);
       
       // Remove from DOM
-      if(I.inDoc(this.el)) {
-         this.el.parentNode.removeChild(this.el);
+      if(I.inDoc(this.fieldEl)) {
+         this.fieldEl.parentNode.removeChild(this.fieldEl);
       }
       
    }

@@ -45,10 +45,10 @@ Y.extend(inputEx.FileField, inputEx.Field, {
    	if(this.options.accept) attributes.accept = this.options.accept;
 
       // Create the node
-      this.el = inputEx.cn('input', attributes);
+      this.fieldEl = inputEx.cn('input', attributes);
       
       // Append it to the main element
-      this.fieldContainer.appendChild(this.el);
+      this.fieldContainer.appendChild(this.fieldEl);
    }
 
 });

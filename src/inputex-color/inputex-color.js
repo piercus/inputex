@@ -1,10 +1,10 @@
 /**
  * @module inputex-color
  */
-YUI.add("inputex-color",function(Y){
+gI.addModule("inputex-color",function(I){
 	
-   var inputEx = Y.inputEx,
-       lang = Y.Lang;
+   var inputEx = I,
+       lang = I.Lang;
 	
 /**
  * Create a Color picker input field
@@ -22,7 +22,7 @@ YUI.add("inputex-color",function(Y){
 inputEx.ColorField = function(options) {
 	inputEx.ColorField.superclass.constructor.call(this,options);
 };
-Y.extend(inputEx.ColorField, inputEx.Field, {
+I.extend(inputEx.ColorField, inputEx.Field, {
    
 	/**
 	 * Adds the 'inputEx-ColorField' default className
@@ -43,46 +43,46 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
    },
    
    
-   renderOverlay: function() {
-      
-	   // Create overlay
-      this.oOverlay = new Y.Overlay({
-         visible:false,
-         zIndex: 4
-      });
-      this.oOverlay.render();
-      
-      Y.one( Y.DOM._getWin().document ).on('click', function(e) {
-         var n = e.target._node
-         if(n != this.button._node && n != this.colorEl) {
-            this.oOverlay.hide();
-         }
-      },this );
+//   renderOverlay: function() {
+//      
+//	   // Create overlay
+//      this.oOverlay = new Y.Overlay({
+//         visible:false,
+//         zIndex: 4
+//      });
+//      this.oOverlay.render();
+//      
+//      Y.one( Y.DOM._getWin().document ).on('click', function(e) {
+//         var n = e.target._node
+//         if(n != this.button._node && n != this.colorEl) {
+//            this.oOverlay.hide();
+//         }
+//      },this );
 
-   },
+//   },
    
    
-	_toggleOverlay: function(e) {
-	   
-	   // DON'T stop the event since it will be used to close other overlays...
-	   //e.stopPropagation();
-	   
-      // palette may not have been rendered yet
-      this.renderPalette();
-      
-      if(this.oOverlay.get('visible')) {
-         this.oOverlay.hide();
-      }
-      else {
-         
-         // Show menu
-         this.oOverlay.show();
+//	_toggleOverlay: function(e) {
+//	   
+//	   // DON'T stop the event since it will be used to close other overlays...
+//	   //e.stopPropagation();
+//	   
+//      // palette may not have been rendered yet
+//      this.renderPalette();
+//      
+//      if(this.oOverlay.get('visible')) {
+//         this.oOverlay.hide();
+//      }
+//      else {
+//         
+//         // Show menu
+//         this.oOverlay.show();
 
-         // align
-         this.oOverlay.set("align", {node:this.button,  points:[Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.BL]});
-      }
-      
-	},
+//         // align
+//         this.oOverlay.set("align", {node:this.button,  points:[Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.BL]});
+//      }
+//      
+//	},
    
 	/**
 	 * Render the color button and the colorpicker popup
@@ -90,30 +90,55 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
 	renderComponent: function() {
 	   
 	   // A hidden input field to store the color code 
-	   this.el = inputEx.cn('input', {
+	   this.fieldEl = inputEx.cn('input', {
 	      type: 'hidden', 
 	      name: this.options.name || '', 
 	      value: this.options.value || '#FFFFFF' });
-	   	   
-	   // Create a colored area
-	   this.colorEl = inputEx.cn('div', {className: 'inputEx-ColorField-button'}, {backgroundColor: this.el.value});
+	   	
+
+
 	
       // This element wraps the input node in a float: none div
       this.wrapEl = inputEx.cn('div', {className: 'inputEx-PickerField-wrapper'});
-	   this.wrapEl.appendChild(this.el);
-	   this.wrapEl.appendChild(this.colorEl);
-
-      
+	   this.wrapEl.appendChild(this.fieldEl);
+	   
+	   //this.colorEl = inputEx.cn('div', {className: 'inputEx-ColorField-button'}, {backgroundColor: this.fieldEl.value});	   
+	   //this.wrapEl.appendChild(this.colorEl);
+	   
+	   var colorEl,arrowUp,that = this;;
+	   this.colors = this.options.colors || this.setDefaultColors(1);
+	   // Create a colored areas
+	   for(var i = 0; i < this.colors.length; i ++){
+	     if(this.fieldEl.value === this.colors[i]){
+	       colorEl = inputEx.cn('div', {className: 'inputEx-ColorField-button selected'}, {backgroundColor: this.colors[i]});
+	       this.colorEl = colorEl;
+	     } else {
+	       colorEl = inputEx.cn('div', {className: 'inputEx-ColorField-button'}, {backgroundColor: this.colors[i]});
+	     }
+	       
+       (function(cEl,j){
+         I.on("click",function(){
+           I.removeClass(that.colorEl,"selected");	         
+           that.colorEl = cEl;
+           I.addClass(that.colorEl,"selected");
+           that.setValue(that.colors[j]);
+         },cEl)
+       })(colorEl,i);	     
+       
+	     arrowUp = inputEx.cn('div', {className: 'arrow-img'});
+	     colorEl.appendChild(arrowUp)
+	     this.wrapEl.appendChild(colorEl);
+	   }
       // Create button
-      this.button = Y.Node.create("<button>&nbsp;</button>").addClass("inputEx-ColorField-button");
-      this.button.appendTo(this.wrapEl);
+//      this.button = Y.Node.create("<button>&nbsp;</button>").addClass("inputEx-ColorField-button");
+      //this.button.appendTo(this.wrapEl);
 
       
       // toggle Menu when clicking on the button
-      this.button.on('click',this._toggleOverlay, this, true);
+      //this.button.on('click',this._toggleOverlay, this, true);
       
       // toggle Menu when clicking on colorEl
-      Y.one(this.colorEl).on('click',this._toggleOverlay,this,true);
+      //Y.one(this.colorEl).on('click',this._toggleOverlay,this,true);
       
 	   // Elements are bound to divEl
       this.fieldContainer.appendChild(this.wrapEl);
@@ -123,9 +148,9 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
 	
 	renderPalette: function() {
       
-      if(!this.oOverlay) {
-         this.renderOverlay();
-      }
+//      if(!this.oOverlay) {
+//         this.renderOverlay();
+//      }
       
       // render once !
       if (this.paletteRendered) { return; }
@@ -148,7 +173,7 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
 
       // Render the color grid
       this.colorGrid = this.renderColorGrid();
-      this.oOverlay.set('bodyContent', this.colorGrid);
+      //this.oOverlay.set('bodyContent', this.colorGrid);
 
       // Unsubscribe the event so this function is called only once
       this.button.unsubscribe("click", this.renderPalette); 
@@ -196,10 +221,10 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
          }
       }
       
-      var colorGrid = Y.one(grid);
+      var colorGrid = I.one(grid);
       
       // click event delegation
-      colorGrid.delegate("click",Y.bind(this.onColorClick,this),"div.inputEx-ColorField-square");
+      //colorGrid.delegate("click",Y.bind(this.onColorClick,this),"div.inputEx-ColorField-square");
         
 	   return colorGrid;
 	},
@@ -214,7 +239,7 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
 		e.halt();
 	   
 	   // Overlay closure
-      this.oOverlay.hide();
+      //this.oOverlay.hide();
        
 	   // SetValue
 		var color = e.currentTarget.getStyle('backgroundColor');
@@ -230,7 +255,7 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
 	 */
 	setValue: function(value, sendUpdatedEvt) {
 		
-	   this.el.value = value;
+	  this.fieldEl.value = value;
 	
 		this.markSelectedColor(value);
 
@@ -243,15 +268,15 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
 	 * @return {String} Color value
 	 */
 	getValue: function() {
-	   return this.el.value;
+	   return this.fieldEl.value;
 	},
 	
 	/**
 	 * Call overlay when field is removed
 	 */
-	close: function() {
-	  this.oOverlay.hide();
-	},
+//	close: function() {
+//	  this.oOverlay.hide();
+//	},
 	
 	/**
     * Purge all event listeners and remove the component from the dom
@@ -295,7 +320,7 @@ Y.extend(inputEx.ColorField, inputEx.Field, {
 		}
 		
 		// set background color on colorEl
-		Y.one(this.colorEl).setStyle('backgroundColor', this.el.value);
+		//Y.one(this.colorEl).setStyle('backgroundColor', this.fieldEl.value);
 		
 	}
 	  
@@ -350,8 +375,8 @@ inputEx.ColorField.ensureHexa = function (color) {
 };
 
 // Register this class as "color" type
-inputEx.registerType("color", inputEx.ColorField, []);
+//inputEx.registerType("color", inputEx.ColorField, []);
 	
 },'3.0.0a',{
-  requires: ['inputex-field','node-event-delegate','overlay']
+  requires: ['inputex-field']
 });
