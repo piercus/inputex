@@ -4,10 +4,10 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 
-//= require ./src/inputex-fjs/inputex-fjs
+//= require ./src/inputex-sand/inputex-sand
 
 //= require ./src/inputex/inputex
-//= require ./src/inputex/lang/inputex_fr
+//= require ./src/inputex/lang/inputex_en
 //= require ./src/inputex-field/inputex-field
 //= require ./src/inputex-checkbox/inputex-checkbox
 //= require ./src/inputex-radio/inputex-radio
@@ -22,5 +22,6 @@
 //= require ./src/inputex-form/inputex-form
 //= require ./src/inputex-select/inputex-select
 //= require ./src/inputex-email/inputex-email
+//= require ./src/inputex-color/inputex-color
 //= require ./src/inputex-list/inputex-list
 //= require ./src/inputex-hidden/inputex-hidden
