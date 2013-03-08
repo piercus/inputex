@@ -1,13 +1,10 @@
 /**
  * @module inputex-integer
  */
-YUI.add("inputex-integer", function(Y){
+gI.addModule("inputex-integer", function(I){
 
-   var lang = Y.Lang,
-       inputEx = Y.inputEx;
-
-   var lang = Y.Lang;
-   var inputEx = Y.inputEx;
+   var lang = I.Lang,
+       inputEx = I;
 /**
  * A field limited to number inputs
  * @class inputEx.IntegerField
@@ -22,7 +19,7 @@ inputEx.IntegerField = function(options) {
    inputEx.IntegerField.superclass.constructor.call(this,options);
 };
 
-Y.extend(inputEx.IntegerField, inputEx.StringField, {
+I.extend(inputEx.IntegerField, inputEx.StringField, {
    /**
     * Adds the negative, min, and max options
     * @param {Object} options

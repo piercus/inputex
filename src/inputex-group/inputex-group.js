@@ -166,14 +166,19 @@ I.extend(I.Group, I.Field, {
    * @param {name} the name of the field to remove
 	 */
    removeField: function(name) {
-		var field = this.getFieldByName(name),
-		    index = I.indexOf(field,this.inputs);
-		this.inputs[index] = null;
-		this.inputs = I.compactArray(this.inputs);
-		delete this.inputsNames.name;
-		field.detach("updated",this.onChange, this);
-        this.fieldset.removeChild(field.getEl());
+      var field = this.getFieldByName(name),
+          index = I.indexOf(field,this.inputs); 
+      
+      if(!field){
         return field;
+      }
+      
+      this.inputs[index] = null;
+      this.inputs = I.compactArray(this.inputs);
+      delete this.inputsNames[name];
+      field.detach("updated",this.onChange, this); 
+      this.fieldset.removeChild(field.getEl());
+      return field; 
 	},
    /**
     * Add a listener for the 'collapsible' option
@@ -418,7 +423,7 @@ I.extend(I.Group, I.Field, {
    runInteractions: function(fieldInstance,fieldValue) {
       
       var index = I.indexOf(fieldInstance, this.inputs);
-      var fieldConfig = this.options.fields[index];
+      var fieldConfig = this.options.fields[index] || fieldInstance.options;//with addField a field Instance can be added after Group instanciation
       if(lang.isUndefined(fieldConfig.interactions) ) return;
       
       // Let's run the interactions !

@@ -48,9 +48,10 @@ if(typeof(gI) === "undefined"){
                 }
               }
               if(name!=="inputex"){
-                requires.push("lang/inputex_en");
+                requires.push("inputex/lang/inputex_en");
               } 
               requires.push("inputex/sand->lI");
+              requires.push("jQuery->jQ");
               args[1] = requires;
           } else if(i === 0){
             name = arguments[i];
@@ -62,7 +63,7 @@ if(typeof(gI) === "undefined"){
             args[0] = sandName;
           }  
       }
-      sand.define.apply(this,args);
+      sand.define.apply(sand,args);
     };
 
     gl.localInputEx = function(r){
@@ -75,6 +76,9 @@ if(typeof(gI) === "undefined"){
           }
           this.hasClass = function(el,c){
             return jQ(el).hasClass(c);
+          }
+          this.delegate = function(el, sel, evt, fn){
+            return jQ(el).delegate(sel, evt, fn);
           }
           //this.hasClass
           this.copy = function(obj){

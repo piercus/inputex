@@ -139,45 +139,44 @@ gI.addModule("inputex-radio", function(I){
 		 * Listen for change events on all radios
 		 */
 		initEvents: function () {
-			// TO DO
 			// Delegate event listening because list of choices is dynamic
 			// so we can't listen on each <input type="radio" class='inputEx-RadioField-radio' />
 			
-            // var fieldContainer = this.fieldContainer, that = this;
-            // 
-            // // Change event (IE does not fire "change" event, so listen to click instead)
-            // fieldContainer.delegate(I.UA.ie ? "click" : "change", function(e, matchedEl, container) {
-            //  that.onChange(e);
-            // }, ".inputEx-RadioField-radio", "input");
-            // 
-            // // Focus / Blur events
-            // fieldContainer.delegate("focusin", function(e, matchedEl, container) {
-            //  that.onFocus(e);
-            // }, ".inputEx-RadioField-radio", "input");
-            // 
-            // fieldContainer.delegate("focusout", function(e, matchedEl, container) {
-            //  that.onBlur(e);
-            // }, ".inputEx-RadioField-radio", "input");
-            // 
-            // // AnyField events
-            // if (this.allowAnyChoice) {
-            //  
-            //  this.anyField.on('updated', function (e, params) {
-            //      
-            //      var value = params[0];
-            //      this.radioAny.value = value;
-            //      
-            //      this.setClassFromState();
-            //      
-            //      I.RadioField.superclass.onChange.call(this,e);
-            //      
-            //  }, this, true);
-            //  
-            //  // Update radio field style after editing anyField content !
-            //             if(this.anyField.el) {
-            //                I.one(this.anyField.el).on('blur', this.onBlur, this, true);
-            //             }
-            // }
+      var fieldContainer = this.fieldContainer, that = this;
+
+      // Change event (IE does not fire "change" event, so listen to click instead)
+      I.delegate(fieldContainer, ".inputEx-RadioField-radio", I.UA.ie ? "click" : "change", function(e, matchedEl, container) {
+        that.onChange(e);
+      }, "input");
+
+      // Focus / Blur events
+      I.delegate(fieldContainer, ".inputEx-RadioField-radio", "focusin", function(e, matchedEl, container) {
+        that.onFocus(e);
+      }, "input");
+
+      I.delegate(fieldContainer, ".inputEx-RadioField-radio", "focusout", function(e, matchedEl, container) {
+        that.onBlur(e);
+      },  "input");
+
+      // AnyField events
+      if (this.allowAnyChoice) {
+
+        this.anyField.on('updated', function (e, params) {
+
+            var value = params[0];
+            this.radioAny.value = value;
+
+            this.setClassFromState();
+
+            I.RadioField.superclass.onChange.call(this,e);      
+
+        }, this, true); 
+
+        // Update radio field style after editing anyField content !
+        if(this.anyField.el) {
+          I.one(this.anyField.el).on('blur', this.onBlur, this, true);
+        }
+      }   
 		},
 		
 		/**

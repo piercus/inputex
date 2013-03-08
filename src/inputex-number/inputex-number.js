@@ -1,10 +1,10 @@
 /**
  * @module inputex-number
  */
-YUI.add("inputex-number", function(Y) {
+gI.addModule("inputex-number", function(I) {
 
-  var lang = Y.Lang,
-      inputEx = Y.inputEx;
+  var lang = I.Lang,
+      inputEx = I;
 
 /**
  * A field limited to number inputs (floating)
@@ -17,7 +17,7 @@ inputEx.NumberField = function(options) {
    inputEx.NumberField.superclass.constructor.call(this,options);
 };
 
-Y.extend(inputEx.NumberField, inputEx.StringField, {
+I.extend(inputEx.NumberField, inputEx.StringField, {
    /**
     * Adds the min, and max options
     * @param {Object} options

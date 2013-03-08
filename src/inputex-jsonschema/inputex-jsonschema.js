@@ -1,10 +1,10 @@
 /**
  * @module inputex-jsonschema
  */
-YUI.add("inputex-jsonschema", function(Y){
+gI.addModule("inputex-jsonschema", function(I){
 
-  var lang = Y.Lang,
-      inputEx = Y.inputEx;
+  var lang = I.Lang,
+      inputEx = I;
 /**
  * Namespace containing utility functions for conversion between inputEx JSON format and JSON Schema
  *
@@ -238,7 +238,7 @@ inputEx.JsonSchema.Builder.prototype = {
 	    	}
 	    	// copy options into new schema, for example we can overide presentation
 	    	// of a defined schema depending on where it is used
-	    	new_schema = Y.mix({},new_schema);	// copy new_schema
+	    	new_schema = I.mix({},new_schema);	// copy new_schema
 	    	
 	    	for(var pk in p) {
 	    		if(p.hasOwnProperty(pk) && lang.isUndefined(new_schema[pk]) && pk != '$ref') {

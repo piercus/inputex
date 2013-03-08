@@ -1,0 +1,28 @@
+{
+  "_sand" : {
+    "wrapper" : "inputex/src/inputex-sand/inputex-sand",
+    "modules" : {
+       "inputex" : "inputex/src/inputex/inputex",        
+       "inputex/Field" : "inputex/src/inputex-field/inputex-field",
+       "inputex/Group" : "inputex/src/inputex-group/inputex-group",
+       "inputex/String" : "inputex/src/inputex-string/inputex-string", 
+       "inputex/Button" : "inputex/src/inputex-button/inputex-button", 
+       "inputex/Number" : "inputex/src/inputex-number/inputex-number",
+       "inputex/Jsonschema" : "inputex/src/inputex-jsonschema/inputex-jsonschema",       
+       "inputex/List" : "inputex/src/inputex-list/inputex-list",              
+       "inputex/Select" : "inputex/src/inputex-select/inputex-select",
+       "inputex/Radio" : "inputex/src/inputex-radio/inputex-radio",   
+       "inputex/Choice" : "inputex/src/inputex-choice/inputex-choice",
+       "inputex/Form" : "inputex/src/inputex-form/inputex-form",
+       "inputex/Hidden" : "inputex/src/inputex-hidden/inputex-hidden",
+       "inputex/Password" : "inputex/src/inputex-password/inputex-password", 
+       "inputex/Textarea" : "inputex/src/inputex-textarea/inputex-textarea",
+       "inputex/Integer" : "inputex/src/inputex-integer/inputex-integer",
+       "inputex/Checkbox" : "inputex/src/inputex-checkbox/inputex-checkbox",
+       
+       "inputex/lang/inputex_en" : "inputex/src/inputex/lang/inputex_en",  
+       "inputex/lang/inputex_fr" : "inputex/src/inputex/lang/inputex_fr"
+       
+    }
+  }                           
+}

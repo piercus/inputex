@@ -1,4 +1,4 @@
-gI.addModule("lang/inputex_en", function(I) {
+gI.addModule("inputex/lang/inputex_en", function(I) {
     
     I.messages = {
         // inputex
