@@ -7,9 +7,15 @@ if(typeof(gI) === "undefined"){
       var gI = {modules:{}};
     }
 }
-
+//var jQ = jQuery;
+// hack for jquery module definition, sand simulate amd
+if(typeof(window) !== "undefined"){
+  window.define = sand.define.bind(sand);
+  window.define.amd = {jQuery : true};
+}
 (function(){
-    //var jQ = jQuery;
+
+    // end of hack
     var gl = gI;
     gl.modulesKeys = [];
     var capitalize = function(s) {
@@ -51,7 +57,7 @@ if(typeof(gI) === "undefined"){
                 requires.push("inputex/lang/inputex_en");
               } 
               requires.push("inputex/sand->lI");
-              requires.push("jQuery->jQ");
+              requires.push("jquery->jQ");
               args[1] = requires;
           } else if(i === 0){
             name = arguments[i];
@@ -307,7 +313,7 @@ if(typeof(gI) === "undefined"){
         return array.indexOf(el);
     };
     
-    sand.define("inputex/sand", ["jQuery->jQ"],function(r){
+    sand.define("inputex/sand", ["jquery->jQ"],function(r){
        //lI means localInputEx
        this.exports = new gl.localInputEx(r);
     });
