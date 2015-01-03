@@ -236,8 +236,16 @@ I.extend(I.StringField, I.Field, {
 	         // remove text
 	         this.fieldEl.value = "";
 
+           // PIE : old code
+
 	         // remove the "empty" state and class
-	         this.previousState = null;
+	         //this.previousState = null;
+
+          //PIE : fix for invalid/valid class remove whith typeInvite
+          if((this.previousState !== I.stateRequired) && (this.previousState !== I.stateInvalid)){
+            this.previousState = null;
+          }   
+
 	         I.removeClass(this.divEl,"inputEx-typeInvite");
          }
       }
