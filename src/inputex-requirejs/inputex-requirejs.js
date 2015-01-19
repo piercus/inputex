@@ -11,6 +11,7 @@ if(typeof(gI) === "undefined"){
 if( typeof(rjs) === "undefined"){
   if(typeof(require) !== "undefined"){
     var rjs = require;
+
   } else if(typeof(requirejs) !== "undefined"){
     var rjs = requirejs;
   } else {
@@ -25,12 +26,24 @@ if(typeof(window) !== "undefined" && window.define){
 }
 (function(){
 
-    // end of hack
-    var gl = gI;
+    var gl = (typeof(gI.length) !== "number") ? gI : gI.addLib("requirejs",{modules:{}});
+
     gl.modulesKeys = [];
     var capitalize = function(s) {
       return (s.charAt(0).toUpperCase() + s.slice(1));
     };
+
+
+    var getRequireModuleName = function(name){
+            if(name.indexOf("/") === -1){
+              return "inputex/src/"+name+"/"+name;
+            } else if(name.indexOf("lang/") !== -1) { 
+              return "inputex/src/inputex/"+name;
+            } else {
+              return "inputex/src/"+name;
+            }
+    };
+
     gl.addModule = function(){
       
       var modules = [], fnI, fnY, afterModules,args = [null,null,null], requires = [],sandName;
@@ -63,7 +76,7 @@ if(typeof(window) !== "undefined" && window.define){
               // first argument must be inputex-requirejs
               requires.unshift("inputex/src/inputex-requirejs/inputex-requirejs");
 
-              if(name!=="inputex"){
+              if(name !== "inputex"){
                 requires.push("inputex/src/inputex/lang/inputex_en");
               } 
               
@@ -71,12 +84,8 @@ if(typeof(window) !== "undefined" && window.define){
 
               args[1] = requires;
           } else if(i === 0){
-            name = arguments[i];
-            if(arguments[0].indexOf("/") === -1){
-              args[0] = "inputex/src/"+arguments[i]+"/"+arguments[i];
-            } else {
-              args[0] = "inputex/src/"+arguments[i];
-            }
+            name = arguments[0];
+            args[0] = getRequireModuleName(name);
             
           }  
       }
@@ -116,8 +125,9 @@ if(typeof(window) !== "undefined" && window.define){
           this.removeClass = function (el,c) {
             return jQ(el).removeClass(c);
           }
-          this.replaceClass= function (el,c) {
-            return jQ(el).replaceClass(c);
+          this.replaceClass= function (el,c1,c2) {
+            jQ(el).removeClass(c1);
+            return jQ(el).addClass(c2);
           };
           this.all = function (selector) {
               return jQ(selector);
@@ -324,13 +334,19 @@ if(typeof(window) !== "undefined" && window.define){
         return array.indexOf(el);
     };
     
-    rjs.define("inputex/src/inputex-requirejs/inputex-requirejs", ["jquery"
-      ], function(jQ){
+    rjs.define("inputex/src/inputex-requirejs/inputex-requirejs", ["jquery"], function(jQ){
        //lI means localInputEx
        this.exports = new gl.localInputEx({jQ : jQ});
 
        return this.exports;
     });
-    gl.use = rjs;
+    gl.use = function(deps, callback){
+      // inputex is the first arg, then we can use function(I)
+      deps.shift("inputex");
+      var deps2 = deps.map(function(dep){
+        return getRequireModuleName(dep);
+      });
+      rjs(deps2,callback);
+    };
 
 })();

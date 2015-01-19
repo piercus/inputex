@@ -1,7 +1,7 @@
 // global is wanted
 gI = new LibManager({
     libs:{
-        "yui2":{
+        /*"yui2":{
             files : [
             "../../lib/yui2/yahoo.js",
             "../../lib/yui2/dom.js",
@@ -9,10 +9,13 @@ gI = new LibManager({
             "../../lib/yui2/connection_core.js",
             "../../lib/yui2/json.js"
             ]
-        },
+        },*//*
     	"yui3":{
-    		files: ["../../../yui/build/yui/yui.js"]
-    	}
+    		files: ["http://yui.yahooapis.com/3.18.1/build/yui/yui-min.js"]
+    	},*/
+        "requirejs" : {
+            files: ["../../lib/require.js"]
+        }
      },
      callback: function(){
          window.onload = function(){
@@ -49,5 +52,8 @@ gI = new LibManager({
                       }  
               
          };
+     },
+     debug : function(o){
+       console.log(o);
      }
 	});

@@ -270,7 +270,7 @@ I.extend(I.ListField,I.Field, {
 	   newDiv.appendChild( subFieldEl );
 	   
 	   // Subscribe the onChange event to resend it 
-	   I.on("updated",this.onChange, el, this);
+	   el.on("updated",this.onChange,this);
 	
 	   // Arrows to order:
 	   if(this.options.sortable) {
@@ -300,7 +300,7 @@ I.extend(I.ListField,I.Field, {
 	      
 	   return el;
 	},
-	   
+
 	/**
 	 * Switch a subField with its previous one
 	 * Called when the user clicked on the up arrow of a sortable list

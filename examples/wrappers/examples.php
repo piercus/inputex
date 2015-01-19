@@ -26,6 +26,15 @@
  </style>
 <script src="libManager.js"  type='text/javascript'></script>
 <script src="examples.js"  type='text/javascript'></script>
+<script>
+    var require = {
+        baseUrl : "../../../",
+        paths : {"jquery" : "inputex/lib/jquery"},
+        waitSeconds: 15,
+        urlArgs: "bustt=" +  (new Date()).getTime()
+    };
+</script>
+
 <h1>InputEx Examples</h1>
 <div id="selects" class="demoContainer">
 <?php
@@ -34,7 +43,8 @@
    $librairies = array(
        -1 => '--',
     	1 => 'yui2',
-    	2 => 'yui3'
+    	2 => 'yui3',
+      3 => 'requirejs'
     );
     $fields = array(
         -1 => '--',
@@ -65,6 +75,8 @@
 
 ?>
 </div>
+
+
 
 <div id="examples"></div>
  </body>

@@ -23,6 +23,7 @@ if(typeof(gI) === "undefined"){
                 fnI = arguments[i];
                 args.push(function(Y){
                     //lI means localInputEx
+                    //console.log(args[0]);
                     fnI(Y.lI);
                 });
             } else if(typeof(arguments[i]) === "object" && typeof(arguments[i].requires) === "object") {
@@ -103,7 +104,7 @@ if(typeof(gI) === "undefined"){
                fn = args[1];
            args[1] = function(){
                   var e = arguments[0];
-                  e.target = e.target._node;
+                  e && e.target && (e.target = e.target._node);
                   fn.apply(this,arguments);
               }
            return Y.on.apply(Y,args)

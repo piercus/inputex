@@ -7,24 +7,31 @@ var LibManager = function(options){
     this.debug = options.debug;
     var l2 = 0,
         l3 = this.fields.length;
-    for(var i in this.libs) this.libs.hasOwnProperty(i)&&l2++;
+    for(var i in this.libs) this.libs.hasOwnProperty(i) && l2++;
     
     var that = this;
-    var onReadyFields = this.onReady(l3,function(){
-        that.log("fields are ready");   
-        that.addExampleFiles(that.fields,function(){
-            options.callback();
-        });
-    })
+
+
     var onReadyLibs= this.onReady(l2,function(){
         that.log("libs are ready");
-        that.addScript("../../src/inputex/lang/inputex_fr.js");
-        gI.waitForAddModule("lang/inputex_fr",function(){
-            for(i = 0; i< that.fields.length; i++){
-                that.addFieldFile(that.fields[i],onReadyFields);
-            }           
+
+
+        var onReadyFields = that.onReady(l3,function(){
+            that.log("fields are ready");   
+            that.addExampleFiles(that.fields,function(){
+                      that.addScript("../../src/inputex/lang/inputex_en.js");
+                      gI.waitForAddModule("inputex/lang/inputex_en",function(){
+                          that.log("inputex/lang/inputex_en is loaded");
+                          that.log("callback");
+                          options.callback();
+                });
+            });
         });
-     });
+
+        for(i = 0; i< that.fields.length; i++){
+            that.addFieldFile(that.fields[i],onReadyFields);
+        }   
+     },"log on Ready libs");
      
       
     for(var i in this.libs) this.libs.hasOwnProperty(i) && this.addLibFiles(i,onReadyLibs);
@@ -32,12 +39,16 @@ var LibManager = function(options){
 LibManager.prototype = {
     addModule : function(){
         var args = arguments, that=this;
+
         var cb = function(){
-            for (var i in that.libs)  that.libs[i].global.addModule.apply(that,args);     
+            for (var i in that.libs) if(that.libs.hasOwnProperty(i)){
+              that.libs[i].global && that.libs[i].global.addModule.apply(that,args);  
+            } 
+
             if(that.modules && that.modules[args[0]] && that.modules[args[0]].state == "wait"){        
                 that.modules[args[0]].state = "ready";        
                 that.modules[args[0]].cb.call(that);
-                that.log(args[0],"module added");
+                that.log(args[0],"module file added");
             }
         }
         if(arguments[3] && arguments[3].requires && arguments[3].requires.length > 0 && (requires = arguments[3].requires)){
@@ -130,7 +141,10 @@ LibManager.prototype = {
             for(var j = 0; j < that.examples[fieldName].list.length; j++){
                 fns.push(that.buildFieldExample(g,fieldName,parentEl,that.examples[fieldName].list[j],j,libName,requires,that.examples[fieldName].keyObject));
             } 
-            g.use.apply(that,(that.examples[fieldName].requires || []).concat(["lang/inputex_fr",fieldName,function(I){
+            console.log("call use", fieldName);
+            g.use.apply(that,[
+                [fieldName],
+                function(I){
 
                   for(var i = 0; i< fns.length; i++){
                     try{
@@ -140,7 +154,9 @@ LibManager.prototype = {
                     }
                   }
 
-            }]));
+                }
+              ]
+            );
         };
         
         var onReady = this.onReady(requires.length,cb,"l140");
@@ -201,7 +217,7 @@ LibManager.prototype = {
                     co.setAttribute("id",idCache);
                     r = /function ?\(parentEl,I\){((.|\n)*)}$/
                     var libs = requires.length ? ",\""+requires.join("\",\"")+"\"" : "";
-                    co.innerHTML = "<pre class=\"brush:js\">gI.use(\"lang/inputex_fr\",\""+fieldName+"\""+libs+",function(I){\n\t\tvar parentEl = \""+idCacheCont+"\";"+fnCache.toString().match(r)[1]+"});</pre>";
+                    co.innerHTML = "<pre class=\"brush:js\">gI.use(\"lang/inputex_en\",\""+fieldName+"\""+libs+",function(I){\n\t\tvar parentEl = \""+idCacheCont+"\";"+fnCache.toString().match(r)[1]+"});</pre>";
                     co.style.display = "block   ";
                 } else if(co.style.display === "block"){
                     co.style.display = "none";
@@ -294,7 +310,7 @@ LibManager.prototype = {
         for(var f = 0; f< this.fields.length; f++) {
             fields.push(this.fields[f]);
          }
-        for (var i in this.libs) this.libs.hasOwnProperty(i) && this.libs[i].global && this.libs[i].global.use.apply(this,["lang/inputex_fr"].concat(fields));
+        for (var i in this.libs) this.libs.hasOwnProperty(i) && this.libs[i].global && this.libs[i].global.use.apply(this,[fields]);//.concat(["inputex/lang/inputex_en"]));
     }
     
 };
